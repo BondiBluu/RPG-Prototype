@@ -10,30 +10,41 @@ public class NextButton : MonoBehaviour
 
     DraftCharaStats draftCharaStats;
     ShowStats showStats;
-    object[] currentStats;
+    int currentIndex = 0;
 
     public void Start()
     {
         draftCharaStats= FindObjectOfType<DraftCharaStats>();
-        showStats= FindObjectOfType<ShowStats>();
-        currentStats = showStats.chara1Stats;
+        draftCharaStats = GetComponent<DraftCharaStats>();
+        showStats = FindObjectOfType<ShowStats>();
     }
     public void SwitchStats()
     {
+
+        if (draftCharaStats == null)
+        {
+            Debug.LogError("DraftCharaStats is not initialized!");
+        }
+
+        if (showStats == null)
+        {
+            Debug.LogError("ShowStats is not initialized!");
+        }
+
         //an array of character stats from the script (ShowStats)
         object[] statLoop = new object[] { showStats.chara1Stats, showStats.chara2Stats, showStats.chara3Stats, showStats.chara4Stats};
 
-        for (int i = 0; i < statLoop.Length; i++)
+        currentIndex++;
+
+        Debug.Log(currentIndex);
+        
+
+        if (currentIndex >= statLoop.Length)
         {
-            //current stats equal what stat chara's stats we're currently at
-            currentStats = (object[])statLoop[i];
-
-            draftCharaStats.ShowStatsArray(currentStats);
-
-            if(i >= statLoop.Length - 1) 
-            {
-                i = 0;
-            }
+            currentIndex = 0;
         }
+
+        //current stats equal what stat chara's stats we're currently at
+        draftCharaStats.ShowStatsArray((object[])statLoop[currentIndex]);
     }
 }
