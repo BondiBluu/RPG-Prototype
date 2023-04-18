@@ -20,17 +20,6 @@ public class NextButton : MonoBehaviour
     }
     public void SwitchStats()
     {
-
-        if (draftCharaStats == null)
-        {
-            Debug.LogError("DraftCharaStats is not initialized!");
-        }
-
-        if (showStats == null)
-        {
-            Debug.LogError("ShowStats is not initialized!");
-        }
-
         //an array of character stats from the script (ShowStats)
         object[] statLoop = new object[] { showStats.chara1Stats, showStats.chara2Stats, showStats.chara3Stats, showStats.chara4Stats};
 
