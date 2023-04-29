@@ -7,10 +7,6 @@ using UnityEngine.InputSystem;
 
 public class InputDialogueNPC : MonoBehaviour
 {
-    [Header("Preview Dialogue")]
-
-    [SerializeField] string previewDialog;
-    [SerializeField] string previewName;
 
     [Header("Main Dialogue")]
 
@@ -28,28 +24,13 @@ public class InputDialogueNPC : MonoBehaviour
         diaMan = FindObjectOfType<DialogueManager>();
     }
 
-    void Update()
-    {
-
-    }
-
-    //showing dialogue when the player walks towards anyone holding this script
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Player")
         {
-            PreviewDialog();
+            Debug.Log("Has entered");
+            diaMan.dialogActive = true;
         }
-    }
-
-
-    void PreviewDialog()
-    {
-        diaMan.dialogActive = true;
-        diaMan.ActiveOn();
-        diaMan.diaText.text = previewDialog;
-        diaMan.nameText.text = previewName;
-        diaMan.charaBox.SetActive(false);
     }
 
     void OnOpenUI(InputValue value)
