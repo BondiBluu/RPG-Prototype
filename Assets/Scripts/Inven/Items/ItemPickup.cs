@@ -1,31 +1,49 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
 public class ItemPickup : MonoBehaviour
 {
+    //[SerializeField] string[] pickupText;
+    [SerializeField] string pickupText = "Found Item!";
+    int currentLine = 0;
+    bool isInPickupRange = false;
+    DialogueManager diaMan;
 
-    DialogueManager manager;
+
     // Start is called before the first frame update
     void Start()
     {
-        manager = GetComponent<DialogueManager>();
+        diaMan = FindObjectOfType<DialogueManager>();
     }
 
+    //making sure the item is in range to be picked up
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Player")
+        {
+            isInPickupRange = true;
+            Debug.Log("In pickup range");
+        }
+    }
+
+    
     void OnPickItem(InputValue value)
     {
-        if (value.isPressed)
+        if (value.isPressed && isInPickupRange == true)
         {
-            manager.diaBox.SetActive(true);
-            manager.dialogActive= true;
-            manager.diaText.text = "Found an item!";
+            Debug.Log("is picked");
+            diaMan.diaBox.SetActive(true);
+            diaMan.diaText.text = pickupText; 
+            currentLine++;
         }
 
-        if (value.isPressed && manager.dialogActive)
+        if (currentLine >= 2)
         {
-            manager.diaBox.SetActive(false);
-            manager.dialogActive = false;
+            diaMan.diaBox.SetActive(false);
+            currentLine = 0;
         }
     }
 }
