@@ -24,6 +24,7 @@ public class InputDialogueNPC : MonoBehaviour
         diaMan = FindObjectOfType<DialogueManager>();
     }
 
+    //for the dialogue points that don't hve preview dialogue
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Player")

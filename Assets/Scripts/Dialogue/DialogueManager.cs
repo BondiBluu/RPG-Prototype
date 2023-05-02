@@ -36,4 +36,10 @@ public class DialogueManager : MonoBehaviour
         nameBox.SetActive(true);
         charaBox.SetActive(true);
     }
+
+    public void PickupDialog(string dialogue)
+    {
+        diaBox.SetActive(true);
+        diaText.text = dialogue;
+    }
 }

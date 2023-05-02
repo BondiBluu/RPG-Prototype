@@ -18,12 +18,6 @@ public class PreviewNPC : MonoBehaviour
         diaMan = FindObjectOfType<DialogueManager>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     //showing dialogue when the player walks towards anyone holding this script
     void OnTriggerEnter2D(Collider2D other)
     {
@@ -33,7 +27,6 @@ public class PreviewNPC : MonoBehaviour
             PreviewDialog();
         }
     }
-
 
     void PreviewDialog()
     {
