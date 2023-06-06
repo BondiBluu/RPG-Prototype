@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.InputSystem;
 
 public class ItemPickup : MonoBehaviour
 {
@@ -10,13 +9,39 @@ public class ItemPickup : MonoBehaviour
     [SerializeField] GameObject itemBox;
     [SerializeField] Text itemText;
     public ItemObject item;
-    public GameObject itemParent;
+    Item myItem;
     //[SerializeField] string pickupText = "Found Item!";
-    int currentLine = 0;
-    public bool isInPickupRange = false;
-    PlayerInven playerInven;
 
-    void OnEnable()
+
+   
+    // Start is called before the first frame update
+    void Start()
+    {
+        myItem = FindObjectOfType<Item>();
+    }
+
+    //making sure the item is in range to be picked up
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log("In range");
+            myItem.PlayerEnteredSpace();
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log("Out of range");
+            myItem.PlayerLeftSpace();
+        }
+    }
+}
+
+
+/* void OnEnable()
     {
         // Initialize pickupText array with item-specific strings
         pickupText = new string[]
@@ -26,26 +51,10 @@ public class ItemPickup : MonoBehaviour
             $"Put {item.itemName} in bag"
         };
         Debug.Log($"Enabled {item.itemName} with pickupText: {pickupText[1]}, {pickupText[2]}");
-    }
+    }*/
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        playerInven= FindObjectOfType<PlayerInven>();
-    }
 
-    //making sure the item is in range to be picked up
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        Debug.Log("In range");
-        if (other.tag == "Player")
-        {
-            isInPickupRange = true;
-        }
-    }
-
-    
-    void OnPickItem(InputValue value)
+/*void OnPickItem(InputValue value)
     {
         if (value.isPressed && isInPickupRange == true)
         {
@@ -62,5 +71,4 @@ public class ItemPickup : MonoBehaviour
         }
 
         itemText.text = pickupText[currentLine];
-    }
-}
+    }*/
