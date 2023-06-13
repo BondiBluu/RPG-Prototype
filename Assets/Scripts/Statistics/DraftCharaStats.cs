@@ -47,6 +47,7 @@ Speed (Who Goes First)*/
     //grabbing the stats of the characters are
     ShowStats showStats;
 
+    CharacterStatistics characterStatistics;
 
     public void Start()
     {
@@ -54,6 +55,8 @@ Speed (Who Goes First)*/
         ShowStringStatsArray(showStats.charaNames);
         ShowIntStatsArray(showStats.chara1Stats);
         ShowImageStatsArray(showStats.charaImage);
+        characterStatistics = FindObjectOfType<CharacterStatistics>();
+        //CharacterStatisticsArray(characterStatistics.stats);
     }
 
 
@@ -84,5 +87,23 @@ Speed (Who Goes First)*/
     public void ShowImageStatsArray(Sprite[] statsArray)
     {
         charaImageBox.GetComponent<Image>().sprite = statsArray[0];
+    }
+
+    //experimantal
+    public void CharacterStatisticsArray(CharacterStats[] statsArray)
+    {
+        charaNameText.text = statsArray[0].ToString();
+        lvl.text = statsArray[1].ToString();
+        currentHpText.text = statsArray[2].ToString();
+        maxHpText.text = statsArray[3].ToString();
+        currentMpText.text = statsArray[4].ToString();
+        maxMpText.text = statsArray[5].ToString();
+        atkText.text = statsArray[6].ToString();
+        defText.text = statsArray[7].ToString();
+        magText.text = statsArray[8].ToString();
+        resText.text = statsArray[9].ToString();
+        effText.text = statsArray[10].ToString();
+        skillText.text = statsArray[11].ToString();
+        speedText.text = statsArray[12].ToString();
     }
 }

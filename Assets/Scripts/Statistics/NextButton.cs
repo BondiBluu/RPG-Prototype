@@ -15,7 +15,6 @@ public class NextButton : MonoBehaviour
     public void Start()
     {
         draftCharaStats= FindObjectOfType<DraftCharaStats>();
-        //draftCharaStats = GetComponent<DraftCharaStats>();
         showStats = FindObjectOfType<ShowStats>();
     }
     public void SwitchStats()
@@ -32,7 +31,7 @@ public class NextButton : MonoBehaviour
             currentIndex = 0;
         }
 
-        //an array of character names from the script (ShowStats)
+        //an array of character names and character images from the script (ShowStats)
         string[] stringLoop = new string[] { showStats.charaNames[currentIndex] };
         Sprite[] imageLoop = new Sprite[] { showStats.charaImage[currentIndex] };
 
