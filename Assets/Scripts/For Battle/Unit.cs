@@ -5,16 +5,32 @@ using UnityEngine;
 public class Unit : MonoBehaviour
 {
     [SerializeField] public CharacterStatistics characterStats;
+    MoveBaseClass moveBaseClass;
 
     // Start is called before the first frame update
     void Start()
     {
         characterStats = FindObjectOfType<CharacterStatistics>();
+        moveBaseClass = FindObjectOfType<MoveBaseClass>();
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public bool TakeDamage()
+    {
+        characterStats.currentHP -= moveBaseClass.AttackPower;
+
+        if(characterStats.currentHP <= 0 )
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

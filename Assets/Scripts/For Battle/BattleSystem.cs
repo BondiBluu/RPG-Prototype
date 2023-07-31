@@ -16,7 +16,8 @@ public class BattleSystem : MonoBehaviour
 {
 
     public BattleState state;
-    BattleHUD battleHUD;
+    BattleHUD playerHUD;
+    BattleHUD enemyHUD;
 
     [Header ("Players and Stations")]
     public GameObject[] playerPrefabs;
@@ -30,39 +31,41 @@ public class BattleSystem : MonoBehaviour
     public Transform[] enemyStations;
     EnemyUnit[] enemyUnits;
 
-
-    Unit playerUnit1;
-    Unit playerUnit2;
-    Unit playerUnit3;
-    Unit playerUnit4;
-    EnemyUnit enemyUnit1;
-    EnemyUnit enemyUnit2;
-    EnemyUnit enemyUnit3;
-    EnemyUnit enemyUnit4;
+    MoveGenerator moveGenerator;
+    MoveBaseClass moveBaseClass;
 
     // Start is called before the first frame update
     void Start()
     {
         state = BattleState.START;
-        battleHUD = FindObjectOfType<BattleHUD>();
+        playerHUD = FindObjectOfType<BattleHUD>();
+        enemyHUD = FindObjectOfType<BattleHUD>();
 
-        //setting up the battle
-        SetUpBattle();
+        moveBaseClass = FindObjectOfType<MoveBaseClass>();
+        moveGenerator = FindObjectOfType<MoveGenerator>();
+
+        //setting up the battle. Starting a Coroutine to manipulate time (waiting for seconds)
+        StartCoroutine(SetUpBattle());
     }
 
-    //instantiating our units
-    void SetUpBattle()
+    //instantiating our units. IEnumerator needed whenever a method is called for a coroutine
+    IEnumerator SetUpBattle()
     {
-
         PlayersandEnemiesInstantiate();
+
+        //waiting seconds after everything has instantiated to switch turns
+        yield return new WaitForSeconds(2f);
+
+        //switching turns
+        state = BattleState.PLAYERTURN;
+        PlayerTurn();
     }
 
     public void PlayersandEnemiesInstantiate()
     {
         //instantiating playerUnits so it can be used with the appropriate size before the loop. It's not public after all, so how would it know?
         playerUnits = new Unit[playerPrefabs.Length];
-        //GameObject[] playerGObjects;
-        //playerGObjects = new GameObject[playerPrefabs.Length];
+
         //looping instead of making 4 enemy references
         for (int i = 0; i < playerPrefabs.Length; i++)
         {
@@ -71,11 +74,11 @@ public class BattleSystem : MonoBehaviour
 
             //spawning our characters on the battle stations whle also making a reference to the spawning game object (used later)
             GameObject playerGObject = Instantiate(playerPrefabs[i], spawnStation);
-            //playerGObjects[i] = Instantiate(playerPrefabs[i], spawnStation);
+
             //using the reference to be able to get the stats information from each individual unit. storing the reference in a Unit and EnemyUnit var to use multiple times
             playerUnits[i] = playerGObject.GetComponent<Unit>();
         }
-        battleHUD.SetPlayerHUD(playerUnits);
+        playerHUD.SetPlayerHUD(playerUnits);
 
         enemyUnits = new EnemyUnit[enemyPrefabs.Length];
         //same for enemies
@@ -85,6 +88,42 @@ public class BattleSystem : MonoBehaviour
             GameObject enemyGObject = Instantiate(enemyPrefabs[i], enemySpawnStation);
             enemyUnits[i] = enemyGObject.GetComponent<EnemyUnit>();
         }
+        enemyHUD.SetEnemyHUD(enemyUnits);
     }
+
+    //where player can choose an action
+    void PlayerTurn()
+    {
+        //selected player being the variable that stores the current player's CharaStats data
+        //moveGenerator.SetCharacterData(selectedPlayer);
+    }
+
+    public void OnAttackButton() {
+
+        //don't do anything if it's not the player's turn
+        if (state != BattleState.PLAYERTURN)
+        {
+            return;
+        }
+
+        StartCoroutine(PlayerAttack());
+    }
+
+    IEnumerator PlayerAttack()
+    {
+        //damaging enemy
+
+        //waiting
+        yield return new WaitForSeconds(1);
+
+        //check if enemy is dead
+        //change state based on what's happened
+    }
+
+    void TakeDamage()
+    {
+
+    }
+    public void OnHealButton() { }
 
 }
