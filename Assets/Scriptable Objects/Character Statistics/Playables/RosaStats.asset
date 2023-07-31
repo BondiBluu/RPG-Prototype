@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b53339b2bbc8399418d586222fffd8a9, type: 3}
+  m_Name: RosaStats
+  m_EditorClassIdentifier: 
+  characterName: Rosa
+  level: 15
+  currentHP: 37
+  maxHP: 50
+  currentMP: 35
+  maxMP: 55
+  attack: 18
+  defense: 8
+  magic: 50
+  resistance: 51
+  efficiency: 45
+  skill: 30
+  speed: 25
+  ability: 
+  abilityDescription: 
+  image: {fileID: 0}
+  statGrowth: 0
+  moveBaseClassList:
+  - {fileID: 11400000, guid: c9d4c0967f944304c8b6400330c053ed, type: 2}
+  - {fileID: 11400000, guid: ee9fa80558443e34781d289b62071308, type: 2}
+  - {fileID: 11400000, guid: c9d4c0967f944304c8b6400330c053ed, type: 2}
+  - {fileID: 11400000, guid: 751be5f47afa21b409be4c4798743d63, type: 2}
+  - {fileID: 11400000, guid: dc3307980d15c8945909b23e628b06a1, type: 2}
+  - {fileID: 11400000, guid: 1ce1feeaff54da74ea72213809c39776, type: 2}
+  - {fileID: 11400000, guid: 812f3aa38b0262946aea71300353af4e, type: 2}
+  - {fileID: 11400000, guid: 382037e4fe9d54a4389c09509e6d150c, type: 2}
+  - {fileID: 11400000, guid: ee9fa80558443e34781d289b62071308, type: 2}

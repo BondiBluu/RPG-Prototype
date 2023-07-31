@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e950f1ad7661d64fa1fb0c3c77bc3ef, type: 3}
+  m_Name: JubilantSong
+  m_EditorClassIdentifier: 
+  attackName: Jubilant Song
+  attackDesc: Caster sings a song of their home. Raises attack.
+  attackPower: 0
+  mPConsumption: 0
+  boostAmount: 0
+  levelAqcuired: 1
+  healAmount: 0
+  moveType: 0
+  attackType: 0

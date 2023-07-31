@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b53339b2bbc8399418d586222fffd8a9, type: 3}
+  m_Name: MargotStats
+  m_EditorClassIdentifier: 
+  characterName: Margot
+  level: 1
+  currentHP: 3
+  maxHP: 33
+  currentMP: 2
+  maxMP: 22
+  attack: 2
+  defense: 4
+  magic: 5
+  resistance: 6
+  efficiency: 8
+  skill: 6
+  speed: 9
+  ability: Songbird
+  abilityDescription: 
+  image: {fileID: 0}
+  statGrowth: 0
+  moveBaseClassList:
+  - {fileID: 11400000, guid: dc3307980d15c8945909b23e628b06a1, type: 2}

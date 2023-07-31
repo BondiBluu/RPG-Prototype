@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b53339b2bbc8399418d586222fffd8a9, type: 3}
+  m_Name: LolaStats
+  m_EditorClassIdentifier: 
+  characterName: Lola
+  level: 2
+  currentHP: 15
+  maxHP: 17
+  currentMP: 12
+  maxMP: 12
+  attack: 22
+  defense: 20
+  magic: 3
+  resistance: 10
+  efficiency: 18
+  skill: 29
+  speed: 8
+  ability: One with Weapons
+  abilityDescription: 
+  image: {fileID: 0}
+  statGrowth: 0
+  moveBaseClassList:
+  - {fileID: 11400000, guid: 382037e4fe9d54a4389c09509e6d150c, type: 2}
+  - {fileID: 11400000, guid: 812f3aa38b0262946aea71300353af4e, type: 2}
