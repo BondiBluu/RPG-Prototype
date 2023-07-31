@@ -55,7 +55,7 @@ Speed (Who Goes First)*/
         ShowStringStatsArray(showStats.charaNames);
         ShowIntStatsArray(showStats.chara1Stats);
         ShowImageStatsArray(showStats.charaImage);
-        characterStatistics = FindObjectOfType<CharacterStatistics>();
+        //characterStatistics = FindObjectOfType<CharacterStatistics>();
         //CharacterStatisticsArray(characterStatistics.stats);
     }
 

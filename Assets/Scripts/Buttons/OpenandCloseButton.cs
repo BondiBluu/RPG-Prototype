@@ -5,6 +5,7 @@ using UnityEngine;
 public class OpenandCloseButton : MonoBehaviour
 {
     [SerializeField] GameObject openButton;
+    [SerializeField] GameObject windowToOpen;
     [SerializeField] GameObject closeButton;
 
     public void OpenButton()

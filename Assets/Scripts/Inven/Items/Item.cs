@@ -6,54 +6,56 @@ using UnityEngine.UI;
 
 public class Item : MonoBehaviour
 {
-    string[] pickupText = new string[3];
-    [SerializeField] GameObject itemBox;
+    string[] pickupText = new string[2];
+    [SerializeField] public  GameObject itemBox;
     [SerializeField] Text itemText;
     public ItemObject itemObject;
-    ItemPickup itemPickup;
     PlayerInven playerInven;
-    Item item;
-    int currentLine = 0;
+    public int currentLine = 0;
+    public bool playerEnteredSpace;
+    [SerializeField] string objectname;
 
-    void OnEnable()
-    {
-        // Initialize pickupText array with item-specific strings
-        pickupText = new string[]
-        {
-            "",
-            $"Found {itemObject.itemName}!",
-            $"Put {itemObject.itemName} in bag"
-        };
-        Debug.Log($"Enabled {itemObject.itemName} with pickupText: {pickupText[1]}, {pickupText[2]}");
-    }
+
 
     // Start is called before the first frame update
     void Start()
     {
-        item = FindObjectOfType<Item>();
-        itemPickup = FindObjectOfType<ItemPickup>();
+        playerInven = FindObjectOfType<PlayerInven>();
+        playerEnteredSpace = false;
+        
     }
 
-    // Update is called once per frame
-    void Update()
+    //for ItemPickup.cs
+    public void PlayerEnteredSpace()
     {
-        
+        playerEnteredSpace = true;
+        Debug.Log("Item.cs has registered that player has entered item range.");
+    }
+
+    //for ItemPickup.cs
+    public void PlayerLeftSpace()
+    {
+        playerEnteredSpace = false;
+        Debug.Log("Player left.");
     }
 
     void OnPickItem(InputValue value)
     {
-        if (value.isPressed && itemPickup.isInPickupRange == true)
+        if (value.isPressed && playerEnteredSpace == true)
         {
-            itemBox.SetActive(true);
-            currentLine++;
+                // Access itemObject or perform operations on it
+                Debug.Log("Button was pressed");
+                itemBox.SetActive(true);
+                currentLine++;
+
         }
 
-        if (currentLine >= pickupText.Length)
+        if (currentLine > pickupText.Length - 1 && playerEnteredSpace == true)
         {
             itemBox.SetActive(false);
-            playerInven.inven.AddItem(itemObject, 1); //adding item to inven
-            Destroy(item.gameObject); //destroying this object
-            currentLine = 0;
+            playerInven.AddingToPlayerInven();
+            //playerInven.inven.AddItem(itemObject, 1); //adding item to inven
+            Destroy(gameObject); //destroying this object
         }
 
         itemText.text = pickupText[currentLine];

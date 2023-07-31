@@ -2,17 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MakeButton : MonoBehaviour
+public class HealingButton : MonoBehaviour
 {
-    [SerializeField]
-    private bool physical;
+    // Start is called before the first frame update
     void Start()
     {
-        string temp = gameObject.name;
-        
         
     }
 
+    // Update is called once per frame
     void Update()
     {
         

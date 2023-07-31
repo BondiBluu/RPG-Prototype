@@ -5,13 +5,16 @@ using UnityEngine;
 public class PlayerInven : MonoBehaviour
 {
     public InventoryObject inven;
-    ItemPickup item;
+    Item item;
+    ItemPickup pickup;
     //adding items to and displaying inven in the game
 
     // Start is called before the first frame update
     void Start()
     {
-        item = FindObjectOfType<ItemPickup>();
+        item = GetComponent<Item>();
+        item = FindObjectOfType<Item>();
+        pickup = FindObjectOfType<ItemPickup>();
     }
 
     // Update is called once per frame
@@ -24,14 +27,14 @@ public class PlayerInven : MonoBehaviour
         item.itemBox.SetActive(true);
         item.currentLine++;
     }
-
-    public void StopItemText()
+    */
+    public void AddingToPlayerInven()
     {
         item.itemBox.SetActive(false);
-        inven.AddItem(item.item, 1);
-        Destroy(item.itemParent.gameObject);
+        inven.AddItem(item.itemObject, 1);
         item.currentLine = 0;
-    }*/
+        //Destroy(pickup.itemParent.gameObject);
+    }
 
 
 }
