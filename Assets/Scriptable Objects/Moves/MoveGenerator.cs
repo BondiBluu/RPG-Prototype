@@ -9,40 +9,53 @@ public class MoveGenerator : MonoBehaviour
     [SerializeField] Transform buttonContainer;
     [SerializeField] GameObject moveButtonPrefab;
     [SerializeField] CharacterStatistics characterStatistics;
-    [SerializeField] int requiredLevelToShowMove;
-    [SerializeField] float buttonSpacing= 20;
+    [SerializeField] float buttonSpacing;
+
+    List<MoveBaseClass> movesAlreadyAdded = new List<MoveBaseClass>();
 
     // Start is called before the first frame update
     void Start()
     {
-        //spacing out the buttons
-        float currentPosY = 0f;
-
-        //if the player's level is more or equal to the required amount, show the move. Needs to be changed to add buttons when the required level is reached
-        if ( characterStatistics.level >= requiredLevelToShowMove)
-        {
-            foreach(MoveBaseClass move in characterStatistics.moveBaseClassList)
-            {
-                //making a new move button- instantiating the prefab and having it be a child of buttonContainer
-                GameObject buttonGO = Instantiate(moveButtonPrefab, buttonContainer);
-                //setting the anchored pos of the button's rectTransform using a vector 2 
-                buttonGO.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -currentPosY);
-                //adding button spacing- next button will appear under the one that was just made
-                currentPosY = buttonSpacing + buttonGO.GetComponent<RectTransform>().sizeDelta.y;
-                Debug.Log("Moves available.");
-                Debug.Log(move.AttackName);
-                Debug.Log("Level gotten: " + move.LevelAqcuired); 
-                //instantiating a button component onto the prefab, this way we won't need a button in the hierarchy
-                //Button button = buttonGO.AddComponent<Button>();
-                buttonGO.GetComponentInChildren<TMP_Text>().text = move.AttackName;
-            }
-        }
+        GenerateButtons();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        GenerateButtons();
+    }
+
+    public void GenerateButtons()
+    {
+        //spacing out the buttons
+        float currentPosY = 0f;
+
+        //if the player's level is more or equal to the required amount, show the move. Needs to be changed to add buttons when the required level is reached
+        if (characterStatistics != null)
+        {
+            foreach (MoveBaseClass move in characterStatistics.moveBaseClassList)
+            {
+                //if the move's level is more than or equal to out chara's level
+                if (characterStatistics.level >= move.LevelAqcuired && !movesAlreadyAdded.Contains(move))
+                    {
+                    //making a new move button- instantiating the prefab and having it be a child of buttonContainer
+                    GameObject buttonGO = Instantiate(moveButtonPrefab, buttonContainer);
+                    //setting the anchored pos of the button's rectTransform using a vector 2 
+                    buttonGO.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -currentPosY);
+                    //adding button spacing- next button will appear under the one that was just made
+                    currentPosY += buttonSpacing + buttonGO.GetComponent<RectTransform>().sizeDelta.y;
+                    Debug.Log("Moves available.");
+                    Debug.Log(move.AttackName);
+                    Debug.Log("Level gotten: " + move.LevelAqcuired);
+                    //instantiating a button component onto the prefab, this way we won't need a button in the hierarchy
+                    //Button button = buttonGO.AddComponent<Button>();
+                    buttonGO.GetComponentInChildren<TMP_Text>().text = move.AttackName;
+                    //adding the move to the list
+                    movesAlreadyAdded.Add(move);
+                }
+            }
+        }
     }
 
     //pass the selected character's CharacterStatistics data to the MoveGenerator script so it can display the moves for that specific character
