@@ -19,5 +19,5 @@ MonoBehaviour:
   boostAmount: 0
   levelAqcuired: 1
   healAmount: 0
-  moveType: 0
+  moveType: 1
   attackType: 0

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BlowAway
   m_EditorClassIdentifier: 
   attackName: Blow Away
-  attackDesc: Bacis attackk. Call the wind to attack.
+  attackDesc: Basic attack. Call the wind to attack.
   attackPower: 6
   mPConsumption: 3
   boostAmount: 0
