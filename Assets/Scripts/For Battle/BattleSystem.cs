@@ -22,7 +22,7 @@ public class BattleSystem : MonoBehaviour
     [Header ("Players and Stations")]
     public GameObject[] playerPrefabs;
     public Transform[] playerStations;
-    public Unit[] playerUnits;
+    Unit[] playerUnits;
 
 
     [Header("Enemies and Stations")]
@@ -97,6 +97,7 @@ public class BattleSystem : MonoBehaviour
         {
             //showing the player's turn
             Debug.Log(playerUnits[i].characterStats.characterName + "'s turn.");
+            //Debug.Log(playerUnits[i].characterStats);
 
 
             //display the attack button for the current unit

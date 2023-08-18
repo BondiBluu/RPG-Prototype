@@ -36,6 +36,12 @@ public class MoveGenerator : MonoBehaviour
 
     public void GenerateSUPPButtons(CharacterStatistics characterStatistics)
     {
+        movesAlreadyAdded.Clear();
+        foreach (Transform button in suppButtonContainer)
+        {
+            Destroy(button.gameObject);
+        }
+        Debug.Log(characterStatistics);
         //spacing out the buttons
         float currentPosY = 0f;
 
@@ -72,13 +78,20 @@ public class MoveGenerator : MonoBehaviour
     
     public void GenerateATKButtons(CharacterStatistics characterStatistics)
     {
+        movesAlreadyAdded.Clear();
+        foreach (Transform button in atkButtonContainer)
+        {
+            Destroy(button.gameObject);
+        }
+
+        Debug.Log(characterStatistics);
+
         float currentPosY = 0f;
 
         if (characterStatistics != null)
         {
             for (int i = 0; i < characterStatistics.moveBaseClassList.Count; i++)
             {
-                //getting the specific move from characterStats
                 MoveBaseClass move = characterStatistics.moveBaseClassList[i];
 
                 if (characterStatistics.level >= move.LevelAqcuired && !movesAlreadyAdded.Contains(move) && move.MoveType == MoveType.DAMAGING)
@@ -123,7 +136,7 @@ public class MoveGenerator : MonoBehaviour
 
         selectedMove = move;
         attackButtonPressed = true;
-        attackandSupplementary.atkUI.SetActive(false);
+        attackandSupplementary.TurnOffButton();
         currentPlayerIndex++;
     }
 }

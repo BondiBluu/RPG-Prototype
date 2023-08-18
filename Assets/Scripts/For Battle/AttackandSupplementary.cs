@@ -34,14 +34,11 @@ public class AttackandSupplementary : MonoBehaviour
         actionIsUp = true;
     }
 
-    public void OnBackButton()
-    {
-        if (actionIsUp == true)
-        {
+    public void TurnOffButton()
+    {   
             suppUI.SetActive (false);
             atkUI.SetActive(false);
             actionIsUp = false;
-        }
     }
 
 
