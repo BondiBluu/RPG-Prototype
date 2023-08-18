@@ -22,7 +22,7 @@ public class BattleSystem : MonoBehaviour
     [Header ("Players and Stations")]
     public GameObject[] playerPrefabs;
     public Transform[] playerStations;
-    Unit[] playerUnits;
+    public Unit[] playerUnits;
 
 
     [Header("Enemies and Stations")]
@@ -32,7 +32,7 @@ public class BattleSystem : MonoBehaviour
     EnemyUnit[] enemyUnits;
 
     MoveGenerator moveGenerator;
-    MoveBaseClass moveBaseClass;
+    PlayerActionStorage playerActionStorage;
 
     // Start is called before the first frame update
     void Start()
@@ -41,8 +41,8 @@ public class BattleSystem : MonoBehaviour
         playerHUD = FindObjectOfType<BattleHUD>();
         enemyHUD = FindObjectOfType<BattleHUD>();
 
-        moveBaseClass = FindObjectOfType<MoveBaseClass>();
         moveGenerator = FindObjectOfType<MoveGenerator>();
+        playerActionStorage = FindObjectOfType<PlayerActionStorage>();
 
         //setting up the battle. Starting a Coroutine to manipulate time (waiting for seconds)
         StartCoroutine(SetUpBattle());
@@ -51,20 +51,10 @@ public class BattleSystem : MonoBehaviour
     //instantiating our units. IEnumerator needed whenever a method is called for a coroutine
     IEnumerator SetUpBattle()
     {
-        PlayersandEnemiesInstantiate();
-
-        //waiting seconds after everything has instantiated to switch turns
-        yield return new WaitForSeconds(2f);
-
-        //switching turns
-        state = BattleState.PLAYERTURN;
-        PlayerTurn();
-    }
-
-    public void PlayersandEnemiesInstantiate()
-    {
-        //instantiating playerUnits so it can be used with the appropriate size before the loop. It's not public after all, so how would it know?
+        //instantiating all the playerUnits so it can be used with the appropriate size before the loop. It's not public after all, so how would it know?
         playerUnits = new Unit[playerPrefabs.Length];
+        //saving the players to use later
+        //instantiatedPlayers.Add(playerUnits);
 
         //looping instead of making 4 enemy references
         for (int i = 0; i < playerPrefabs.Length; i++)
@@ -89,41 +79,89 @@ public class BattleSystem : MonoBehaviour
             enemyUnits[i] = enemyGObject.GetComponent<EnemyUnit>();
         }
         enemyHUD.SetEnemyHUD(enemyUnits);
+
+
+        //waiting seconds after everything has instantiated to switch turns
+        yield return new WaitForSeconds(1f);
+
+        
+        //switching turns
+        state = BattleState.PLAYERTURN;
+        StartCoroutine(PlayerTurn());
     }
 
     //where player can choose an action
-    void PlayerTurn()
+    IEnumerator PlayerTurn()
     {
-        //selected player being the variable that stores the current player's CharaStats data
-        //moveGenerator.SetCharacterData(selectedPlayer);
-    }
-
-    public void OnAttackButton() {
-
-        //don't do anything if it's not the player's turn
-        if (state != BattleState.PLAYERTURN)
+       for (int i = 0; i < playerUnits.Length; i++)
         {
-            return;
-        }
+            //showing the player's turn
+            Debug.Log(playerUnits[i].characterStats.characterName + "'s turn.");
 
-        StartCoroutine(PlayerAttack());
+
+            //display the attack button for the current unit
+            moveGenerator.GenerateATKButtons(playerUnits[i].characterStats);
+            moveGenerator.GenerateSUPPButtons(playerUnits[i].characterStats);
+
+            //seeing if attackButtonPressed is true, meaning the player pressed the attack button
+            yield return new WaitUntil(() => moveGenerator.HasPressedAttackButton());
+
+
+            SavePlayerAction(playerUnits[i], moveGenerator.selectedMove);
+
+            //saying the next player hasn't chosen their move yet.
+            moveGenerator.ClearAttackButtons();
+            
+        }
+        yield return new WaitForSeconds(1.5f);
+        Debug.Log("Finished.");
+        //state = BattleState.ENEMYTURN;
     }
 
-    IEnumerator PlayerAttack()
+    List<PlayerActions> playerActionContainer = new List<PlayerActions>();
+
+    public void SavePlayerAction(Unit _playerUnit, MoveBaseClass _move)
+    {
+        //adding the player's actions
+        playerActionContainer.Add(new PlayerActions(_playerUnit, _move));
+        Debug.Log(playerActionContainer.Count);
+        Debug.Log(_playerUnit.characterStats.characterName + " " + _move.AttackName);
+    }
+
+
+    //creating a class to store each player's actions
+    class PlayerActions
+    {
+        public MoveBaseClass move;
+        public Unit playerUnit;
+
+
+        public PlayerActions(Unit _playerUnit, MoveBaseClass _move)
+        {
+            playerUnit = _playerUnit;
+            move = _move;
+        }
+    }
+}
+
+
+
+/*
+
+    public IEnumerator PlayerAttack()
     {
         //damaging enemy
+        //enemyUnits[0].TakeDamage(moveBaseClass.AttackPower);
 
         //waiting
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(2f);
 
         //check if enemy is dead
         //change state based on what's happened
     }
 
-    void TakeDamage()
+    public void TakeDamage()
     {
 
     }
-    public void OnHealButton() { }
-
-}
+    public void OnHealButton() { }*/

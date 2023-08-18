@@ -9,26 +9,32 @@ public class MoveGenerator : MonoBehaviour
     [SerializeField] Transform atkButtonContainer;
     [SerializeField] Transform suppButtonContainer;
     [SerializeField] GameObject moveButtonPrefab;
-    [SerializeField] CharacterStatistics characterStatistics;
     [SerializeField] float buttonSpacing;
+    BattleSystem battleSystem;
+    AttackandSupplementary attackandSupplementary;
+    PlayerActionStorage playerActionStorage;
+    int currentPlayerIndex = 0;
+
+    bool attackButtonPressed = false;
+    public MoveBaseClass selectedMove;
 
     List<MoveBaseClass> movesAlreadyAdded = new List<MoveBaseClass>();
 
     // Start is called before the first frame update
     void Start()
     {        
-        GenerateATKButtons();
-        GenerateSUPPButtons();
+        battleSystem = FindObjectOfType<BattleSystem>();
+        attackandSupplementary = FindObjectOfType<AttackandSupplementary>();
+        playerActionStorage = FindObjectOfType<PlayerActionStorage>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        GenerateATKButtons();
-        GenerateSUPPButtons();
+        
     }
 
-    public void GenerateSUPPButtons()
+    public void GenerateSUPPButtons(CharacterStatistics characterStatistics)
     {
         //spacing out the buttons
         float currentPosY = 0f;
@@ -36,8 +42,11 @@ public class MoveGenerator : MonoBehaviour
         //if the player's level is more or equal to the required amount, show the move. Needs to be changed to add buttons when the required level is reached
         if (characterStatistics != null)
         {
-            foreach (MoveBaseClass move in characterStatistics.moveBaseClassList)
+            for (int i = 0; i < characterStatistics.moveBaseClassList.Count; i++)
             {
+                //getting the specific move from characterStats
+                MoveBaseClass move = characterStatistics.moveBaseClassList[i];
+
                 //if the move's level is more than or equal to out chara's level
                 if (characterStatistics.level >= move.LevelAqcuired && !movesAlreadyAdded.Contains(move) && move.MoveType == MoveType.SUPPLEMENTARY)
                     {
@@ -47,9 +56,6 @@ public class MoveGenerator : MonoBehaviour
                     buttonGO.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -currentPosY);
                     //adding button spacing- next button will appear under the one that was just made
                     currentPosY += buttonSpacing + buttonGO.GetComponent<RectTransform>().sizeDelta.y;
-                    Debug.Log("Moves available.");
-                    Debug.Log(move.AttackName);
-                    Debug.Log("Level gotten: " + move.LevelAqcuired);
                     
                     buttonGO.GetComponentInChildren<TMP_Text>().text = move.AttackName;
                     //adding the move to the list
@@ -57,21 +63,24 @@ public class MoveGenerator : MonoBehaviour
 
                     //prefabs can't have onClick events, so we'll have to get the component and add an onClick event.
                     Button buttonComponent = buttonGO.GetComponent<Button>();
-                    buttonComponent.onClick.AddListener(() => OnButtonClick());
+                    buttonComponent.onClick.AddListener(() => OnAttackButton(move, i)); 
 
                 }
             }
         }
     }
     
-    public void GenerateATKButtons()
+    public void GenerateATKButtons(CharacterStatistics characterStatistics)
     {
         float currentPosY = 0f;
 
         if (characterStatistics != null)
         {
-            foreach (MoveBaseClass move in characterStatistics.moveBaseClassList)
+            for (int i = 0; i < characterStatistics.moveBaseClassList.Count; i++)
             {
+                //getting the specific move from characterStats
+                MoveBaseClass move = characterStatistics.moveBaseClassList[i];
+
                 if (characterStatistics.level >= move.LevelAqcuired && !movesAlreadyAdded.Contains(move) && move.MoveType == MoveType.DAMAGING)
                     {
                     GameObject buttonGO = Instantiate(moveButtonPrefab, atkButtonContainer);
@@ -79,30 +88,42 @@ public class MoveGenerator : MonoBehaviour
                     buttonGO.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -currentPosY);
 
                     currentPosY += buttonSpacing + buttonGO.GetComponent<RectTransform>().sizeDelta.y;
-                    Debug.Log("Moves available.");
-                    Debug.Log(move.AttackName);
-                    Debug.Log("Level gotten: " + move.LevelAqcuired);
 
                     buttonGO.GetComponentInChildren<TMP_Text>().text = move.AttackName;
 
                     movesAlreadyAdded.Add(move);
 
                     Button buttonComponent = buttonGO.GetComponent<Button>();
-                    buttonComponent.onClick.AddListener(() => OnButtonClick());
+                    buttonComponent.onClick.AddListener(() => OnAttackButton(move,i));
                 }
             }
         }
     }
 
-    public void OnButtonClick()
+    //checking if the attack button's been pressed
+    public bool HasPressedAttackButton()
     {
-        Debug.Log("Button clicked");
+        return attackButtonPressed;
     }
 
-    //pass the selected character's CharacterStatistics data to the MoveGenerator script so it can display the moves for that specific character
-    public void SetCharacterData(CharacterStatistics characterData)
+    //clears the flag that signals when the player has made their move
+    public void ClearAttackButtons()
     {
-        characterStatistics = characterData;
+        attackButtonPressed = false;
     }
 
+    //using the generated buttons to attack. parameters are the move being used and the current player using it
+    public void OnAttackButton(MoveBaseClass move, int playerIndex)
+    { 
+
+        if (battleSystem.state != BattleState.PLAYERTURN)
+        {
+            return;
+        }
+
+        selectedMove = move;
+        attackButtonPressed = true;
+        attackandSupplementary.atkUI.SetActive(false);
+        currentPlayerIndex++;
+    }
 }

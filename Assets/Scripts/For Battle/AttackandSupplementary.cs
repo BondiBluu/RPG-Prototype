@@ -7,8 +7,8 @@ public class AttackandSupplementary : MonoBehaviour
 {
     //make a list for the moves
     [SerializeField] List<Button> atkButtons;
-    [SerializeField] GameObject atkUI;
-    [SerializeField] GameObject suppUI;
+    [SerializeField] public GameObject atkUI;
+    [SerializeField] public GameObject suppUI;
     [SerializeField] TMP_Text atkText;
     public bool actionIsUp = false;
     MoveGenerator moveGenerator;
@@ -24,7 +24,6 @@ public class AttackandSupplementary : MonoBehaviour
         atkUI.SetActive(true);
         suppUI.SetActive(false);
         actionIsUp = true;
-        moveGenerator.GenerateATKButtons();
     }
     
     //for te support button
@@ -33,7 +32,6 @@ public class AttackandSupplementary : MonoBehaviour
         suppUI.SetActive(true);
         atkUI.SetActive(false);
         actionIsUp = true;
-        moveGenerator.GenerateSUPPButtons();
     }
 
     public void OnBackButton()
