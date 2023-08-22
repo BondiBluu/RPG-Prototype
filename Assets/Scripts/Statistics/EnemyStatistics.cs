@@ -28,4 +28,7 @@ public class EnemyStatistics : ScriptableObject
     public string ability;
     //itemObject?
     SpawnRate spawnRate;
+
+    public List<MoveBaseClass> moveBaseClassList;
+
 }

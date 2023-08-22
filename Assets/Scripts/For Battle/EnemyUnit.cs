@@ -9,12 +9,21 @@ public class EnemyUnit : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        enemyStats = FindObjectOfType<EnemyStatistics>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    void TakingDamage()
+    {
+        bool isDefeated;
+        if (enemyStats.currentHP <= 0)
+        {
+            isDefeated = true;
+        }
     }
 }

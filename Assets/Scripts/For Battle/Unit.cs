@@ -18,6 +18,15 @@ public class Unit : MonoBehaviour
     {
         
     }
+    void TakingDamage()
+    {
+        bool isDefeated;
+        if (characterStats.currentHP <= 0)
+        {
+            isDefeated = true;
+        }
+        isDefeated = false;
+    }
 
     public bool TakeDamage()
     {
