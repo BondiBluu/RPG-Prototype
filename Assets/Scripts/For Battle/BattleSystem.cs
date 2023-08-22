@@ -125,9 +125,6 @@ public class BattleSystem : MonoBehaviour
             attackandSupplementary.enemyPanelUI.SetActive(false);
             //saying the next player hasn't chosen their move yet.
             moveGenerator.ClearAttackButtons();
-            
-
-            
         }
         yield return new WaitForSeconds(1.5f);
         Debug.Log("Finished.");
@@ -152,11 +149,15 @@ public class BattleSystem : MonoBehaviour
         {
             //getting how many enemy moves there are in the current enemy
             int enemyMoves = enemyUnits[i].enemyStats.moveBaseClassList.Count;
+            int playersPresent = playerUnits.Length;
+            int selectedPlayer = Random.Range(0, playersPresent);
             //enemy will choosea random move in their list
             int selectedMove = Random.Range(0, enemyMoves);
             //move to use is whatever number was chosen
             MoveBaseClass moveToUse = enemyUnits[i].enemyStats.moveBaseClassList[selectedMove];
-            SaveEnemyAction(enemyUnits[i], moveToUse);
+            Unit unitToAttack = playerUnits[selectedPlayer];
+
+            SaveEnemyAction(enemyUnits[i], moveToUse, unitToAttack);
         }
         state = BattleState.BATTLEPHASE;
     }
@@ -171,12 +172,12 @@ public class BattleSystem : MonoBehaviour
         Debug.Log(playerActionContainer.Count);
         Debug.Log(_playerUnit.characterStats.characterName + " " + _move.AttackName + ", on " + _enemyUnit.enemyStats.enemyName);
     }
-    public void SaveEnemyAction(EnemyUnit _enemyUnit, MoveBaseClass _move)
+    public void SaveEnemyAction(EnemyUnit _enemyUnit, MoveBaseClass _move, Unit _playerUnit)
     {
         //adding the player's actions
-        enemyActionContainer.Add(new EnemyActions(_enemyUnit, _move));
+        enemyActionContainer.Add(new EnemyActions(_enemyUnit, _move, _playerUnit));
         Debug.Log(enemyActionContainer.Count);
-        Debug.Log(_enemyUnit.enemyStats.enemyName + " " + _move.AttackName);
+        Debug.Log(_enemyUnit.enemyStats.enemyName + " " + _move.AttackName + ", on " + _playerUnit.characterStats.characterName);
     }
 
 
@@ -202,10 +203,11 @@ public class BattleSystem : MonoBehaviour
         public Unit playerUnit;
 
 
-        public EnemyActions(EnemyUnit _enemyUnit, MoveBaseClass _move)
+        public EnemyActions(EnemyUnit _enemyUnit, MoveBaseClass _move, Unit _playerUnit)
         {
             enemyUnit = _enemyUnit;
             move = _move;
+            playerUnit = _playerUnit;
         }
     }
 }
