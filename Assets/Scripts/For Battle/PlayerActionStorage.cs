@@ -12,9 +12,9 @@ public class PlayerActionStorage : MonoBehaviour
         //adding the player's actions
         playerActionContainer.Add(new PlayerActions(_playerUnit, _move));
         Debug.Log(playerActionContainer.Count);
-        Debug.Log(playerActionContainer);
+        Debug.Log(_playerUnit.characterStats.characterName + " " + _move.AttackName);
     }
-    
+
 
     //creating a class to store each player's actions
     class PlayerActions

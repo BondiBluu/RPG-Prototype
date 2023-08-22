@@ -9,8 +9,8 @@ public class AttackandSupplementary : MonoBehaviour
     [SerializeField] List<Button> atkButtons;
     [SerializeField] public GameObject atkUI;
     [SerializeField] public GameObject suppUI;
+    [SerializeField] public GameObject enemyPanelUI;
     [SerializeField] TMP_Text atkText;
-    public bool actionIsUp = false;
     BattleSystem battleSystem;
 
     private void Start()
@@ -25,7 +25,6 @@ public class AttackandSupplementary : MonoBehaviour
         {
             atkUI.SetActive(true);
             suppUI.SetActive(false);
-            actionIsUp = true;
         }
     }
     
@@ -36,7 +35,16 @@ public class AttackandSupplementary : MonoBehaviour
         {
             suppUI.SetActive(true);
             atkUI.SetActive(false);
-            actionIsUp = true;
+        }
+    }
+
+    public void EnemyContainerOn()
+    {
+        if (battleSystem.state == BattleState.PLAYERTURN)
+        {
+            suppUI.SetActive(false);
+            atkUI.SetActive(false);
+            enemyPanelUI.SetActive(true);
         }
     }
 
@@ -44,7 +52,6 @@ public class AttackandSupplementary : MonoBehaviour
     {   
             suppUI.SetActive (false);
             atkUI.SetActive(false);
-            actionIsUp = false;
     }
 
 

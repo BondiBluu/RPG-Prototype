@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public enum BattleState
 {
@@ -31,8 +32,15 @@ public class BattleSystem : MonoBehaviour
     public GameObject[] enemyPrefabs;
     public Transform[] enemyStations;
     EnemyUnit[] enemyUnits;
+    public EnemyUnit selectedEnemy; //for the player to choose which enemy to hits
+
+    [Header("Buttons")]
+    public Button[] enemySelectButton;
+
+    int selectedPlayerIndex = 0;
 
     MoveGenerator moveGenerator;
+    AttackandSupplementary attackandSupplementary;
     PlayerActionStorage playerActionStorage;
 
     // Start is called before the first frame update
@@ -44,6 +52,7 @@ public class BattleSystem : MonoBehaviour
 
         moveGenerator = FindObjectOfType<MoveGenerator>();
         playerActionStorage = FindObjectOfType<PlayerActionStorage>();
+        attackandSupplementary = FindObjectOfType<AttackandSupplementary>();
 
         //setting up the battle. Starting a Coroutine to manipulate time (waiting for seconds)
         StartCoroutine(SetUpBattle());
@@ -54,8 +63,6 @@ public class BattleSystem : MonoBehaviour
     {
         //instantiating all the playerUnits so it can be used with the appropriate size before the loop. It's not public after all, so how would it know?
         playerUnits = new Unit[playerPrefabs.Length];
-        //saving the players to use later
-        //instantiatedPlayers.Add(playerUnits);
 
         //looping instead of making 4 enemy references
         for (int i = 0; i < playerPrefabs.Length; i++)
@@ -103,14 +110,23 @@ public class BattleSystem : MonoBehaviour
             moveGenerator.GenerateATKButtons(playerUnits[i].characterStats);
             moveGenerator.GenerateSUPPButtons(playerUnits[i].characterStats);
 
+            
+
             //seeing if attackButtonPressed is true, meaning the player pressed the attack button
             yield return new WaitUntil(() => moveGenerator.HasPressedAttackButton());
 
+            attackandSupplementary.EnemyContainerOn();
 
-            SavePlayerAction(playerUnits[i], moveGenerator.selectedMove);
+            yield return new WaitUntil(() => selectedEnemy != null);
 
+            SavePlayerAction(playerUnits[i], moveGenerator.selectedMove, selectedEnemy);
+
+            selectedEnemy = null;
+            attackandSupplementary.enemyPanelUI.SetActive(false);
             //saying the next player hasn't chosen their move yet.
             moveGenerator.ClearAttackButtons();
+            
+
             
         }
         yield return new WaitForSeconds(1.5f);
@@ -118,6 +134,16 @@ public class BattleSystem : MonoBehaviour
         state = BattleState.ENEMYTURN;
         EnemyTurn();
     }
+
+    //for button clicking enemies
+    public void OnEnemyButtonClick(int enemyIndex)
+    {
+        selectedEnemy = enemyUnits[enemyIndex];
+        selectedPlayerIndex++;
+    }
+
+
+
 
     void EnemyTurn()
     {
@@ -138,12 +164,12 @@ public class BattleSystem : MonoBehaviour
     List<PlayerActions> playerActionContainer = new List<PlayerActions>();
     List<EnemyActions> enemyActionContainer = new List<EnemyActions>();
 
-    public void SavePlayerAction(Unit _playerUnit, MoveBaseClass _move)
+    public void SavePlayerAction(Unit _playerUnit, MoveBaseClass _move, EnemyUnit _enemyUnit)
     {
         //adding the player's actions
-        playerActionContainer.Add(new PlayerActions(_playerUnit, _move));
+        playerActionContainer.Add(new PlayerActions(_playerUnit, _move, _enemyUnit));
         Debug.Log(playerActionContainer.Count);
-        Debug.Log(_playerUnit.characterStats.characterName + " " + _move.AttackName);
+        Debug.Log(_playerUnit.characterStats.characterName + " " + _move.AttackName + ", on " + _enemyUnit.enemyStats.enemyName);
     }
     public void SaveEnemyAction(EnemyUnit _enemyUnit, MoveBaseClass _move)
     {
@@ -159,11 +185,13 @@ public class BattleSystem : MonoBehaviour
     {
         public MoveBaseClass move;
         public Unit playerUnit;
+        public EnemyUnit enemyUnit;
 
-        public PlayerActions(Unit _playerUnit, MoveBaseClass _move)
+        public PlayerActions(Unit _playerUnit, MoveBaseClass _move, EnemyUnit _enemyUnit)
         {
             playerUnit = _playerUnit;
             move = _move;
+            enemyUnit = _enemyUnit;
         }
 
     }
@@ -171,6 +199,8 @@ public class BattleSystem : MonoBehaviour
     {
         public MoveBaseClass move;
         public EnemyUnit enemyUnit;
+        public Unit playerUnit;
+
 
         public EnemyActions(EnemyUnit _enemyUnit, MoveBaseClass _move)
         {
