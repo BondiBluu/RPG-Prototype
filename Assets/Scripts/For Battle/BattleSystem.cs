@@ -8,6 +8,7 @@ public enum BattleState
     START,
     PLAYERTURN,
     ENEMYTURN,
+    BATTLEPHASE,
     WIN,
     LOSS
 }
@@ -97,10 +98,8 @@ public class BattleSystem : MonoBehaviour
         {
             //showing the player's turn
             Debug.Log(playerUnits[i].characterStats.characterName + "'s turn.");
-            //Debug.Log(playerUnits[i].characterStats);
 
-
-            //display the attack button for the current unit
+            //display the attack etc buttons for the current unit
             moveGenerator.GenerateATKButtons(playerUnits[i].characterStats);
             moveGenerator.GenerateSUPPButtons(playerUnits[i].characterStats);
 
@@ -116,10 +115,28 @@ public class BattleSystem : MonoBehaviour
         }
         yield return new WaitForSeconds(1.5f);
         Debug.Log("Finished.");
-        //state = BattleState.ENEMYTURN;
+        state = BattleState.ENEMYTURN;
+        EnemyTurn();
+    }
+
+    void EnemyTurn()
+    {
+        //wat for the enemy to move
+        for(int i = 0; i < enemyUnits.Length; i++)
+        {
+            //getting how many enemy moves there are in the current enemy
+            int enemyMoves = enemyUnits[i].enemyStats.moveBaseClassList.Count;
+            //enemy will choosea random move in their list
+            int selectedMove = Random.Range(0, enemyMoves);
+            //move to use is whatever number was chosen
+            MoveBaseClass moveToUse = enemyUnits[i].enemyStats.moveBaseClassList[selectedMove];
+            SaveEnemyAction(enemyUnits[i], moveToUse);
+        }
+        state = BattleState.BATTLEPHASE;
     }
 
     List<PlayerActions> playerActionContainer = new List<PlayerActions>();
+    List<EnemyActions> enemyActionContainer = new List<EnemyActions>();
 
     public void SavePlayerAction(Unit _playerUnit, MoveBaseClass _move)
     {
@@ -127,6 +144,13 @@ public class BattleSystem : MonoBehaviour
         playerActionContainer.Add(new PlayerActions(_playerUnit, _move));
         Debug.Log(playerActionContainer.Count);
         Debug.Log(_playerUnit.characterStats.characterName + " " + _move.AttackName);
+    }
+    public void SaveEnemyAction(EnemyUnit _enemyUnit, MoveBaseClass _move)
+    {
+        //adding the player's actions
+        enemyActionContainer.Add(new EnemyActions(_enemyUnit, _move));
+        Debug.Log(enemyActionContainer.Count);
+        Debug.Log(_enemyUnit.enemyStats.enemyName + " " + _move.AttackName);
     }
 
 
@@ -136,10 +160,21 @@ public class BattleSystem : MonoBehaviour
         public MoveBaseClass move;
         public Unit playerUnit;
 
-
         public PlayerActions(Unit _playerUnit, MoveBaseClass _move)
         {
             playerUnit = _playerUnit;
+            move = _move;
+        }
+
+    }
+    class EnemyActions
+    {
+        public MoveBaseClass move;
+        public EnemyUnit enemyUnit;
+
+        public EnemyActions(EnemyUnit _enemyUnit, MoveBaseClass _move)
+        {
+            enemyUnit = _enemyUnit;
             move = _move;
         }
     }
