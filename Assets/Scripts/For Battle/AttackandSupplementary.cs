@@ -11,27 +11,33 @@ public class AttackandSupplementary : MonoBehaviour
     [SerializeField] public GameObject suppUI;
     [SerializeField] TMP_Text atkText;
     public bool actionIsUp = false;
-    MoveGenerator moveGenerator;
+    BattleSystem battleSystem;
 
     private void Start()
     {
-        moveGenerator = FindObjectOfType<MoveGenerator>();
+        battleSystem = FindObjectOfType<BattleSystem>();
     }
 
     //for the attack button
     public void OnATKButton()
     {
-        atkUI.SetActive(true);
-        suppUI.SetActive(false);
-        actionIsUp = true;
+        if (battleSystem.state == BattleState.PLAYERTURN)
+        {
+            atkUI.SetActive(true);
+            suppUI.SetActive(false);
+            actionIsUp = true;
+        }
     }
     
     //for te support button
     public void OnSUPPButton()
     {
-        suppUI.SetActive(true);
-        atkUI.SetActive(false);
-        actionIsUp = true;
+        if (battleSystem.state == BattleState.PLAYERTURN)
+        {
+            suppUI.SetActive(true);
+            atkUI.SetActive(false);
+            actionIsUp = true;
+        }
     }
 
     public void TurnOffButton()
