@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System.Linq;
 
 public enum BattleState
 {
@@ -160,6 +161,7 @@ public class BattleSystem : MonoBehaviour
             SaveEnemyAction(enemyUnits[i], moveToUse, unitToAttack);
         }
         state = BattleState.BATTLEPHASE;
+        StartCoroutine(BattlePhase());
     }
 
     List<PlayerActions> playerActionContainer = new List<PlayerActions>();
@@ -210,11 +212,66 @@ public class BattleSystem : MonoBehaviour
             playerUnit = _playerUnit;
         }
     }
-}
+
+    IEnumerator BattlePhase()
+    {
+        List<PlayerActions> sortedPlayerActions = playerActionContainer.OrderByDescending(action => action.playerUnit.characterStats.speed).ToList();
+        List<EnemyActions> sortedEnemyActions = enemyActionContainer.OrderByDescending(action => action.enemyUnit.enemyStats.speed).ToList();
+
+        List<object> allActions = new List<object>();
+
+        allActions.AddRange(sortedPlayerActions);
+        allActions.AddRange(sortedEnemyActions);
+
+        allActions.Sort((action1, action2) =>
+        {
+            float speed1 = 0f;
+            float speed2 = 0f;
+
+            if(action1 is PlayerActions playerActions1)
+            {
+                speed1 = playerActions1.playerUnit.characterStats.speed;
+            } 
+            else if (action1 is EnemyActions enemyActions1)
+            {
+                speed1 = enemyActions1.enemyUnit.enemyStats.speed;
+            }
+            
+            if(action2 is PlayerActions playerActions2)
+            {
+                speed2 = playerActions2.playerUnit.characterStats.speed;
+            } 
+            else if (action2 is EnemyActions enemyActions2)
+            {
+                speed2 = enemyActions2.enemyUnit.enemyStats.speed;
+            }
+
+            return speed2.CompareTo(speed1);
+        });
 
 
+        foreach (object action in allActions)
+        {
+            
+            if(action is PlayerActions playerAction)
+            {
+                Debug.Log(playerAction.playerUnit.characterStats.characterName);
+            }
+            
+            else if(action is EnemyActions enemyAction)
+            {
+                Debug.Log(enemyAction.enemyUnit.enemyStats.name);
+            }
 
-/*
+            yield return new WaitForSeconds(2f);
+        }
+
+        yield return new WaitForSeconds(2f);
+        Debug.Log("Finished");
+    }
+
+
+}/*
 
     public IEnumerator PlayerAttack()
     {
