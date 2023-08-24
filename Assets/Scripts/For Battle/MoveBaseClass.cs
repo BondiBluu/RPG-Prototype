@@ -34,6 +34,12 @@ public enum AttackType
     MAGICAL
 }
 
+public enum SupplementaryEffect
+{
+    POSITIVE,
+    NEGATIVE
+}
+
 [CreateAssetMenu(fileName = "New Move", menuName = "Move/NewMove")]
 public class MoveBaseClass : ScriptableObject
 {
@@ -47,6 +53,7 @@ public class MoveBaseClass : ScriptableObject
     [SerializeField] int healAmount;
     [SerializeField] MoveType moveType;
     [SerializeField] AttackType attackType;
+    [SerializeField] SupplementaryEffect supplementaryEffect;
     //damage over time? Things like poison
     //number of attacks
     //number of people to attack
@@ -104,5 +111,11 @@ public class MoveBaseClass : ScriptableObject
     {
         get { return attackType; }
         set { attackType = value; }
+    }
+
+    public SupplementaryEffect SupplementaryEffect 
+    { 
+        get { return supplementaryEffect; }
+        set { supplementaryEffect = value; }
     }
 }
