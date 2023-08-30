@@ -20,6 +20,11 @@ public class BattleHUD : MonoBehaviour
     public TMP_Text[] maxMPPlayers;
     public Slider[] sliderMPPlayers;
 
+    [Header("Allies")]
+    public TMP_Text[] nameTextAllies;
+    public Slider[] sliderHPAllies;
+    public Slider[] sliderMPAllies;
+
     [Header("Enemy Names")]
     public TMP_Text[] nameTextEnemies;
 
@@ -32,29 +37,36 @@ public class BattleHUD : MonoBehaviour
         for (int i = 0; i < units.Length; i++)
         {
             //displaying name, lvl, max and current hp and mp of players
-            nameTextPlayers[i].text = units[i].characterStats.characterName;
-            levelTextPlayers[i].text = units[i].characterStats.level.ToString();
-            maxHPPlayers[i].text = units[i].characterStats.maxHP.ToString();
-            currentHPPlayers[i].text = units[i].characterStats.currentHP.ToString();
-            maxMPPlayers[i].text = units[i].characterStats.maxMP.ToString();
-            currentMPPlayers[i].text = units[i].characterStats.currentMP.ToString();
+            nameTextPlayers[i].text = units[i].characterStats.CharacterName;
+            levelTextPlayers[i].text = units[i].characterStats.Level.ToString();
+            maxHPPlayers[i].text = units[i].characterStats.MaxHP.ToString();
+            currentHPPlayers[i].text = units[i].characterStats.CurrentHP.ToString();
+            maxMPPlayers[i].text = units[i].characterStats.MaxMP.ToString();
+            currentMPPlayers[i].text = units[i].characterStats.CurrentMP.ToString();
+
+            //displaying things for allies
+            nameTextAllies[i].text = units[i].characterStats.CharacterName;
+            sliderHPAllies[i].maxValue = units[i].characterStats.MaxHP;
+            sliderHPAllies[i].value = units[i].characterStats.CurrentHP;
+            sliderMPAllies[i].maxValue = units[i].characterStats.MaxMP;
+            sliderMPAllies[i].value = units[i].characterStats.CurrentMP;
 
             //sliders have built in max values and vaues in general
-            sliderHPPlayers[i].maxValue = units[i].characterStats.maxHP; 
-            sliderMPPlayers[i].maxValue = units[i].characterStats.maxMP; 
-            sliderHPPlayers[i].value = units[i].characterStats.currentHP;
-            sliderMPPlayers[i].value = units[i].characterStats.currentMP;
+            sliderHPPlayers[i].maxValue = units[i].characterStats.MaxHP; 
+            sliderMPPlayers[i].maxValue = units[i].characterStats.MaxMP; 
+            sliderHPPlayers[i].value = units[i].characterStats.CurrentHP;
+            sliderMPPlayers[i].value = units[i].characterStats.CurrentMP;
         }
     }
 
-    public void SetEnemyHUD(EnemyUnit[] units)
+    public void SetEnemyHUD(Unit[] units)
     {
         for (int i = 0; i < units.Length; i++)
         {
             //displaying name and current hp of enemies
-            nameTextEnemies[i].text = units[i].enemyStats.enemyName;
-            sliderEnemies[i].maxValue = units[i].enemyStats.maxHP;
-            sliderEnemies[i].value = units[i].enemyStats.currentHP;
+            nameTextEnemies[i].text = units[i].characterStats.CharacterName;
+            sliderEnemies[i].maxValue = units[i].characterStats.MaxHP;
+            sliderEnemies[i].value = units[i].characterStats.CurrentHP;
         }
     }
 

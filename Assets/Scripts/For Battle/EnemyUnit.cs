@@ -2,16 +2,52 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyUnit : MonoBehaviour
+public class EnemyUnit : Unit
 {
-    [SerializeField] public EnemyStatistics enemyStats;
 
-    void TakeDamage()
+    public void ApplyDebuff(Boost[] debuffTypes, float debuffAmount)
     {
-        bool isDefeated;
-        if (enemyStats.currentHP <= 0)
+        foreach (Boost debuffType in debuffTypes)
         {
-            isDefeated = true;
+            switch (debuffType)
+            {
+                case Boost.ATTACK:
+                    {
+                        break;
+                    }
+                case Boost.DEFENSE:
+                    {
+                        break;
+                    }
+                case Boost.MAGIC:
+                    {
+                        break;
+                    }
+                case Boost.RES:
+                    {
+                        break;
+                    }
+                case Boost.EFF:
+                    {
+                        break;
+                    }
+                case Boost.SKILL:
+                    {
+                        break;
+                    }
+                case Boost.SPEED:
+                    {
+                        break;
+                    }
+            }
         }
     }
 }
+/* void TakeDamage()
+    {
+        bool isDefeated;
+        if (enemyStats.CurrentHP <= 0)
+        {
+            isDefeated = true;
+        }
+    }*/

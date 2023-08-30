@@ -10,6 +10,7 @@ public class AttackandSupplementary : MonoBehaviour
     [SerializeField] public GameObject atkUI;
     [SerializeField] public GameObject suppUI;
     [SerializeField] public GameObject enemyPanelUI;
+    [SerializeField] public GameObject allyPanelUI;
     [SerializeField] TMP_Text atkText;
     BattleSystem battleSystem;
 
@@ -28,7 +29,7 @@ public class AttackandSupplementary : MonoBehaviour
         }
     }
     
-    //for te support button
+    //for the support button
     public void OnSUPPButton()
     {
         if (battleSystem.state == BattleState.PLAYERTURN)
@@ -47,10 +48,20 @@ public class AttackandSupplementary : MonoBehaviour
             enemyPanelUI.SetActive(true);
         }
     }
+    public void AllyContainerOn()
+    {
+        if (battleSystem.state == BattleState.PLAYERTURN)
+        {
+            suppUI.SetActive(false);
+            atkUI.SetActive(false);
+            allyPanelUI.SetActive(true);
+        }
+    }
 
     public void TurnOffButton()
     {   
             suppUI.SetActive (false);
+            allyPanelUI.SetActive (false);
             atkUI.SetActive(false);
     }
 

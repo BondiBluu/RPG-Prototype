@@ -2,42 +2,72 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class DamageCalc : MonoBehaviour
 {
-    public int CalcDamage(Unit attacker, MoveBaseClass move, EnemyUnit theAttacked)
+    public string message = "";
+    public int CalcDamage(Unit attacker, MoveBaseClass move, Unit theTarget)
     {
         float damageOutput = 0f;
         int finalResult = 0;
 
-        if (move.AttackType == AttackType.PHYSICAL)
+        switch (move.AttackType)
         {
-            damageOutput = (attacker.characterStats.attack * move.AttackPower) / (2 * theAttacked.enemyStats.defense);
-            finalResult = (int)Math.Ceiling(damageOutput);
-        }
-        
-        if (move.AttackType == AttackType.MAGICAL)
-        {
-            damageOutput = (attacker.characterStats.magic * move.AttackPower) / (2 * theAttacked.enemyStats.resistance);
-            finalResult = (int)Math.Ceiling(damageOutput);
+            case AttackType.PHYSICAL:
+                {
+                    //so there's no divide by 0 error, the divisor, if not anything higher than 0, will be 1.
+                    damageOutput = (attacker.characterStats.CurrentAttack * move.AttackPower) / (2 * Math.Max(1, theTarget.characterStats.CurrentDefense));
+                    finalResult = (int)Math.Ceiling(damageOutput);
+                    message += $"{attacker.characterStats.CharacterName} used {move.AttackName} on {theTarget.characterStats.CharacterName}! Did {finalResult} damage!";
+                    break;
+                }
+            case AttackType.MAGICAL:
+                {
+                    damageOutput = (attacker.characterStats.CurrentAttack * move.AttackPower) / (2 * Math.Max(1, theTarget.characterStats.CurrentDefense));
+                    finalResult = (int)Math.Ceiling(damageOutput);
+                    message += $"{attacker.characterStats.CharacterName} used {move.AttackName} on {theTarget.characterStats.CharacterName}! Did {finalResult} damage!";
+                    break;
+                }
         }
 
-        if(move.BoostAmount > 0)
+        if(move.BuffTypes.Length > 0)
         {
-            //boost by that amount
-            if(move.SupplementaryEffect == SupplementaryEffect.POSITIVE)
-            {
-                //boost
-                //atk+(atk * .1(the boost amount))
-                //target will be self
-            }
+            //the attacker applies the buff on whatever ally- be it themselves or someone else
+            theTarget.ApplyBuff(move.BuffTypes, move.BuffAmount);
 
-            if (move.SupplementaryEffect == SupplementaryEffect.NEGATIVE)
+            //adding the buffs to the message
+            message += $"{attacker.characterStats.CharacterName} uses {move.AttackName} on {theTarget.characterStats.CharacterName}! {theTarget.characterStats.CharacterName}'s";
+            //naming all the buffs that were in that attack
+            for (int i = 0; i < move.BuffTypes.Length; i++)
             {
-                //lower
+                message += $" {move.BuffTypes[i]}";
+                if(i < move.BuffTypes.Length - 1)
+                {
+                    message += ",";
+                }
             }
+            message += $" raised!";
         }
-        
+
+        if(move.DebuffTypes.Length > 0)
+        {
+            //applying any debuff on the target
+            theTarget.ApplyBuff(move.DebuffTypes, move.DebuffAmount);
+
+            message += $"{attacker.characterStats.CharacterName} uses {move.AttackName} on {theTarget.characterStats.CharacterName}! {theTarget.characterStats.CharacterName}'s";
+
+            for (int i = 0; i < move.DebuffTypes.Length; i++)
+            {
+                message += $" {move.DebuffTypes[i]}";
+                if (i < move.DebuffTypes.Length - 1)
+                {
+                    message += ",";
+                }
+            }
+            message += $" lowered!";
+        }
+
         if (finalResult <= 0)
         {
             if (move.MoveType != MoveType.SUPPLEMENTARY)
@@ -48,35 +78,30 @@ public class DamageCalc : MonoBehaviour
         return finalResult;
 
     }
-    public int EnemyCalc(EnemyUnit attacker, MoveBaseClass move, Unit theAttacked)
+
+    void CalcHeal() { }
+}
+
+/*public int EnemyCalc(Unit attacker, MoveBaseClass move, Unit theTarget)
     {
         float damageOutput = 0f;
         int finalResult = 0;
 
         if (move.AttackType == AttackType.PHYSICAL)
         {
-            damageOutput = (attacker.enemyStats.attack * move.AttackPower) / (2 * theAttacked.characterStats.defense);
+            damageOutput = (attacker.characterStats.CurrentAttack * move.AttackPower) / (2 * MathF.Max(1, theTarget.characterStats.CurrentDefense));
             finalResult = (int)Math.Ceiling(damageOutput);
         }
 
-        if (move.AttackType == AttackType.PHYSICAL)
+        if (move.AttackType == AttackType.MAGICAL)
         {
-            damageOutput = (attacker.enemyStats.magic * move.AttackPower) / (2 * theAttacked.characterStats.resistance);
+            damageOutput = (attacker.characterStats.CurrentMagic * move.AttackPower) / (2 * Math.Max(1,theTarget.characterStats.CurrentDefense));
             finalResult = (int)Math.Ceiling(damageOutput);
         }
 
-        if (move.BoostAmount > 0)
+        if (move.BuffAmount > 0)
         {
-            //boost by that amount
-            if (move.SupplementaryEffect == SupplementaryEffect.POSITIVE)
-            {
-                //boost
-            }
-
-            if (move.SupplementaryEffect == SupplementaryEffect.NEGATIVE)
-            {
-                //lower
-            }
+            
         }
 
         if (finalResult <= 0)
@@ -87,7 +112,4 @@ public class DamageCalc : MonoBehaviour
             }
         }
         return finalResult;
-    }
-
-
-}
+    }*/

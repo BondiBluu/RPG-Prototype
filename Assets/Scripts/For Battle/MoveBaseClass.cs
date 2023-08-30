@@ -5,9 +5,13 @@ using UnityEngine;
 public enum Boost
 {
     None,
-    ATTACKBOOST,
-    DEFENSEBOOST,
-    
+    ATTACK,
+    DEFENSE,
+    MAGIC,
+    RES,
+    EFF,
+    SKILL,
+    SPEED
 }
 
 public enum Status
@@ -34,11 +38,7 @@ public enum AttackType
     MAGICAL
 }
 
-public enum SupplementaryEffect
-{
-    POSITIVE,
-    NEGATIVE
-}
+
 
 [CreateAssetMenu(fileName = "New Move", menuName = "Move/NewMove")]
 public class MoveBaseClass : ScriptableObject
@@ -48,12 +48,15 @@ public class MoveBaseClass : ScriptableObject
     [SerializeField] string attackDesc;
     [SerializeField] int attackPower;
     [SerializeField] int mPConsumption;
-    [SerializeField] float boostAmount;
     [SerializeField] int levelAqcuired;
     [SerializeField] int healAmount;
     [SerializeField] MoveType moveType;
     [SerializeField] AttackType attackType;
-    [SerializeField] SupplementaryEffect supplementaryEffect;
+    [SerializeField] Boost[] buffTypes;
+    [SerializeField] float buffAmount;
+    [SerializeField] Boost[] debuffTypes;
+    [SerializeField] float debuffAmount;
+
     //damage over time? Things like poison
     //number of attacks
     //number of people to attack
@@ -84,10 +87,26 @@ public class MoveBaseClass : ScriptableObject
         set { mPConsumption = value; }
     }
 
-    public float BoostAmount
+    public Boost[] BuffTypes
     {
-        get { return boostAmount; }
-        set { boostAmount = value; }
+        get { return buffTypes; }
+        set { buffTypes = value; }
+    }
+    public Boost[] DebuffTypes
+    {
+        get { return debuffTypes; }
+        set { debuffTypes = value; }
+    }
+
+    public float BuffAmount
+    {
+        get { return buffAmount; }
+        set { buffAmount = value; }
+    }
+     public float DebuffAmount
+    {
+        get { return debuffAmount; }
+        set { debuffAmount = value; }
     }
 
     public int LevelAqcuired
@@ -111,11 +130,5 @@ public class MoveBaseClass : ScriptableObject
     {
         get { return attackType; }
         set { attackType = value; }
-    }
-
-    public SupplementaryEffect SupplementaryEffect 
-    { 
-        get { return supplementaryEffect; }
-        set { supplementaryEffect = value; }
     }
 }
