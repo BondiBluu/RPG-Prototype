@@ -8,12 +8,13 @@ public class MoveGenerator : MonoBehaviour
 {
     [SerializeField] Transform atkButtonContainer;
     [SerializeField] Transform suppButtonContainer;
+    [SerializeField] Transform itemButtonContainer;
     [SerializeField] GameObject moveButtonPrefab;
     [SerializeField] float buttonSpacing;
     BattleSystem battleSystem;
     AttackandSupplementary attackandSupplementary;
-    PlayerActionStorage playerActionStorage;
-    int currentPlayerIndex = 0;
+    public InventoryObject playerInven;
+
 
     bool attackButtonPressed = false;
     public MoveBaseClass selectedMove;
@@ -25,13 +26,37 @@ public class MoveGenerator : MonoBehaviour
     {        
         battleSystem = FindObjectOfType<BattleSystem>();
         attackandSupplementary = FindObjectOfType<AttackandSupplementary>();
-        playerActionStorage = FindObjectOfType<PlayerActionStorage>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void GenerateItems()
     {
-        
+        foreach (Transform button in itemButtonContainer)
+        {
+            Destroy(button.gameObject);
+        }
+
+        float currentPosY = 0f;
+
+        for(int i = 0; i < playerInven.Container.Count; i++)
+        {
+            //grabbing the specific inven item in the inven's container
+            InventorySlot slot = playerInven.Container[i];
+            //grabbiing the specific item in the slot we made
+            ItemObject item = slot.item;
+
+            GameObject buttonGo = Instantiate(moveButtonPrefab, itemButtonContainer);
+            buttonGo.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -currentPosY);
+
+            currentPosY += buttonSpacing + buttonGo.GetComponent<RectTransform>().sizeDelta.y;
+
+            Debug.Log("item: " + (item != null ? item.invenItemName : "null"));
+            Debug.Log("slot: " + (slot != null ? slot.amount.ToString() : "null"));
+
+            buttonGo.GetComponentInChildren<TMP_Text>().text = item.invenItemName + " x" + slot.amount;
+
+            Button buttonComponent = buttonGo.GetComponent<Button>();
+            buttonComponent.onClick.AddListener(() => OnItemButton(item, i));
+        }
     }
 
     public void GenerateSUPPButtons(CharacterStatistics characterStatistics)
@@ -41,7 +66,7 @@ public class MoveGenerator : MonoBehaviour
         {
             Destroy(button.gameObject);
         }
-        Debug.Log(characterStatistics);
+
         //spacing out the buttons
         float currentPosY = 0f;
 
@@ -54,7 +79,7 @@ public class MoveGenerator : MonoBehaviour
                 MoveBaseClass move = characterStatistics.moveBaseClassList[i];
 
                 //if the move's level is more than or equal to out chara's level
-                if (characterStatistics.level >= move.LevelAqcuired && !movesAlreadyAdded.Contains(move) && move.MoveType == MoveType.SUPPLEMENTARY)
+                if (characterStatistics.Level >= move.LevelAqcuired && !movesAlreadyAdded.Contains(move) && move.MoveType == MoveType.SUPPLEMENTARY)
                     {
                     //making a new move button- instantiating the prefab and having it be a child of atkButtonContainer
                     GameObject buttonGO = Instantiate(moveButtonPrefab, suppButtonContainer);
@@ -84,8 +109,6 @@ public class MoveGenerator : MonoBehaviour
             Destroy(button.gameObject);
         }
 
-        Debug.Log(characterStatistics);
-
         float currentPosY = 0f;
 
         if (characterStatistics != null)
@@ -94,7 +117,7 @@ public class MoveGenerator : MonoBehaviour
             {
                 MoveBaseClass move = characterStatistics.moveBaseClassList[i];
 
-                if (characterStatistics.level >= move.LevelAqcuired && !movesAlreadyAdded.Contains(move) && move.MoveType == MoveType.DAMAGING)
+                if (characterStatistics.Level >= move.LevelAqcuired && !movesAlreadyAdded.Contains(move) && move.MoveType == MoveType.DAMAGING)
                     {
                     GameObject buttonGO = Instantiate(moveButtonPrefab, atkButtonContainer);
 
@@ -137,6 +160,7 @@ public class MoveGenerator : MonoBehaviour
         selectedMove = move;
         attackButtonPressed = true;
         attackandSupplementary.TurnOffButton();
-        currentPlayerIndex++;
     }
+
+    void OnItemButton(ItemObject item, int playerIndex) { }
 }

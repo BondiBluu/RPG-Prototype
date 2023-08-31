@@ -16,6 +16,7 @@ public class StatRaisingObject : ItemObject
     public int effBoostPerm;
     public int speedBoostPerm;
 
+
     public void Awake()
     {
         type = ItemType.StatRaise;

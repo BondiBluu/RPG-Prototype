@@ -16,6 +16,8 @@ public abstract class ItemObject : ScriptableObject
     public GameObject prefab;
     public ItemType type;
     public string itemName;
+    public string namePlural;
+    public string invenItemName;
     [TextArea(15,20)]
     public string desc;
     [TextArea(15, 20)]

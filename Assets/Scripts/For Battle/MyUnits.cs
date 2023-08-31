@@ -5,7 +5,6 @@ using UnityEngine;
 public class Units : MonoBehaviour
 {
     [SerializeField] public CharacterStatistics characterStats;
-    [SerializeField] BaseStatistics baseStats;
     MoveBaseClass moveBaseClass;
     void TakingDamage()
     {

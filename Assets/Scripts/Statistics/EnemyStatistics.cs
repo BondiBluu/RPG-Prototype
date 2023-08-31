@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum SpawnRate
+/*public enum SpawnRate
 {
+    PlayerCharacter,
     Low,
     High,
     Rare,
     NearImpossible
-}
+}*/
 
 [CreateAssetMenu(fileName = "New Enemy's Stats", menuName = "Character/EnemyStat")]
 public class EnemyStatistics : ScriptableObject

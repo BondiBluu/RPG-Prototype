@@ -9,6 +9,7 @@ public class AttackandSupplementary : MonoBehaviour
     [SerializeField] List<Button> atkButtons;
     [SerializeField] public GameObject atkUI;
     [SerializeField] public GameObject suppUI;
+    [SerializeField] public GameObject itemUI;
     [SerializeField] public GameObject enemyPanelUI;
     [SerializeField] public GameObject allyPanelUI;
     [SerializeField] TMP_Text atkText;
@@ -26,6 +27,17 @@ public class AttackandSupplementary : MonoBehaviour
         {
             atkUI.SetActive(true);
             suppUI.SetActive(false);
+            itemUI.SetActive(false);
+        }
+    }
+      //for the item button
+    public void OnItemButton()
+    {
+        if (battleSystem.state == BattleState.PLAYERTURN)
+        {
+            itemUI.SetActive(true);
+            atkUI.SetActive(false);
+            suppUI.SetActive(false);
         }
     }
     
@@ -36,6 +48,7 @@ public class AttackandSupplementary : MonoBehaviour
         {
             suppUI.SetActive(true);
             atkUI.SetActive(false);
+            itemUI.SetActive(false);
         }
     }
 
@@ -45,6 +58,7 @@ public class AttackandSupplementary : MonoBehaviour
         {
             suppUI.SetActive(false);
             atkUI.SetActive(false);
+            itemUI.SetActive(false);
             enemyPanelUI.SetActive(true);
         }
     }
@@ -54,15 +68,17 @@ public class AttackandSupplementary : MonoBehaviour
         {
             suppUI.SetActive(false);
             atkUI.SetActive(false);
+            itemUI.SetActive(false);
             allyPanelUI.SetActive(true);
         }
     }
 
     public void TurnOffButton()
     {   
-            suppUI.SetActive (false);
-            allyPanelUI.SetActive (false);
-            atkUI.SetActive(false);
+        suppUI.SetActive (false);
+        allyPanelUI.SetActive (false);
+        atkUI.SetActive(false);
+        itemUI.SetActive(false);
     }
 
 

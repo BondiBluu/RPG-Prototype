@@ -10,6 +10,7 @@ public class DamagingToolObject : ItemObject
     public float atkPower;
     public float magPower;
 
+
     public void Awake()
     {
         type = ItemType.DamagingTool;

@@ -7,6 +7,7 @@ public class HealthObject : ItemObject
 {
     public int hpRestoreAmount;
     public int mpRestoreAmount;
+
     public void Awake()
     {
         type = ItemType.Health;

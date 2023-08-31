@@ -24,7 +24,7 @@ public class DamageCalc : MonoBehaviour
                 }
             case AttackType.MAGICAL:
                 {
-                    damageOutput = (attacker.characterStats.CurrentAttack * move.AttackPower) / (2 * Math.Max(1, theTarget.characterStats.CurrentDefense));
+                    damageOutput = (attacker.characterStats.CurrentMagic * move.AttackPower) / (2 * Math.Max(1, theTarget.characterStats.CurrentResistance));
                     finalResult = (int)Math.Ceiling(damageOutput);
                     message += $"{attacker.characterStats.CharacterName} used {move.AttackName} on {theTarget.characterStats.CharacterName}! Did {finalResult} damage!";
                     break;
@@ -82,34 +82,3 @@ public class DamageCalc : MonoBehaviour
     void CalcHeal() { }
 }
 
-/*public int EnemyCalc(Unit attacker, MoveBaseClass move, Unit theTarget)
-    {
-        float damageOutput = 0f;
-        int finalResult = 0;
-
-        if (move.AttackType == AttackType.PHYSICAL)
-        {
-            damageOutput = (attacker.characterStats.CurrentAttack * move.AttackPower) / (2 * MathF.Max(1, theTarget.characterStats.CurrentDefense));
-            finalResult = (int)Math.Ceiling(damageOutput);
-        }
-
-        if (move.AttackType == AttackType.MAGICAL)
-        {
-            damageOutput = (attacker.characterStats.CurrentMagic * move.AttackPower) / (2 * Math.Max(1,theTarget.characterStats.CurrentDefense));
-            finalResult = (int)Math.Ceiling(damageOutput);
-        }
-
-        if (move.BuffAmount > 0)
-        {
-            
-        }
-
-        if (finalResult <= 0)
-        {
-            if(move.MoveType != MoveType.SUPPLEMENTARY)
-            {
-                finalResult += 1;
-            }
-        }
-        return finalResult;
-    }*/

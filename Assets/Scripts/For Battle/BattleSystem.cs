@@ -114,6 +114,7 @@ public class BattleSystem : MonoBehaviour
             //display the attack etc buttons for the current unit
             moveGenerator.GenerateATKButtons(playerUnits[i].characterStats);
             moveGenerator.GenerateSUPPButtons(playerUnits[i].characterStats);
+            moveGenerator.GenerateItems();
 
 
 

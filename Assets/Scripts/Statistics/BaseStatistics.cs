@@ -1,37 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public enum StatGrowth
-{
-    Low,
-    Medium,
-    High,
-    Abnormal,
-    LowtoHigh,
-    HightoLow,
-    EnemyCharacter
-}
-
-public enum SpawnRate
-{
-    PlayerCharacter,
-    Low,
-    High,
-    Rare,
-    NearImpossible
-}
-
-public enum UnitType
-{
-    BOSS,
-    PLAYERCHARACTER,
-    ENEMY
-}
-
-[CreateAssetMenu(fileName = "New Character's Stats", menuName = "Character/CharacterStat")]
-public class CharacterStatistics: ScriptableObject
+public class BaseStatistics : ScriptableObject
 {
     [SerializeField] string characterName;
     [SerializeField] int level;
@@ -53,14 +24,11 @@ public class CharacterStatistics: ScriptableObject
     [SerializeField] int skillBase;
     [SerializeField] int speedCurrent;
     [SerializeField] int speedBase;
-    [SerializeField] string ability;
-    [TextArea(15, 20)]
-    [SerializeField] string abilityDescription;
-    [SerializeField] Sprite image;
-    [SerializeField] StatGrowth statGrowth;
-    [SerializeField] SpawnRate spawnRate;
 
-    public List<MoveBaseClass> moveBaseClassList;
+    public virtual void Initialize()
+    {
+        // Common initialization logic for both characters and enemies
+    }
 
     public string CharacterName
     {
@@ -177,13 +145,38 @@ public class CharacterStatistics: ScriptableObject
         get { return speedCurrent; }
         set { speedCurrent = value; }
     }
+}
 
+public enum StatGrowths
+{
+    Low,
+    Medium,
+    High,
+    Abnormal,
+    LowtoHigh,
+    HightoLow
+}
+
+public class PlayerStatistics : BaseStatistics
+{
+    [SerializeField] string ability;
+    [TextArea(15, 20)]
+    [SerializeField] string abilityDescription;
+    [SerializeField] Sprite image;
+    [SerializeField] StatGrowth statGrowth;
+
+    public List<MoveBaseClass> moveBaseClassList;
+
+    public override void Initialize()
+    {
+        // Additional initialization logic for characters
+    }
     public string Ability
     {
         get { return ability; }
         set { ability = value; }
     }
-     public string AbilityDesc
+    public string AbilityDesc
     {
         get { return abilityDescription; }
         set { abilityDescription = value; }
@@ -194,10 +187,32 @@ public class CharacterStatistics: ScriptableObject
         get { return statGrowth; }
         set { statGrowth = value; }
     }
+}
 
-    public SpawnRate SpawnRate
-    { 
-        get { return spawnRate; } 
-        set {  spawnRate = value; } 
+public enum SpawnRates
+{
+    Low,
+    High,
+    Rare,
+    NearImpossible
+}
+
+public class EnemyStatistic : BaseStatistics
+{
+    public SpawnRates spawnRates;
+
+    public List<MoveBaseClass> moveBaseClassList;
+
+    public override void Initialize()
+    {
+        // Additional initialization logic for enemies
+    }
+
+    public SpawnRates SpawnRate
+    {
+        get { return spawnRates; }
+        set { spawnRates = value; }
     }
 }
+
+
