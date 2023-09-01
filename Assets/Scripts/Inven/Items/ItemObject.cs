@@ -13,15 +13,69 @@ public enum ItemType
 
 public abstract class ItemObject : ScriptableObject
 {
-    public GameObject prefab;
-    public ItemType type;
-    public string itemName;
-    public string namePlural;
-    public string invenItemName;
+    [SerializeField] GameObject prefab;
+    [SerializeField] ItemType type;
+    [SerializeField] string itemName;
+    [SerializeField] string namePlural;
+    [SerializeField] string invenItemName;
     [TextArea(15,20)]
-    public string desc;
+    [SerializeField] string desc;
     [TextArea(15, 20)]
-    public string trueDesc;
-    public float price;
-    public bool ableToSell;
+    [SerializeField] string trueDesc;
+    [SerializeField] float price;
+    [SerializeField] bool ableToSell;
+
+    public GameObject Prefab
+    {
+        get { return prefab; }
+        set { prefab = value; }
+    }
+
+    public ItemType Type
+    {
+        get { return type; }
+        set { type = value; }
+    }
+
+    public string ItemName
+    {
+        get { return itemName; }
+        set { itemName = value; }
+    }
+
+    public string NamePlural
+    {
+        get { return namePlural; }
+        set { namePlural = value; }
+    }
+
+    public string InvenItemName
+    {
+        get { return invenItemName; }
+        set { invenItemName = value; }
+    }
+
+    public string Desc
+    {
+        get { return desc; }
+        set { desc = value; }
+    }
+
+    public string TrueDesc
+    {
+        get { return trueDesc; }
+        set { trueDesc = value; }
+    }
+
+    public float Price
+    {
+        get { return price; }
+        set { price = value; }
+    }
+
+    public bool AbleToSell
+    {
+        get { return ableToSell; }
+        set { ableToSell = value; }
+    }
 }

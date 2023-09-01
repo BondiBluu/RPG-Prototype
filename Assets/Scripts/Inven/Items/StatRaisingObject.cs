@@ -19,6 +19,6 @@ public class StatRaisingObject : ItemObject
 
     public void Awake()
     {
-        type = ItemType.StatRaise;
+        Type = ItemType.StatRaise;
     }
 }

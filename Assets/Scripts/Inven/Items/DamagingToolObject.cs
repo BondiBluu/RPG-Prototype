@@ -13,6 +13,6 @@ public class DamagingToolObject : ItemObject
 
     public void Awake()
     {
-        type = ItemType.DamagingTool;
+        Type = ItemType.DamagingTool;
     }
 }

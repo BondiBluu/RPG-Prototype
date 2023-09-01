@@ -10,6 +10,6 @@ public class HealthObject : ItemObject
 
     public void Awake()
     {
-        type = ItemType.Health;
+        Type = ItemType.Health;
     }
 }
