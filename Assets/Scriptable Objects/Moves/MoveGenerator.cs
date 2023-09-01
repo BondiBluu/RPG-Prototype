@@ -18,6 +18,7 @@ public class MoveGenerator : MonoBehaviour
 
     bool attackButtonPressed = false;
     public MoveBaseClass selectedMove;
+    public ItemObject selectedItem;
 
     List<MoveBaseClass> movesAlreadyAdded = new List<MoveBaseClass>();
 
@@ -26,37 +27,6 @@ public class MoveGenerator : MonoBehaviour
     {        
         battleSystem = FindObjectOfType<BattleSystem>();
         attackandSupplementary = FindObjectOfType<AttackandSupplementary>();
-    }
-
-    public void GenerateItems()
-    {
-        foreach (Transform button in itemButtonContainer)
-        {
-            Destroy(button.gameObject);
-        }
-
-        float currentPosY = 0f;
-
-        for(int i = 0; i < playerInven.Container.Count; i++)
-        {
-            //grabbing the specific inven item in the inven's container
-            InventorySlot slot = playerInven.Container[i];
-            //grabbiing the specific item in the slot we made
-            ItemObject item = slot.item;
-
-            GameObject buttonGo = Instantiate(moveButtonPrefab, itemButtonContainer);
-            buttonGo.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -currentPosY);
-
-            currentPosY += buttonSpacing + buttonGo.GetComponent<RectTransform>().sizeDelta.y;
-
-            Debug.Log("item: " + (item != null ? item.invenItemName : "null"));
-            Debug.Log("slot: " + (slot != null ? slot.amount.ToString() : "null"));
-
-            buttonGo.GetComponentInChildren<TMP_Text>().text = item.invenItemName + " x" + slot.amount;
-
-            Button buttonComponent = buttonGo.GetComponent<Button>();
-            buttonComponent.onClick.AddListener(() => OnItemButton(item, i));
-        }
     }
 
     public void GenerateSUPPButtons(CharacterStatistics characterStatistics)
@@ -136,6 +106,36 @@ public class MoveGenerator : MonoBehaviour
         }
     }
 
+    public void GenerateItems()
+    {
+        foreach (Transform button in itemButtonContainer)
+        {
+            Destroy(button.gameObject);
+        }
+
+        float currentPosY = 0f;
+
+        for (int i = 0; i < playerInven.Container.Count; i++)
+        {
+            //grabbing the specific inven item in the inven's container
+            InventorySlot slot = playerInven.Container[i];
+            //grabbiing the specific item in the slot we made
+            ItemObject item = slot.item;
+            if (item.Type == ItemType.Health || item.Type == ItemType.DamagingTool)
+            {
+                GameObject buttonGo = Instantiate(moveButtonPrefab, itemButtonContainer);
+                buttonGo.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -currentPosY);
+
+                currentPosY += buttonSpacing + buttonGo.GetComponent<RectTransform>().sizeDelta.y;
+
+                buttonGo.GetComponentInChildren<TMP_Text>().text = item.InvenItemName + " x" + slot.amount;
+
+                Button buttonComponent = buttonGo.GetComponent<Button>();
+                buttonComponent.onClick.AddListener(() => OnItemButton(item, i));
+            }
+        }
+    }
+
     //checking if the attack button's been pressed
     public bool HasPressedAttackButton()
     {
@@ -162,5 +162,15 @@ public class MoveGenerator : MonoBehaviour
         attackandSupplementary.TurnOffButton();
     }
 
-    void OnItemButton(ItemObject item, int playerIndex) { }
+    void OnItemButton(ItemObject item, int playerIndex)
+    {
+        if (battleSystem.state != BattleState.PLAYERTURN)
+        {
+            return;
+        }
+
+        selectedItem = item;
+        attackButtonPressed = true;
+        attackandSupplementary.TurnOffButton();
+    }
 }
