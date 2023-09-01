@@ -13,6 +13,8 @@ public class AttackandSupplementary : MonoBehaviour
     [SerializeField] public GameObject enemyPanelUI;
     [SerializeField] public GameObject allyPanelUI;
     [SerializeField] TMP_Text atkText;
+    public bool wantsToAttack = false;
+    public bool wantsToUseItem = false;
     BattleSystem battleSystem;
 
     private void Start()
@@ -28,6 +30,8 @@ public class AttackandSupplementary : MonoBehaviour
             atkUI.SetActive(true);
             suppUI.SetActive(false);
             itemUI.SetActive(false);
+            wantsToAttack = true;
+            wantsToUseItem = false;
         }
     }
       //for the item button
@@ -38,6 +42,9 @@ public class AttackandSupplementary : MonoBehaviour
             itemUI.SetActive(true);
             atkUI.SetActive(false);
             suppUI.SetActive(false);
+            wantsToAttack = false;
+            wantsToUseItem = true;
+
         }
     }
     
@@ -49,6 +56,8 @@ public class AttackandSupplementary : MonoBehaviour
             suppUI.SetActive(true);
             atkUI.SetActive(false);
             itemUI.SetActive(false);
+            wantsToAttack = true;
+            wantsToUseItem = false;
         }
     }
 
