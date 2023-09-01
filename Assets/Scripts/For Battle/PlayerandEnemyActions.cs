@@ -9,23 +9,16 @@ public class PlayerandEnemyActions : MonoBehaviour
     public List<SavePlayerActions> playerActionContainer = new List<SavePlayerActions>();
     public List<SaveEnemyActions> enemyActionContainer = new List<SaveEnemyActions>();
 
-    //saving player attack and defuffs
-    public void SaveAttacksAndDebuffs(Unit _playerUnit, MoveBaseClass _move, Unit _enemyUnit)
+    //saving player actions (attack, debuff, buff, etc)
+    public void SavePlayersActions(Unit _playerUnit, MoveBaseClass _move, Unit _theTarget)
     {
         //adding the player's actions
-        playerActionContainer.Add(new SavePlayerActions(_playerUnit, _move, _enemyUnit));
+        playerActionContainer.Add(new SavePlayerActions(_playerUnit, _move, _theTarget));
         Debug.Log(playerActionContainer.Count);
-        Debug.Log(_playerUnit.characterStats.CharacterName + " " + _move.AttackName + ", on " + _enemyUnit.characterStats.CharacterName);
+        Debug.Log(_playerUnit.characterStats.CharacterName + " " + _move.AttackName + ", on " + _theTarget.characterStats.CharacterName);
     }
 
-    //saving player heals and buffs
-    public void SaveBuffAndHeal(Unit _playerUnit, MoveBaseClass _move, Unit _allyTarget)
-    {
-        playerActionContainer.Add(new SavePlayerActions(_playerUnit, _move, _allyTarget));
-        Debug.Log(playerActionContainer.Count);
-        Debug.Log(_playerUnit.characterStats.CharacterName + " " + _move.AttackName + ", on " + _allyTarget.characterStats.CharacterName);
-    }
-
+    //saving player item usage
     public void SaveItemUsage(Unit _playerUnit, ItemObject _item, Unit _theTarget)
     {
         playerActionContainer.Add(new SavePlayerActions(_playerUnit, _item, _theTarget));
@@ -33,20 +26,12 @@ public class PlayerandEnemyActions : MonoBehaviour
         Debug.Log(_playerUnit.characterStats.CharacterName + " " + _item.ItemName + ", on " + _theTarget.characterStats.CharacterName);
     }
 
-    //saving enemy attack and defuffs
-    public void SaveEnemyAndDebuffs(Unit _enemyUnit, MoveBaseClass _move, Unit _playerUnit)
+    //saving enemy actions
+    public void SaveEnemyAction(Unit _enemyUnit, MoveBaseClass _move, Unit _theTarget)
     {
-        enemyActionContainer.Add(new SaveEnemyActions(_enemyUnit, _move, _playerUnit));
+        enemyActionContainer.Add(new SaveEnemyActions(_enemyUnit, _move, _theTarget));
         Debug.Log(enemyActionContainer.Count);
-        Debug.Log(_enemyUnit.characterStats.CharacterName + " " + _move.AttackName + ", on " + _playerUnit.characterStats.CharacterName);
-    }
-
-    //saving enemy heals and buffs
-    public void SaveEnemyBuffAndHeal(Unit _enemyUnit, MoveBaseClass _move, Unit _alliedEnemyUnit)
-    {
-        enemyActionContainer.Add(new SaveEnemyActions(_enemyUnit, _move, _alliedEnemyUnit));
-        Debug.Log(enemyActionContainer.Count);
-        Debug.Log(_enemyUnit.characterStats.CharacterName + " " + _move.AttackName + ", on " + _alliedEnemyUnit.characterStats.CharacterName);
+        Debug.Log(_enemyUnit.characterStats.CharacterName + " " + _move.AttackName + ", on " + _theTarget.characterStats.CharacterName);
     }
 
     public void SaveItems() { }
@@ -79,15 +64,15 @@ public class PlayerandEnemyActions : MonoBehaviour
     public class SaveEnemyActions
     {
         public Unit enemyUnit;
-        public Unit playerTarget;
+        public Unit theTarget;
         public MoveBaseClass move;
 
         //saving enemy attacks and debuffs
-        public SaveEnemyActions(Unit _enemyUnit, MoveBaseClass _move, Unit _playerUnit)
+        public SaveEnemyActions(Unit _enemyUnit, MoveBaseClass _move, Unit _theTarget)
         {
             enemyUnit = _enemyUnit;
             move = _move;
-            playerTarget = _playerUnit;
+            theTarget = _theTarget;
         }
     }
 }
