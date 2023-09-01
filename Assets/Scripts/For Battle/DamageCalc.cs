@@ -79,6 +79,54 @@ public class DamageCalc : MonoBehaviour
 
     }
 
-    void CalcHeal() { }
+    public void CalcTool(Unit attacker, ItemObject item, Unit theTarget)
+    {
+        int finalResult = 0;
+        switch (item.Type)
+        {
+            case ItemType.Health: 
+                {
+                    float hpRestorationAmount = 0f;
+                    float mpRestorationAmount = 0f;
+
+                    //making the item type more specifically a healing object
+                    HealthObject healingItem = (HealthObject)item;
+
+                    message += $"{attacker.characterStats.CharacterName} used {item.ItemName} on {theTarget.characterStats.CharacterName}!";
+
+                    if (healingItem.hpRestoreAmount > 0)
+                    {
+                        hpRestorationAmount = (int)Math.Ceiling(healingItem.hpRestoreAmount + (.15f * attacker.characterStats.CurrentEfficiency));
+                        message += $" Restored {hpRestorationAmount} health!";
+                    }
+                    if(healingItem.mpRestoreAmount > 0)
+                    {
+                        mpRestorationAmount = (int)Math.Ceiling(healingItem.mpRestoreAmount + (.15f * attacker.characterStats.CurrentEfficiency));
+                        message += $" Restored {mpRestorationAmount} magic!";
+                    }
+
+                    break;
+                }
+            case ItemType.DamagingTool: 
+                {
+                    float damageOutput = 0f;
+
+                    DamagingToolObject tool = (DamagingToolObject)item;
+                    if (tool.atkPower > 0)
+                    {
+                        damageOutput = tool.atkPower + (.15f * attacker.characterStats.CurrentEfficiency);
+                    }
+                    else if(tool.magPower > 0)
+                    {
+                        damageOutput = tool.magPower + (.15f * attacker.characterStats.CurrentEfficiency);
+                    }
+
+                    finalResult = (int)Math.Ceiling(damageOutput);
+                    message += $"{attacker.characterStats.CharacterName} used {item.ItemName} on {theTarget.characterStats.CharacterName}! It did {finalResult} damage!";
+                    break; 
+                }
+
+        }
+    }
 }
 
