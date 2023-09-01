@@ -116,36 +116,59 @@ public class BattleSystem : MonoBehaviour
             moveGenerator.GenerateSUPPButtons(playerUnits[i].characterStats);
             moveGenerator.GenerateItems();
 
-
-
             //seeing if attackButtonPressed is true, meaning the player pressed the attack button
             yield return new WaitUntil(() => moveGenerator.HasPressedAttackButton());
 
-
-            //if the move selected is a buff
-            if (moveGenerator.selectedMove.BuffTypes.Length > 0)
+            //checking if they've opened the attck button to click an attack
+            if (attackandSupplementary.wantsToAttack == true)
             {
-                attackandSupplementary.AllyContainerOn();
 
-                yield return new WaitUntil(() => selectedPlayerUnit != null);
+                //if the move selected is a buff
+                if (moveGenerator.selectedMove.BuffTypes.Length > 0)
+                {
+                    attackandSupplementary.AllyContainerOn();
 
-                playerandEnemyStorage.SaveBuffAndHeal(playerUnits[i], moveGenerator.selectedMove, selectedPlayerUnit);
+                    yield return new WaitUntil(() => selectedPlayerUnit != null);
 
-                attackandSupplementary.allyPanelUI.SetActive(false);
+                    playerandEnemyStorage.SavePlayersActions(playerUnits[i], moveGenerator.selectedMove, selectedPlayerUnit);
+
+                    attackandSupplementary.allyPanelUI.SetActive(false);
+                }
+
+                //if it's an attacking move or debuff
+                if (moveGenerator.selectedMove.DebuffTypes.Length > 0 || moveGenerator.selectedMove.AttackPower > 0)
+                {
+                    attackandSupplementary.EnemyContainerOn();
+
+                    yield return new WaitUntil(() => selectedEnemy != null);
+
+                    playerandEnemyStorage.SavePlayersActions(playerUnits[i], moveGenerator.selectedMove, selectedEnemy);
+
+                    attackandSupplementary.enemyPanelUI.SetActive(false);
+                }
             }
 
-            //if it's an attacking move or debuff
-            if (moveGenerator.selectedMove.DebuffTypes.Length > 0 || moveGenerator.selectedMove.AttackPower > 0)
+            if (attackandSupplementary.wantsToUseItem == true)
             {
-                attackandSupplementary.EnemyContainerOn();
 
-                yield return new WaitUntil(() => selectedEnemy != null);
+                if (moveGenerator.selectedItem.Type == ItemType.Health)
+                {
+                    attackandSupplementary.AllyContainerOn();
+                    yield return new WaitUntil(() => selectedPlayerUnit != null);
+                    playerandEnemyStorage.SaveItemUsage(playerUnits[i], moveGenerator.selectedItem, selectedPlayerUnit);
+                    attackandSupplementary.allyPanelUI.SetActive(false);
+                }
 
-                playerandEnemyStorage.SaveAttacksAndDebuffs(playerUnits[i], moveGenerator.selectedMove, selectedEnemy);
-
-                attackandSupplementary.enemyPanelUI.SetActive(false);
+                if (moveGenerator.selectedItem.Type == ItemType.DamagingTool)
+                {
+                    attackandSupplementary.EnemyContainerOn();
+                    yield return new WaitUntil(() => selectedEnemy != null);
+                    playerandEnemyStorage.SaveItemUsage(playerUnits[i], moveGenerator.selectedItem, selectedEnemy);
+                    attackandSupplementary.enemyPanelUI.SetActive(false);
+                }
             }
 
+            selectedPlayerUnit = null;
             selectedEnemy = null;
             attackandSupplementary.enemyPanelUI.SetActive(false);
             attackandSupplementary.allyPanelUI.SetActive(false);
@@ -187,7 +210,7 @@ public class BattleSystem : MonoBehaviour
             MoveBaseClass moveToUse = enemyUnits[i].characterStats.moveBaseClassList[selectedMove];
             Unit unitToAttack = playerUnits[selectedPlayer];
 
-            playerandEnemyStorage.SaveAttacksAndDebuffs(enemyUnits[i], moveToUse, unitToAttack);
+            playerandEnemyStorage.SaveEnemyAction(enemyUnits[i], moveToUse, unitToAttack);
         }
         state = BattleState.BATTLEPHASE;
         StartCoroutine(BattlePhase());
@@ -197,8 +220,9 @@ public class BattleSystem : MonoBehaviour
 
     IEnumerator BattlePhase()
     {
-            List<PlayerandEnemyActions.SavePlayerActions> sortedPlayerActions = playerandEnemyStorage.playerActionContainer.OrderByDescending(action => action.playerUnit.characterStats.CurrentSpeed).ToList();
-            List<PlayerandEnemyActions.SaveEnemyActions> sortedEnemyActions = playerandEnemyStorage.enemyActionContainer.OrderByDescending(action => action.enemyUnit.characterStats.CurrentSpeed).ToList();
+        //saving 2 separate lists of player and enemy actions
+        List<PlayerandEnemyActions.SavePlayerActions> sortedPlayerActions = playerandEnemyStorage.playerActionContainer.OrderByDescending(action => action.playerUnit.characterStats.CurrentSpeed).ToList();    
+        List<PlayerandEnemyActions.SaveEnemyActions> sortedEnemyActions = playerandEnemyStorage.enemyActionContainer.OrderByDescending(action => action.enemyUnit.characterStats.CurrentSpeed).ToList();
 
             List<object> allActions = new List<object>();
 
@@ -233,21 +257,32 @@ public class BattleSystem : MonoBehaviour
                 return speed2.CompareTo(speed1);
             });
 
-            //displaying all character actions NOTE: when using anims, yield return new WaitForSeconds(animClip.length)
-            foreach (object action in allActions)
+
+        //displaying all character actions NOTE: when using anims, yield return new WaitForSeconds(animClip.length) 
+        foreach (object action in allActions)
             {
             if (action is PlayerandEnemyActions.SavePlayerActions playerAction)
                 {
-                int damage = damageCalc.CalcDamage(playerAction.playerUnit, playerAction.move, playerAction.enemyTarget);
-                string message = damageCalc.message;    
-                Debug.Log(message);
-                damageCalc.message = "";
-                //on " + playerAction.enemyTarget.enemyStats.CharacterName + "! Does " +damage + " damage!"
+                if(playerAction.move != null)
+                {
+                    int damage = damageCalc.CalcDamage(playerAction.playerUnit, playerAction.move, playerAction.theTarget);
+                    string message = damageCalc.message;
+                    Debug.Log(message);
+                    damageCalc.message = "";
+                } 
+                else if (playerAction.item != null)
+                {
+                    damageCalc.CalcTool(playerAction.playerUnit, playerAction.item, playerAction.theTarget);
+                    string message = damageCalc.message;
+                    Debug.Log(message);
+                    damageCalc.message = "";
+                }
+                
                 }
     
             else if (action is PlayerandEnemyActions.SaveEnemyActions enemyAction)
                 {    
-                int damage = damageCalc.CalcDamage(enemyAction.enemyUnit, enemyAction.move, enemyAction.playerTarget);
+                int damage = damageCalc.CalcDamage(enemyAction.enemyUnit, enemyAction.move, enemyAction.theTarget);
                 string message = damageCalc.message;
                 Debug.Log(message);
                 damageCalc.message = "";
@@ -260,31 +295,3 @@ public class BattleSystem : MonoBehaviour
             Debug.Log("Finished");
         }        
     }
-
-
-/**  
-        playerandEnemyStorage.actionContainer.Sort((action1, action2) =>
-        {
-            float speed1 = 0f;
-            float speed2 = 0f;
-
-            if (action1.enemyTarget != null)
-            {
-                speed1 = action1.enemyTarget.enemyStats.CurrentSpeed;
-            }
-            else if (action1.playerUnit != null)
-            {
-                speed1 = action1.playerUnit.characterStats.CurrentSpeed;
-            }
-
-            if (action2.enemyTarget != null)
-            {
-                speed2 = action2.enemyTarget.enemyStats.CurrentSpeed;
-            }
-            else if (action2.playerUnit != null)
-            {
-                speed2 = action2.playerUnit.characterStats.CurrentSpeed;
-            }
-            return speed2.CompareTo(speed1);
-        });
-*/
