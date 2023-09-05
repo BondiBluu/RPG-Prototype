@@ -24,7 +24,7 @@ public class BattleSystem : MonoBehaviour
     [Header("Players and Stations")]
     public GameObject[] playerPrefabs;
     public Transform[] playerStations;
-    Unit[] playerUnits;
+    public Unit[] playerUnits;
     public Unit selectedPlayerUnit;
 
 
@@ -258,49 +258,66 @@ public class BattleSystem : MonoBehaviour
         });
 
         // Move player actions with healing items to the top
-        for (int i = allActions.Count - 1; i >= 0; i--)
+        List<PlayerandEnemyActions.SavePlayerActions> playerActionsWithHealingItems = new List<PlayerandEnemyActions.SavePlayerActions>();
+
+        // Find player actions with healing items and add them to the new list
+        foreach (var action in allActions)
         {
-            if (allActions[i] is PlayerandEnemyActions.SavePlayerActions playersAction)
+            if (action is PlayerandEnemyActions.SavePlayerActions playersAction)
             {
                 if (playersAction.item != null && playersAction.item.Type == ItemType.Health)
                 {
-                    allActions.RemoveAt(i);
-                    allActions.Insert(0, playersAction);
+                    playerActionsWithHealingItems.Add(playersAction);
                 }
             }
         }
 
-            //displaying all character actions NOTE: when using anims, yield return new WaitForSeconds(animClip.length) 
-            foreach (object action in allActions)
+        // Remove the player actions with healing items from the original list
+        foreach (var playerAction in playerActionsWithHealingItems)
+        {
+            allActions.Remove(playerAction);
+        }
+        // Insert the player actions with healing items at the beginning of the original list
+        foreach (var playerAction in playerActionsWithHealingItems)
+        {
+            allActions.Insert(0, playerAction);
+        }
+
+
+        //displaying all character actions NOTE: when using anims, yield return new WaitForSeconds(animClip.length)     
+        foreach (object action in allActions)    
+        {
+            if (action is PlayerandEnemyActions.SavePlayerActions playerAction)
             {
-                if (action is PlayerandEnemyActions.SavePlayerActions playerAction)
+                if (playerAction.move != null)   
                 {
-                    if (playerAction.move != null)
-                    {
-                        int damage = damageCalc.CalcDamage(playerAction.playerUnit, playerAction.move, playerAction.theTarget);
-                        string message = damageCalc.message;
-                        Debug.Log(message);
-                        damageCalc.message = "";
-                    }
-                    else if (playerAction.item != null)
-                    {
-                        damageCalc.CalcTool(playerAction.playerUnit, playerAction.item, playerAction.theTarget);
-                        string message = damageCalc.message;
-                        Debug.Log(message);
-                        damageCalc.message = "";
-                    }
-                }
-                else if (action is PlayerandEnemyActions.SaveEnemyActions enemyAction)
-                {
-                    int damage = damageCalc.CalcDamage(enemyAction.enemyUnit, enemyAction.move, enemyAction.theTarget);
+                    damageCalc.CalcDamage(playerAction.playerUnit, playerAction.move, playerAction.theTarget);
+                    playerHUD.UpdateHPAndMP(playerAction.theTarget, playerAction.theTarget.characterStats.CurrentHP, playerAction.theTarget.characterStats.CurrentMP);
                     string message = damageCalc.message;
                     Debug.Log(message);
                     damageCalc.message = "";
                 }
-                yield return new WaitForSeconds(2f);
-
+                else if (playerAction.item != null)
+                {
+                    damageCalc.CalcTool(playerAction.playerUnit, playerAction.item, playerAction.theTarget);
+                    playerHUD.UpdateHPAndMP(playerAction.theTarget, playerAction.theTarget.characterStats.CurrentHP, playerAction.theTarget.characterStats.CurrentMP);
+                    string message = damageCalc.message;
+                    Debug.Log(message);
+                    damageCalc.message = "";
+                }
             }
+            else if (action is PlayerandEnemyActions.SaveEnemyActions enemyAction)
+            {
+                damageCalc.CalcDamage(enemyAction.enemyUnit, enemyAction.move, enemyAction.theTarget);
+                playerHUD.UpdateHPAndMP(enemyAction.theTarget, enemyAction.theTarget.characterStats.CurrentHP, enemyAction.theTarget.characterStats.CurrentMP);
+                string message = damageCalc.message;
+                Debug.Log(message);
+                damageCalc.message = "";
+            }
+
             yield return new WaitForSeconds(2f);
-            Debug.Log("Finished");
+        }
+        yield return new WaitForSeconds(2f);
+        Debug.Log("Finished");
         }
     }

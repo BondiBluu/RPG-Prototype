@@ -7,19 +7,17 @@ public class Unit : MonoBehaviour
 {
     [SerializeField] public CharacterStatistics characterStats;
     MoveBaseClass moveBaseClass;
-    void TakingDamage()
+    BattleHUD battleHUD;
+
+    private void Start()
     {
-        bool isDefeated;
-        if (characterStats.CurrentHP <= 0)
-        {
-            isDefeated = true;
-        }
-        isDefeated = false;
+        battleHUD = FindObjectOfType<BattleHUD>();
     }
 
-    public bool TakeDamage()
+
+    public bool TakeDamage(int finalResult)
     {
-        characterStats.CurrentHP -= moveBaseClass.AttackPower;
+        characterStats.CurrentHP -= finalResult;
 
         if (characterStats.CurrentHP <= 0)
         {
@@ -28,6 +26,18 @@ public class Unit : MonoBehaviour
         else
         {
             return false;
+        }
+    }
+
+    public void ApplyHealing(HealthObject item, int finalResult)
+    {
+        if(item.hpRestoreAmount > 0)
+        {
+            characterStats.CurrentHP += finalResult;
+        } 
+        else if (item.mpRestoreAmount > 0)
+        {
+            characterStats.CurrentMP += finalResult;
         }
     }
 
@@ -46,45 +56,45 @@ public class Unit : MonoBehaviour
     int maxSkill;
     int maxSpeed;
 
-    public void ApplyBuff(Boost[] buffTypes, float buffAmount)
+    public void ApplyandDebuff(Boost[] boostTypes, float boostAmount)
     {
-        foreach(Boost buffType in buffTypes)
+        foreach(Boost boostType in boostTypes)
         {
-            switch(buffType)
+            switch(boostType)
             {
                 case Boost.ATTACK:
                     {
-                        characterStats.CurrentAttack += (int)(characterStats.BaseAttack * buffAmount);
+                        characterStats.CurrentAttack += (int)(characterStats.BaseAttack * boostAmount);
                         break;
                     }   
                 case Boost.DEFENSE: 
                     {
-                        characterStats.CurrentDefense += (int)(characterStats.BaseDefense * buffAmount);
+                        characterStats.CurrentDefense += (int)(characterStats.BaseDefense * boostAmount);
                         break; 
                     }    
                 case Boost.MAGIC: 
                     {
-                        characterStats.CurrentMagic += (int)(characterStats.BaseMagic * buffAmount);
+                        characterStats.CurrentMagic += (int)(characterStats.BaseMagic * boostAmount);
                         break; 
                     }    
                 case Boost.RES: 
                     {
-                        characterStats.CurrentResistance += (int)(characterStats.BaseResistance * buffAmount);
+                        characterStats.CurrentResistance += (int)(characterStats.BaseResistance * boostAmount);
                         break; 
                     }
                 case Boost.EFF: 
                     {
-                        characterStats.CurrentEfficiency += (int)(characterStats.BaseEfficiency * buffAmount);
+                        characterStats.CurrentEfficiency += (int)(characterStats.BaseEfficiency * boostAmount);
                         break;
                     }   
                 case Boost.SKILL: 
                     {
-                        characterStats.CurrentSkill += (int)(characterStats.BaseSkill * buffAmount);
+                        characterStats.CurrentSkill += (int)(characterStats.BaseSkill * boostAmount);
                         break;
                     }    
                 case Boost.SPEED: 
                     {
-                        characterStats.CurrentSpeed += (int)(characterStats.BaseSpeed * buffAmount);
+                        characterStats.CurrentSpeed += (int)(characterStats.BaseSpeed * boostAmount);
                         break;
                     }
             }
