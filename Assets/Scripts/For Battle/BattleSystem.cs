@@ -221,77 +221,86 @@ public class BattleSystem : MonoBehaviour
     IEnumerator BattlePhase()
     {
         //saving 2 separate lists of player and enemy actions
-        List<PlayerandEnemyActions.SavePlayerActions> sortedPlayerActions = playerandEnemyStorage.playerActionContainer.OrderByDescending(action => action.playerUnit.characterStats.CurrentSpeed).ToList();    
+        List<PlayerandEnemyActions.SavePlayerActions> sortedPlayerActions = playerandEnemyStorage.playerActionContainer.OrderByDescending(action => action.playerUnit.characterStats.CurrentSpeed).ToList();
         List<PlayerandEnemyActions.SaveEnemyActions> sortedEnemyActions = playerandEnemyStorage.enemyActionContainer.OrderByDescending(action => action.enemyUnit.characterStats.CurrentSpeed).ToList();
 
-            List<object> allActions = new List<object>();
+        List<object> allActions = new List<object>();
 
-            //adding all sorted actions to allActions
-            allActions.AddRange(sortedPlayerActions);
-            allActions.AddRange(sortedEnemyActions);
+        //adding all sorted actions to allActions
+        allActions.AddRange(sortedPlayerActions);
+        allActions.AddRange(sortedEnemyActions);
 
-            //sorting all actions by way of speed
-            allActions.Sort((action1, action2) =>
+        //sorting all actions by way of speed
+        allActions.Sort((action1, action2) =>
+        {
+            float speed1 = 0f;
+            float speed2 = 0f;
+
+            if (action1 is PlayerandEnemyActions.SavePlayerActions playerActions1)
             {
-                float speed1 = 0f;
-                float speed2 = 0f;
-
-                if (action1 is PlayerandEnemyActions.SavePlayerActions playerActions1)
-                {
-                    speed1 = playerActions1.playerUnit.characterStats.CurrentSpeed;
-                }
-                else if (action1 is PlayerandEnemyActions.SaveEnemyActions enemyActions1)
-                {
-                    speed1 = enemyActions1.enemyUnit.characterStats.CurrentSpeed;
-                }
-
-                if (action2 is PlayerandEnemyActions.SavePlayerActions playerActions2)
-                {
-                    speed2 = playerActions2.playerUnit.characterStats.CurrentSpeed;
-                }
-                else if (action2 is PlayerandEnemyActions.SaveEnemyActions enemyActions2)
-                {
-                    speed2 = enemyActions2.enemyUnit.characterStats.CurrentSpeed;
-                }
-
-                return speed2.CompareTo(speed1);
-            });
-
-
-        //displaying all character actions NOTE: when using anims, yield return new WaitForSeconds(animClip.length) 
-        foreach (object action in allActions)
+                speed1 = playerActions1.playerUnit.characterStats.CurrentSpeed;
+            }
+            else if (action1 is PlayerandEnemyActions.SaveEnemyActions enemyActions1)
             {
-            if (action is PlayerandEnemyActions.SavePlayerActions playerAction)
+                speed1 = enemyActions1.enemyUnit.characterStats.CurrentSpeed;
+            }
+
+            if (action2 is PlayerandEnemyActions.SavePlayerActions playerActions2)
+            {
+                speed2 = playerActions2.playerUnit.characterStats.CurrentSpeed;
+            }
+            else if (action2 is PlayerandEnemyActions.SaveEnemyActions enemyActions2)
+            {
+                speed2 = enemyActions2.enemyUnit.characterStats.CurrentSpeed;
+            }
+
+            return speed2.CompareTo(speed1);
+        });
+
+        // Move player actions with healing items to the top
+        for (int i = allActions.Count - 1; i >= 0; i--)
+        {
+            if (allActions[i] is PlayerandEnemyActions.SavePlayerActions playersAction)
+            {
+                if (playersAction.item != null && playersAction.item.Type == ItemType.Health)
                 {
-                if(playerAction.move != null)
+                    allActions.RemoveAt(i);
+                    allActions.Insert(0, playersAction);
+                }
+            }
+        }
+
+            //displaying all character actions NOTE: when using anims, yield return new WaitForSeconds(animClip.length) 
+            foreach (object action in allActions)
+            {
+                if (action is PlayerandEnemyActions.SavePlayerActions playerAction)
                 {
-                    int damage = damageCalc.CalcDamage(playerAction.playerUnit, playerAction.move, playerAction.theTarget);
+                    if (playerAction.move != null)
+                    {
+                        int damage = damageCalc.CalcDamage(playerAction.playerUnit, playerAction.move, playerAction.theTarget);
+                        string message = damageCalc.message;
+                        Debug.Log(message);
+                        damageCalc.message = "";
+                    }
+                    else if (playerAction.item != null)
+                    {
+                        damageCalc.CalcTool(playerAction.playerUnit, playerAction.item, playerAction.theTarget);
+                        string message = damageCalc.message;
+                        Debug.Log(message);
+                        damageCalc.message = "";
+                    }
+                }
+                else if (action is PlayerandEnemyActions.SaveEnemyActions enemyAction)
+                {
+                    int damage = damageCalc.CalcDamage(enemyAction.enemyUnit, enemyAction.move, enemyAction.theTarget);
                     string message = damageCalc.message;
                     Debug.Log(message);
                     damageCalc.message = "";
-                } 
-                else if (playerAction.item != null)
-                {
-                    damageCalc.CalcTool(playerAction.playerUnit, playerAction.item, playerAction.theTarget);
-                    string message = damageCalc.message;
-                    Debug.Log(message);
-                    damageCalc.message = "";
                 }
-                
-                }
-    
-            else if (action is PlayerandEnemyActions.SaveEnemyActions enemyAction)
-                {    
-                int damage = damageCalc.CalcDamage(enemyAction.enemyUnit, enemyAction.move, enemyAction.theTarget);
-                string message = damageCalc.message;
-                Debug.Log(message);
-                damageCalc.message = "";
-            }
+                yield return new WaitForSeconds(2f);
 
-            yield return new WaitForSeconds(2f);
             }
-
             yield return new WaitForSeconds(2f);
             Debug.Log("Finished");
-        }        
+        }
     }
