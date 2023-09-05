@@ -12,7 +12,7 @@ public class DamageCalc : MonoBehaviour
         float damageOutput = 0f;
         int finalResult = 0;
 
-        message += $"{attacker.characterStats.CharacterName} used {move.AttackName} on {theTarget.characterStats.CharacterName}!"
+        message += $"{attacker.characterStats.CharacterName} used {move.AttackName} on {theTarget.characterStats.CharacterName}!";
 
         switch (move.AttackType)
         {
@@ -29,8 +29,8 @@ public class DamageCalc : MonoBehaviour
                             finalResult += 1;
                         }
                     }
-
-                    message += $"Did {finalResult} damage!";
+                    theTarget.TakeDamage(finalResult);
+                    message += $" Did {finalResult} damage!";
                     break;
                 }
             case AttackType.MAGICAL:
@@ -45,8 +45,8 @@ public class DamageCalc : MonoBehaviour
                             finalResult += 1;
                         }
                     }
-
-                    message += $"Did {finalResult} damage!";
+                    theTarget.TakeDamage(finalResult);
+                    message += $" Did {finalResult} damage!";
                     break;
                 }
         }
@@ -54,7 +54,7 @@ public class DamageCalc : MonoBehaviour
         if(move.BuffTypes.Length > 0)
         {
             //the attacker applies the buff on whatever ally- be it themselves or someone else
-            theTarget.ApplyBuff(move.BuffTypes, move.BuffAmount);
+            theTarget.ApplyandDebuff(move.BuffTypes, move.BuffAmount);
 
             //adding the buffs to the message
             message += $"{theTarget.characterStats.CharacterName}'s";
@@ -73,7 +73,7 @@ public class DamageCalc : MonoBehaviour
         if(move.DebuffTypes.Length > 0)
         {
             //applying any debuff on the target
-            theTarget.ApplyBuff(move.DebuffTypes, move.DebuffAmount);
+            theTarget.ApplyandDebuff(move.DebuffTypes, move.DebuffAmount);
 
             message += $"{theTarget.characterStats.CharacterName}'s";
 
@@ -99,8 +99,8 @@ public class DamageCalc : MonoBehaviour
         {
             case ItemType.Health: 
                 {
-                    float hpRestorationAmount = 0f;
-                    float mpRestorationAmount = 0f;
+                    int hpRestorationAmount = 0;
+                    int mpRestorationAmount = 0;
 
                     //making the item type more specifically a healing object
                     HealthObject healingItem = (HealthObject)item;
@@ -108,12 +108,14 @@ public class DamageCalc : MonoBehaviour
                     if (healingItem.hpRestoreAmount > 0)
                     {
                         hpRestorationAmount = (int)Math.Ceiling(healingItem.hpRestoreAmount + (.15f * attacker.characterStats.CurrentEfficiency));
+                        theTarget.ApplyHealing(healingItem, hpRestorationAmount);
                         message += $" Restored {hpRestorationAmount} health!";
                     }
 
                     if(healingItem.mpRestoreAmount > 0)
                     {
                         mpRestorationAmount = (int)Math.Ceiling(healingItem.mpRestoreAmount + (.15f * attacker.characterStats.CurrentEfficiency));
+                        theTarget.ApplyHealing(healingItem, mpRestorationAmount);
                         message += $" Restored {mpRestorationAmount} magic!";
                     }
 
@@ -134,6 +136,7 @@ public class DamageCalc : MonoBehaviour
                     }
 
                     finalResult = (int)Math.Ceiling(damageOutput);
+                    theTarget.TakeDamage(finalResult);
                     message += $" It did {finalResult} damage!";
                     break; 
                 }
