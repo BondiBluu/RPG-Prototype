@@ -7,10 +7,12 @@ using UnityEngine.UIElements;
 public class DamageCalc : MonoBehaviour
 {
     public string message = "";
-    public int CalcDamage(Unit attacker, MoveBaseClass move, Unit theTarget)
+    public void CalcDamage(Unit attacker, MoveBaseClass move, Unit theTarget)
     {
         float damageOutput = 0f;
         int finalResult = 0;
+
+        message += $"{attacker.characterStats.CharacterName} used {move.AttackName} on {theTarget.characterStats.CharacterName}!"
 
         switch (move.AttackType)
         {
@@ -19,14 +21,32 @@ public class DamageCalc : MonoBehaviour
                     //so there's no divide by 0 error, the divisor, if not anything higher than 0, will be 1.
                     damageOutput = (attacker.characterStats.CurrentAttack * move.AttackPower) / (2 * Math.Max(1, theTarget.characterStats.CurrentDefense));
                     finalResult = (int)Math.Ceiling(damageOutput);
-                    message += $"{attacker.characterStats.CharacterName} used {move.AttackName} on {theTarget.characterStats.CharacterName}! Did {finalResult} damage!";
+
+                    if (finalResult <= 0)
+                    {
+                        if (move.MoveType != MoveType.SUPPLEMENTARY)
+                        {
+                            finalResult += 1;
+                        }
+                    }
+
+                    message += $"Did {finalResult} damage!";
                     break;
                 }
             case AttackType.MAGICAL:
                 {
                     damageOutput = (attacker.characterStats.CurrentMagic * move.AttackPower) / (2 * Math.Max(1, theTarget.characterStats.CurrentResistance));
                     finalResult = (int)Math.Ceiling(damageOutput);
-                    message += $"{attacker.characterStats.CharacterName} used {move.AttackName} on {theTarget.characterStats.CharacterName}! Did {finalResult} damage!";
+
+                    if (finalResult <= 0)
+                    {
+                        if (move.MoveType != MoveType.SUPPLEMENTARY)
+                        {
+                            finalResult += 1;
+                        }
+                    }
+
+                    message += $"Did {finalResult} damage!";
                     break;
                 }
         }
@@ -37,7 +57,7 @@ public class DamageCalc : MonoBehaviour
             theTarget.ApplyBuff(move.BuffTypes, move.BuffAmount);
 
             //adding the buffs to the message
-            message += $"{attacker.characterStats.CharacterName} uses {move.AttackName} on {theTarget.characterStats.CharacterName}! {theTarget.characterStats.CharacterName}'s";
+            message += $"{theTarget.characterStats.CharacterName}'s";
             //naming all the buffs that were in that attack
             for (int i = 0; i < move.BuffTypes.Length; i++)
             {
@@ -55,7 +75,7 @@ public class DamageCalc : MonoBehaviour
             //applying any debuff on the target
             theTarget.ApplyBuff(move.DebuffTypes, move.DebuffAmount);
 
-            message += $"{attacker.characterStats.CharacterName} uses {move.AttackName} on {theTarget.characterStats.CharacterName}! {theTarget.characterStats.CharacterName}'s";
+            message += $"{theTarget.characterStats.CharacterName}'s";
 
             for (int i = 0; i < move.DebuffTypes.Length; i++)
             {
@@ -67,21 +87,14 @@ public class DamageCalc : MonoBehaviour
             }
             message += $" lowered!";
         }
-
-        if (finalResult <= 0)
-        {
-            if (move.MoveType != MoveType.SUPPLEMENTARY)
-            {
-                finalResult += 1;
-            }
-        }
-        return finalResult;
-
     }
 
     public void CalcTool(Unit attacker, ItemObject item, Unit theTarget)
     {
         int finalResult = 0;
+
+        message += $"{attacker.characterStats.CharacterName} used {item.ItemName} on {theTarget.characterStats.CharacterName}!";
+
         switch (item.Type)
         {
             case ItemType.Health: 
@@ -92,13 +105,12 @@ public class DamageCalc : MonoBehaviour
                     //making the item type more specifically a healing object
                     HealthObject healingItem = (HealthObject)item;
 
-                    message += $"{attacker.characterStats.CharacterName} used {item.ItemName} on {theTarget.characterStats.CharacterName}!";
-
                     if (healingItem.hpRestoreAmount > 0)
                     {
                         hpRestorationAmount = (int)Math.Ceiling(healingItem.hpRestoreAmount + (.15f * attacker.characterStats.CurrentEfficiency));
                         message += $" Restored {hpRestorationAmount} health!";
                     }
+
                     if(healingItem.mpRestoreAmount > 0)
                     {
                         mpRestorationAmount = (int)Math.Ceiling(healingItem.mpRestoreAmount + (.15f * attacker.characterStats.CurrentEfficiency));
@@ -122,7 +134,7 @@ public class DamageCalc : MonoBehaviour
                     }
 
                     finalResult = (int)Math.Ceiling(damageOutput);
-                    message += $"{attacker.characterStats.CharacterName} used {item.ItemName} on {theTarget.characterStats.CharacterName}! It did {finalResult} damage!";
+                    message += $" It did {finalResult} damage!";
                     break; 
                 }
 
