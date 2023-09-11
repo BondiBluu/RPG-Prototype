@@ -57,7 +57,7 @@ public class DamageCalc : MonoBehaviour
             theTarget.ApplyandDebuff(move.BuffTypes, move.BuffAmount);
 
             //adding the buffs to the message
-            message += $"{theTarget.characterStats.CharacterName}'s";
+            message += $" {theTarget.characterStats.CharacterName}'s";
             //naming all the buffs that were in that attack
             for (int i = 0; i < move.BuffTypes.Length; i++)
             {
@@ -75,7 +75,7 @@ public class DamageCalc : MonoBehaviour
             //applying any debuff on the target
             theTarget.ApplyandDebuff(move.DebuffTypes, move.DebuffAmount);
 
-            message += $"{theTarget.characterStats.CharacterName}'s";
+            message += $" {theTarget.characterStats.CharacterName}'s";
 
             for (int i = 0; i < move.DebuffTypes.Length; i++)
             {
