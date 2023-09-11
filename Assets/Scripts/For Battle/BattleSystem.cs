@@ -26,7 +26,8 @@ public class BattleSystem : MonoBehaviour
     public Transform[] playerStations;
     public Unit[] playerUnits;
     public Unit selectedPlayerUnit;
-
+    int currentCycleIndex = 0;
+    public bool undoClicked = false;
 
     [Header("Enemies and Stations")]
 
@@ -106,8 +107,9 @@ public class BattleSystem : MonoBehaviour
     //where player can choose an action
     IEnumerator PlayerTurn()
     {
-        for (int i = 0; i < playerUnits.Length; i++)
-        {
+
+        for (int i = currentCycleIndex; i < playerUnits.Length; i++)
+        { 
             //showing the player's turn
             Debug.Log(playerUnits[i].characterStats.CharacterName + "'s turn.");
 
@@ -172,6 +174,8 @@ public class BattleSystem : MonoBehaviour
             selectedEnemy = null;
             attackandSupplementary.enemyPanelUI.SetActive(false);
             attackandSupplementary.allyPanelUI.SetActive(false);
+            //incrementing in case we have to undo
+            currentCycleIndex++;
             //saying the next player hasn't chosen their move yet.
             moveGenerator.ClearAttackButtons();
         }
@@ -179,6 +183,25 @@ public class BattleSystem : MonoBehaviour
         Debug.Log("Finished.");
         state = BattleState.ENEMYTURN;
         EnemyTurn();
+    }
+
+    public void OnUndo()
+    {
+        if(playerandEnemyStorage.playerActionContainer.Count > 0)
+        {
+            playerandEnemyStorage.playerActionContainer.RemoveAt(playerandEnemyStorage.playerActionContainer.Count - 1);
+
+            selectedPlayerUnit = null;
+            selectedEnemy = null;
+            undoClicked = true;
+
+            //decrementing to go back to the previous character
+            currentCycleIndex--;
+            Debug.Log($"Move undone. {playerUnits[currentCycleIndex].characterStats.CharacterName}'s turn.");
+
+            StartCoroutine(PlayerTurn());
+
+        }
     }
 
     //picking a target ally (for Unity hierarchy)
