@@ -13,6 +13,7 @@ public class DamageCalc : MonoBehaviour
         int finalResult = 0;
 
         message += $"{attacker.characterStats.CharacterName} used {move.AttackName} on {theTarget.characterStats.CharacterName}!";
+        attacker.characterStats.CurrentMP -= move.MPConsumption;
 
         switch (move.AttackType)
         {
@@ -87,6 +88,11 @@ public class DamageCalc : MonoBehaviour
             }
             message += $" lowered!";
         }
+
+        if (theTarget.isDefeated)
+        {
+            message += $" {theTarget.characterStats.CharacterName} was defeated!";
+        }
     }
 
     public void CalcTool(Unit attacker, ItemObject item, Unit theTarget)
@@ -141,6 +147,11 @@ public class DamageCalc : MonoBehaviour
                     break; 
                 }
 
+        }
+
+        if (theTarget.isDefeated)
+        {
+            Debug.Log($"{theTarget.characterStats.CharacterName} was defeated!");
         }
     }
 }

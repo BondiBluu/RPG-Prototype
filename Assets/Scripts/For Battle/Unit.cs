@@ -6,27 +6,41 @@ using UnityEngine;
 public class Unit : MonoBehaviour
 {
     [SerializeField] public CharacterStatistics characterStats;
-    MoveBaseClass moveBaseClass;
     BattleHUD battleHUD;
+   
+    public bool isDefeated;
 
     private void Start()
     {
         battleHUD = FindObjectOfType<BattleHUD>();
+        isDefeated = false;
+        RemoveBuffsAndDebuffs();
     }
 
+    //for testing purposes ONLY
 
-    public bool TakeDamage(int finalResult)
+    int startingHP = 20;
+    int startingMP = 20;
+    public void InitialiseStats()
+    {
+        characterStats.CurrentHP = startingHP;
+        characterStats.CurrentMP = startingMP;
+    }
+
+    public void TakeDamage(int finalResult)
     {
         characterStats.CurrentHP -= finalResult;
 
         if (characterStats.CurrentHP <= 0)
         {
-            return true;
+            characterStats.CurrentHP = 0;
+            isDefeated = true;
         }
         else
         {
-            return false;
+            isDefeated = false;
         }
+        UpdateHealthAndMagic();
     }
 
     public void ApplyHealing(HealthObject item, int finalResult)
@@ -34,10 +48,33 @@ public class Unit : MonoBehaviour
         if(item.hpRestoreAmount > 0)
         {
             characterStats.CurrentHP += finalResult;
+
+            if(characterStats.CurrentHP >= characterStats.MaxHP)
+            {
+                characterStats.CurrentHP = characterStats.MaxHP;
+            }
         } 
         else if (item.mpRestoreAmount > 0)
         {
             characterStats.CurrentMP += finalResult;
+
+            if (characterStats.CurrentMP >= characterStats.MaxMP)
+            {
+                characterStats.CurrentMP = characterStats.MaxMP;
+            }
+        }
+        UpdateHealthAndMagic();
+    }
+
+    public void UpdateHealthAndMagic()
+    {
+        if(characterStats.UnitType == UnitType.PLAYERCHARACTER)
+        {
+            battleHUD.UpdatePlayerHPAndMP(this, characterStats.CurrentHP, characterStats.CurrentMP);
+        } 
+        else
+        {
+            battleHUD.UpdateEnemyHPAndMP(this, characterStats.CurrentHP);
         }
     }
 

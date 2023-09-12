@@ -27,17 +27,17 @@ public class BattleSystem : MonoBehaviour
     public Unit[] playerUnits;
     public Unit selectedPlayerUnit;
     int currentCycleIndex = 0;
-    public bool undoClicked = false;
 
     [Header("Enemies and Stations")]
 
     public GameObject[] enemyPrefabs;
     public Transform[] enemyStations;
-    Unit[] enemyUnits;
+    public Unit[] enemyUnits;
     public Unit selectedEnemy; //for the player to choose which enemy to hits
 
     [Header("Buttons")]
     public Button[] enemySelectButton;
+    public GameObject undoButtonHolder;
 
     int selectedPlayerIndex = 0;
 
@@ -57,6 +57,8 @@ public class BattleSystem : MonoBehaviour
         playerandEnemyStorage = FindObjectOfType<PlayerandEnemyActions>();
         attackandSupplementary = FindObjectOfType<AttackandSupplementary>();
         damageCalc = FindObjectOfType<DamageCalc>();
+
+        undoButtonHolder.SetActive(false);
 
         //setting up the battle. Starting a Coroutine to manipulate time (waiting for seconds)
         StartCoroutine(SetUpBattle());
@@ -79,6 +81,9 @@ public class BattleSystem : MonoBehaviour
 
             //using the reference to be able to get the stats information from each individual unit. storing the reference in a Unit and EnemyUnit var to use multiple times
             playerUnits[i] = playerGObject.GetComponent<Unit>();
+
+            //REMOVE AFTER TESTING
+            playerUnits[i].InitialiseStats();
         }
         playerHUD.SetPlayerHUD(playerUnits);
 
@@ -89,6 +94,9 @@ public class BattleSystem : MonoBehaviour
             Transform enemySpawnStation = enemyStations[i];
             GameObject enemyGObject = Instantiate(enemyPrefabs[i], enemySpawnStation);
             enemyUnits[i] = enemyGObject.GetComponent<EnemyUnit>();
+
+            //REMOVE AFTER TESTING
+            enemyUnits[i].InitialiseStats();
         }
         enemyHUD.SetEnemyHUD(enemyUnits);
 
@@ -107,9 +115,17 @@ public class BattleSystem : MonoBehaviour
     //where player can choose an action
     IEnumerator PlayerTurn()
     {
-
         for (int i = currentCycleIndex; i < playerUnits.Length; i++)
-        { 
+        {
+            //checking for character defeat
+            if (playerUnits[i].characterStats.CurrentHP <= 0)
+            {
+                //currentCycleIndex++;
+                continue;
+            }
+
+            if (i > 0){undoButtonHolder.SetActive(true);} 
+            else { undoButtonHolder.SetActive(false); }
             //showing the player's turn
             Debug.Log(playerUnits[i].characterStats.CharacterName + "'s turn.");
 
@@ -124,7 +140,6 @@ public class BattleSystem : MonoBehaviour
             //checking if they've opened the attck button to click an attack
             if (attackandSupplementary.wantsToAttack == true)
             {
-
                 //if the move selected is a buff
                 if (moveGenerator.selectedMove.BuffTypes.Length > 0)
                 {
@@ -148,6 +163,8 @@ public class BattleSystem : MonoBehaviour
 
                     attackandSupplementary.enemyPanelUI.SetActive(false);
                 }
+                //if player somehow chooses an item AND a move
+                moveGenerator.selectedItem = null;
             }
 
             if (attackandSupplementary.wantsToUseItem == true)
@@ -168,19 +185,26 @@ public class BattleSystem : MonoBehaviour
                     playerandEnemyStorage.SaveItemUsage(playerUnits[i], moveGenerator.selectedItem, selectedEnemy);
                     attackandSupplementary.enemyPanelUI.SetActive(false);
                 }
+                moveGenerator.selectedMove = null;
             }
 
+            moveGenerator.selectedMove = null;
+            moveGenerator.selectedItem = null;
             selectedPlayerUnit = null;
             selectedEnemy = null;
             attackandSupplementary.enemyPanelUI.SetActive(false);
             attackandSupplementary.allyPanelUI.SetActive(false);
+            attackandSupplementary.blocker.SetActive(false);
             //incrementing in case we have to undo
             currentCycleIndex++;
             //saying the next player hasn't chosen their move yet.
             moveGenerator.ClearAttackButtons();
+            undoButtonHolder.SetActive(false);
         }
         yield return new WaitForSeconds(1.5f);
         Debug.Log("Finished.");
+        //resetting the current cycle index to use again
+        currentCycleIndex = 0;
         state = BattleState.ENEMYTURN;
         EnemyTurn();
     }
@@ -193,7 +217,6 @@ public class BattleSystem : MonoBehaviour
 
             selectedPlayerUnit = null;
             selectedEnemy = null;
-            undoClicked = true;
 
             //decrementing to go back to the previous character
             currentCycleIndex--;
@@ -207,7 +230,7 @@ public class BattleSystem : MonoBehaviour
     //picking a target ally (for Unity hierarchy)
     public void OnPlayerClick(int playerIndex)
     {
-        //selecter player will be the button linked to the unit. Unit will then be chosen at the selected player to recieve buffs ot heals
+        //selecter player will be the button linked to the unit. Unit will then be chosen at the selected player to recieve buffs or heals
         selectedPlayerUnit = playerUnits[playerIndex];
         selectedPlayerIndex++;
     }
@@ -223,6 +246,10 @@ public class BattleSystem : MonoBehaviour
         //wat for the enemy to move
         for (int i = 0; i < enemyUnits.Length; i++)
         {
+                if (enemyUnits[i].characterStats.CurrentHP <= 0)
+                {
+                    continue;
+                }
             //getting how many enemy moves there are in the current enemy
             int enemyMoves = enemyUnits[i].characterStats.moveBaseClassList.Count;
             int playersPresent = playerUnits.Length;
@@ -312,35 +339,112 @@ public class BattleSystem : MonoBehaviour
         {
             if (action is PlayerandEnemyActions.SavePlayerActions playerAction)
             {
-                if (playerAction.move != null)   
+                //checking if player is defeated
+                if (!playerAction.playerUnit.isDefeated)
                 {
-                    damageCalc.CalcDamage(playerAction.playerUnit, playerAction.move, playerAction.theTarget);
-                    playerHUD.UpdateHPAndMP(playerAction.theTarget, playerAction.theTarget.characterStats.CurrentHP, playerAction.theTarget.characterStats.CurrentMP);
-                    string message = damageCalc.message;
-                    Debug.Log(message);
-                    damageCalc.message = "";
-                }
-                else if (playerAction.item != null)
-                {
-                    damageCalc.CalcTool(playerAction.playerUnit, playerAction.item, playerAction.theTarget);
-                    playerHUD.UpdateHPAndMP(playerAction.theTarget, playerAction.theTarget.characterStats.CurrentHP, playerAction.theTarget.characterStats.CurrentMP);
-                    string message = damageCalc.message;
-                    Debug.Log(message);
-                    damageCalc.message = "";
+                    if (playerAction.move != null)
+                    {
+                        damageCalc.CalcDamage(playerAction.playerUnit, playerAction.move, playerAction.theTarget);
+                        //playerHUD.UpdatePlayerHPAndMP(playerAction.theTarget, playerAction.theTarget.characterStats.CurrentHP, playerAction.theTarget.characterStats.CurrentMP);
+                        string message = damageCalc.message;
+                        Debug.Log(message);
+                        damageCalc.message = "";
+                    }
+                    else if (playerAction.item != null)
+                    {
+                        damageCalc.CalcTool(playerAction.playerUnit, playerAction.item, playerAction.theTarget);
+                        //playerHUD.UpdatePlayerHPAndMP(playerAction.theTarget, playerAction.theTarget.characterStats.CurrentHP, playerAction.theTarget.characterStats.CurrentMP);
+                        string message = damageCalc.message;
+                        Debug.Log(message);
+                        damageCalc.message = "";
+                    }
                 }
             }
             else if (action is PlayerandEnemyActions.SaveEnemyActions enemyAction)
             {
-                damageCalc.CalcDamage(enemyAction.enemyUnit, enemyAction.move, enemyAction.theTarget);
-                playerHUD.UpdateHPAndMP(enemyAction.theTarget, enemyAction.theTarget.characterStats.CurrentHP, enemyAction.theTarget.characterStats.CurrentMP);
-                string message = damageCalc.message;
-                Debug.Log(message);
-                damageCalc.message = "";
+                if (!enemyAction.enemyUnit.isDefeated)
+                {
+                    damageCalc.CalcDamage(enemyAction.enemyUnit, enemyAction.move, enemyAction.theTarget);
+                    //playerHUD.UpdateEnemyHPAndMP(enemyAction.theTarget, enemyAction.theTarget.characterStats.CurrentHP);
+                    string message = damageCalc.message;
+                    Debug.Log(message);
+                    damageCalc.message = "";
+                }
             }
-
             yield return new WaitForSeconds(2f);
         }
         yield return new WaitForSeconds(2f);
-        Debug.Log("Finished");
+
+        bool allEnemiesDefeated = true;
+        bool allPlayersDefeated = true;
+
+        foreach(Unit enemyUnit in enemyUnits)
+        {
+            //checking if all enemies are still alive
+            if(enemyUnit.characterStats.CurrentHP > 0)
+            {
+                allEnemiesDefeated = false;
+                //if even one is alive, just break since we don't need to check anymore
+                break;
+
+                //if there are all true, all enemies are defeated
+            }
         }
+
+        foreach(Unit playerUnit in playerUnits)
+        {
+            if(playerUnit.characterStats.CurrentHP > 0)
+            {
+                allPlayersDefeated = false;
+                break;
+            }
+        }
+
+        if (allEnemiesDefeated)
+        {
+            state = BattleState.WIN;
+            StartCoroutine(EndBattle());
+            //be sure to add drops with wins
+        }
+        else if (allPlayersDefeated)
+        {
+            state = BattleState.LOSS;
+            StartCoroutine(EndBattle());
+            //put them back to a pokemon center or the like. To be discussed.
+        }
+        else
+        {
+            allActions.Clear();
+            sortedPlayerActions.Clear();
+            sortedEnemyActions.Clear();
+            playerandEnemyStorage.playerActionContainer.Clear();
+            playerandEnemyStorage.enemyActionContainer.Clear();
+
+            state = BattleState.PLAYERTURN;
+            StartCoroutine(PlayerTurn());
+        }    
     }
+
+    IEnumerator EndBattle()
+    {
+        foreach (Unit playerUnit in playerUnits)
+        {
+            playerUnit.RemoveBuffsAndDebuffs();
+        }
+           
+        foreach (Unit enemyUnits in enemyUnits)
+        {
+            enemyUnits.RemoveBuffsAndDebuffs();
+        }
+
+            if (state == BattleState.WIN)
+        {
+            Debug.Log("Won!");
+        } else if (state == BattleState.LOSS)
+        {
+            Debug.Log("Lost. Rerouting.");
+        }
+        yield return new WaitForSeconds(2f);
+    }
+    
+}

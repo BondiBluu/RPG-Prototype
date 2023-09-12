@@ -78,12 +78,13 @@ public class BattleHUD : MonoBehaviour
     }
 
     //updating player hp
-    public void UpdateHPAndMP(Unit unit, int hP, int mP)
+    public void UpdatePlayerHPAndMP(Unit unit, int hP, int mP)
     {
         int characterIndex = System.Array.IndexOf(battleSystem.playerUnits, unit);
 
         if (characterIndex != -1)
         {
+            //updating the current hp and mp of all players, and numberical value of hp
             sliderHPPlayers[characterIndex].value = hP;
             sliderHPAllies[characterIndex].value = hP;
             currentHPPlayers[characterIndex].text = hP.ToString();
@@ -91,6 +92,18 @@ public class BattleHUD : MonoBehaviour
             sliderMPPlayers[characterIndex].value = mP;
             sliderMPAllies[characterIndex].value = mP;
             currentMPPlayers[characterIndex].text = mP.ToString();
+        }
+                    
+    }
+    
+    public void UpdateEnemyHPAndMP(Unit unit, int hP)
+    {
+        int characterIndex = System.Array.IndexOf(battleSystem.enemyUnits, unit);
+
+        if (characterIndex != -1)
+        {
+            //updating the current hp and mp of all enemies
+            sliderEnemies[characterIndex].value = hP;
         }
                     
     }
