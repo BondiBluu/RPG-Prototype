@@ -18,12 +18,10 @@ public class AttackandSupplementary : MonoBehaviour
     public bool wantsToUseItem = false;
     public bool backButtonPressed;
     BattleSystem battleSystem;
-    MoveGenerator moveGenerator;
 
     private void Start()
     {
         battleSystem = FindObjectOfType<BattleSystem>();
-        moveGenerator = FindObjectOfType<MoveGenerator>();
         blocker.SetActive(false);
     }
 
@@ -99,8 +97,6 @@ public class AttackandSupplementary : MonoBehaviour
         atkUI.SetActive(false);
         itemUI.SetActive(false);
         blocker.SetActive(false);
-        //moveGenerator.selectedItem = null;
-        //moveGenerator.selectedMove = null;
     }
 
 
