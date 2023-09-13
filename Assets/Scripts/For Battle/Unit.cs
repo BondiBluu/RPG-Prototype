@@ -42,14 +42,21 @@ public class Unit : MonoBehaviour
         }
         UpdateHealthAndMagic();
     }
+    public void TakeMP(int mpConsumption)
+    {
+        characterStats.CurrentMP -= mpConsumption;
+        UpdateHealthAndMagic();
+    }
+
 
     public void ApplyHealing(HealthObject item, int finalResult)
     {
         if(item.hpRestoreAmount > 0)
         {
             characterStats.CurrentHP += finalResult;
+            UpdateHealthAndMagic();
 
-            if(characterStats.CurrentHP >= characterStats.MaxHP)
+            if (characterStats.CurrentHP >= characterStats.MaxHP)
             {
                 characterStats.CurrentHP = characterStats.MaxHP;
             }
@@ -57,13 +64,14 @@ public class Unit : MonoBehaviour
         else if (item.mpRestoreAmount > 0)
         {
             characterStats.CurrentMP += finalResult;
+            UpdateHealthAndMagic();
 
             if (characterStats.CurrentMP >= characterStats.MaxMP)
             {
                 characterStats.CurrentMP = characterStats.MaxMP;
             }
         }
-        UpdateHealthAndMagic();
+        
     }
 
     public void UpdateHealthAndMagic()

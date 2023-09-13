@@ -13,7 +13,7 @@ public class DamageCalc : MonoBehaviour
         int finalResult = 0;
 
         message += $"{attacker.characterStats.CharacterName} used {move.AttackName} on {theTarget.characterStats.CharacterName}!";
-        attacker.characterStats.CurrentMP -= move.MPConsumption;
+        attacker.TakeMP(move.MPConsumption);
 
         switch (move.AttackType)
         {
