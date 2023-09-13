@@ -243,24 +243,32 @@ public class BattleSystem : MonoBehaviour
     }
     void EnemyTurn()
     {
-        //wat for the enemy to move
+        //grabbing nondefeated players
+        List<Unit> nondefeatedPlayers = playerUnits.Where(player => !player.isDefeated).ToList();
+
+        //wait for the enemy to move
         for (int i = 0; i < enemyUnits.Length; i++)
         {
-                if (enemyUnits[i].characterStats.CurrentHP <= 0)
-                {
-                    continue;
-                }
-            //getting how many enemy moves there are in the current enemy
-            int enemyMoves = enemyUnits[i].characterStats.moveBaseClassList.Count;
-            int playersPresent = playerUnits.Length;
-            int selectedPlayer = Random.Range(0, playersPresent);
-            //enemy will choosea random move in their list
-            int selectedMove = Random.Range(0, enemyMoves);
-            //move to use is whatever number was chosen
-            MoveBaseClass moveToUse = enemyUnits[i].characterStats.moveBaseClassList[selectedMove];
-            Unit unitToAttack = playerUnits[selectedPlayer];
+                
+            if (enemyUnits[i].isDefeated)
+            {
+                continue;    
+            }
 
-            playerandEnemyStorage.SaveEnemyAction(enemyUnits[i], moveToUse, unitToAttack);
+            if (nondefeatedPlayers.Count > 0)
+            {
+                //getting how many enemy moves there are in the current enemy
+                int enemyMoves = enemyUnits[i].characterStats.moveBaseClassList.Count;
+                int playersPresent = playerUnits.Length;
+                int selectedPlayer = Random.Range(0, nondefeatedPlayers.Count);
+                //enemy will choosea random move in their list
+                int selectedMove = Random.Range(0, enemyMoves);
+                //move to use is whatever number was chosen
+                MoveBaseClass moveToUse = enemyUnits[i].characterStats.moveBaseClassList[selectedMove];
+                Unit unitToAttack = playerUnits[selectedPlayer];
+
+                playerandEnemyStorage.SaveEnemyAction(enemyUnits[i], moveToUse, unitToAttack);
+            }
         }
         state = BattleState.BATTLEPHASE;
         StartCoroutine(BattlePhase());
