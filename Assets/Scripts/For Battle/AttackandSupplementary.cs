@@ -10,6 +10,7 @@ public class AttackandSupplementary : MonoBehaviour
     [SerializeField] public GameObject atkUI;
     [SerializeField] public GameObject suppUI;
     [SerializeField] public GameObject itemUI;
+    [SerializeField] public GameObject statsUI;
     [SerializeField] public GameObject enemyPanelUI;
     [SerializeField] public GameObject allyPanelUI;
     [SerializeField] public GameObject blocker;
@@ -67,6 +68,14 @@ public class AttackandSupplementary : MonoBehaviour
         }
     }
 
+    public void OnStatsButton()
+    {
+        statsUI.SetActive(true);
+        atkUI.SetActive(false);
+        itemUI.SetActive(false);
+        blocker.SetActive(true);
+    }
+
     public void EnemyContainerOn()
     {
         if (battleSystem.state == BattleState.PLAYERTURN)
@@ -94,6 +103,7 @@ public class AttackandSupplementary : MonoBehaviour
     {   
         suppUI.SetActive (false);
         allyPanelUI.SetActive (false);
+        statsUI.SetActive(false);
         atkUI.SetActive(false);
         itemUI.SetActive(false);
         blocker.SetActive(false);
