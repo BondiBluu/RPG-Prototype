@@ -6,6 +6,13 @@ using TMPro;
 
 public class BattleStats : MonoBehaviour
 {
+    [SerializeField] CharacterStatistics characterStatistics;
+
+    private void Start()
+    {
+        ShowStatsForBattle(characterStatistics);
+    }
+
     [SerializeField] GameObject charaImage;
     [SerializeField] TMP_Text abilityText;
     [SerializeField] TMP_Text descAbilityText;
@@ -31,8 +38,8 @@ public class BattleStats : MonoBehaviour
         descAbilityText.text = characterStatistics.AbilityDesc;
         nameText.text = characterStatistics.CharacterName;
         levelText.text = characterStatistics.Level.ToString();
-        hPText.text = $"{characterStatistics.CurrentHP} / {characterStatistics.MaxHP}";
-        mPText.text = $"{characterStatistics.CurrentMP} / {characterStatistics.MaxMP}";
+        hPText.text = $"{characterStatistics.CurrentHP}/{characterStatistics.MaxHP}";
+        mPText.text = $"{characterStatistics.CurrentMP}/{characterStatistics.MaxMP}";
         SetStatTexts(atkText, characterStatistics.CurrentAttack, characterStatistics.BaseAttack);
         SetStatTexts(defText, characterStatistics.CurrentDefense, characterStatistics.BaseDefense);
         SetStatTexts(magText, characterStatistics.CurrentMagic, characterStatistics.BaseMagic);
@@ -46,9 +53,11 @@ public class BattleStats : MonoBehaviour
     {
         //finding what was lowered or raised in the base
         int statsDifference = currentValue - baseValue;
-        string sign = (statsDifference >= 0 ) ? " +" : " -";
 
-        textElement.text = $"{baseValue}  ({sign}{statsDifference})";
+        //blue + or red - plus the stats difference will appear based on if the stats difference is a positive or negative value
+        string sign = (statsDifference >= 0 ) ? $"<color=#6EFFFF>+{statsDifference}</color>" : $"<color=#FF1100>{statsDifference}</color>";
+
+        textElement.text = $"{baseValue}({sign})";
     }
 
 
