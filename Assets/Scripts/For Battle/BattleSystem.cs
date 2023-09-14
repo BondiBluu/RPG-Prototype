@@ -27,6 +27,7 @@ public class BattleSystem : MonoBehaviour
     public Unit[] playerUnits;
     public Unit selectedPlayerUnit;
     int currentCycleIndex = 0;
+    int currentStatsIndex = 0;
 
     [Header("Enemies and Stations")]
 
@@ -39,12 +40,11 @@ public class BattleSystem : MonoBehaviour
     public Button[] enemySelectButton;
     public GameObject undoButtonHolder;
 
-    int selectedPlayerIndex = 0;
-
     MoveGenerator moveGenerator;
     AttackandSupplementary attackandSupplementary;
     DamageCalc damageCalc;
     PlayerandEnemyActions playerandEnemyStorage;
+    BattleStats battleStats;
 
     // Start is called before the first frame update
     void Start()
@@ -57,6 +57,7 @@ public class BattleSystem : MonoBehaviour
         playerandEnemyStorage = FindObjectOfType<PlayerandEnemyActions>();
         attackandSupplementary = FindObjectOfType<AttackandSupplementary>();
         damageCalc = FindObjectOfType<DamageCalc>();
+        battleStats = FindObjectOfType<BattleStats>();
 
         undoButtonHolder.SetActive(false);
 
@@ -86,6 +87,7 @@ public class BattleSystem : MonoBehaviour
             playerUnits[i].InitialiseStats();
         }
         playerHUD.SetPlayerHUD(playerUnits);
+        battleStats.ShowStatsForBattle(playerUnits[currentStatsIndex].characterStats);
 
         enemyUnits = new EnemyUnit[enemyPrefabs.Length];
         //same for enemies
@@ -110,7 +112,17 @@ public class BattleSystem : MonoBehaviour
         StartCoroutine(PlayerTurn());
     }
 
+    public void OnNextStatsButton()
+    {
+        currentStatsIndex++;
 
+        if(currentStatsIndex >= playerUnits.Length)
+        {
+            currentStatsIndex = 0;
+        }
+
+        battleStats.ShowStatsForBattle(playerUnits[currentStatsIndex].characterStats);
+    }
 
     //where player can choose an action
     IEnumerator PlayerTurn()
@@ -232,14 +244,12 @@ public class BattleSystem : MonoBehaviour
     {
         //selecter player will be the button linked to the unit. Unit will then be chosen at the selected player to recieve buffs or heals
         selectedPlayerUnit = playerUnits[playerIndex];
-        selectedPlayerIndex++;
     }
 
     //for button clicking enemies (for Unity hierarchy)
     public void OnEnemyButtonClick(int enemyIndex)
     {
         selectedEnemy = enemyUnits[enemyIndex];
-        selectedPlayerIndex++;
     }
     void EnemyTurn()
     {

@@ -18,6 +18,7 @@ public class AttackandSupplementary : MonoBehaviour
     public bool wantsToAttack = false;
     public bool wantsToUseItem = false;
     public bool backButtonPressed;
+    public bool statsActive = false;
     BattleSystem battleSystem;
 
     private void Start()

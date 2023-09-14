@@ -6,13 +6,6 @@ using TMPro;
 
 public class BattleStats : MonoBehaviour
 {
-    [SerializeField] CharacterStatistics characterStatistics;
-
-    private void Start()
-    {
-        ShowStatsForBattle(characterStatistics);
-    }
-
     [SerializeField] GameObject charaImage;
     [SerializeField] TMP_Text abilityText;
     [SerializeField] TMP_Text descAbilityText;
