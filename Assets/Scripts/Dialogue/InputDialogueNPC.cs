@@ -13,6 +13,10 @@ public class InputDialogueNPC : MonoBehaviour
     [SerializeField] string[] diaLines;
     [SerializeField] string[] nameLines;
     [SerializeField] Sprite[] charaImage;
+    [SerializeField] bool questIsActive;
+    [SerializeField] bool questAvailable;
+
+    [SerializeField] List<QuestBase> quests = new List<QuestBase>();
 
     int currentLine = 0;
 
@@ -22,6 +26,7 @@ public class InputDialogueNPC : MonoBehaviour
     {
         //referencing the DialogueManager script
         diaMan = FindObjectOfType<DialogueManager>();
+        questIsActive = false;
     }
 
     //for the dialogue points that don't hve preview dialogue
@@ -35,13 +40,7 @@ public class InputDialogueNPC : MonoBehaviour
     }
 
     void OnOpenUI(InputValue value)
-    {
-        if (value.isPressed && diaMan.dialogActive == true)
-        {
-            Debug.Log("Pressed");
-        }
-
-            
+    {            
         if (value.isPressed && diaMan.dialogActive == true)
         {
             diaMan.dialogActive = true;

@@ -196,6 +196,8 @@ public class CharacterStatistics: ScriptableObject
         set { statGrowth = value; }
     }
 
+    public Sprite Image { get { return image; } set { image = value; } }
+
     public SpawnRate SpawnRate
     { 
         get { return spawnRate; } 
