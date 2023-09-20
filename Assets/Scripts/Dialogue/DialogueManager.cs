@@ -12,7 +12,10 @@ public class DialogueManager : MonoBehaviour
     
     public Text diaText;
     public Text nameText;
-    
+
+    [Header("For Quests")]
+    public Button questAcceptanceButton;
+    public Button questDenialButton;
 
     public bool dialogActive = false;
         
@@ -35,6 +38,13 @@ public class DialogueManager : MonoBehaviour
         diaBox.SetActive(true);
         nameBox.SetActive(true);
         charaBox.SetActive(true);
+    }
+    
+    public void PreviewOn()
+    {
+        dialogActive = false;
+        diaBox.SetActive(true);
+        nameBox.SetActive(true);
     }
 
     public void PickupDialog(string dialogue)
