@@ -6,15 +6,7 @@ public class Units : MonoBehaviour
 {
     [SerializeField] public CharacterStatistics characterStats;
     MoveBaseClass moveBaseClass;
-    void TakingDamage()
-    {
-        bool isDefeated;
-        if (characterStats.CurrentHP <= 0)
-        {
-            isDefeated = true;
-        }
-        isDefeated = false;
-    }
+
 
     public bool TakeDamage()
     {

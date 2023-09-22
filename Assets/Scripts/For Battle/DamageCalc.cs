@@ -7,10 +7,13 @@ using UnityEngine.UIElements;
 public class DamageCalc : MonoBehaviour
 {
     public string message = "";
-    public int CalcDamage(Unit attacker, MoveBaseClass move, Unit theTarget)
+    public void CalcDamage(Unit attacker, MoveBaseClass move, Unit theTarget)
     {
         float damageOutput = 0f;
         int finalResult = 0;
+
+        message += $"{attacker.characterStats.CharacterName} used {move.AttackName} on {theTarget.characterStats.CharacterName}!";
+        attacker.TakeMP(move.MPConsumption);
 
         switch (move.AttackType)
         {
@@ -19,14 +22,32 @@ public class DamageCalc : MonoBehaviour
                     //so there's no divide by 0 error, the divisor, if not anything higher than 0, will be 1.
                     damageOutput = (attacker.characterStats.CurrentAttack * move.AttackPower) / (2 * Math.Max(1, theTarget.characterStats.CurrentDefense));
                     finalResult = (int)Math.Ceiling(damageOutput);
-                    message += $"{attacker.characterStats.CharacterName} used {move.AttackName} on {theTarget.characterStats.CharacterName}! Did {finalResult} damage!";
+
+                    if (finalResult <= 0)
+                    {
+                        if (move.MoveType != MoveType.SUPPLEMENTARY)
+                        {
+                            finalResult += 1;
+                        }
+                    }
+                    theTarget.TakeDamage(finalResult);
+                    message += $" Did {finalResult} damage!";
                     break;
                 }
             case AttackType.MAGICAL:
                 {
                     damageOutput = (attacker.characterStats.CurrentMagic * move.AttackPower) / (2 * Math.Max(1, theTarget.characterStats.CurrentResistance));
                     finalResult = (int)Math.Ceiling(damageOutput);
-                    message += $"{attacker.characterStats.CharacterName} used {move.AttackName} on {theTarget.characterStats.CharacterName}! Did {finalResult} damage!";
+
+                    if (finalResult <= 0)
+                    {
+                        if (move.MoveType != MoveType.SUPPLEMENTARY)
+                        {
+                            finalResult += 1;
+                        }
+                    }
+                    theTarget.TakeDamage(finalResult);
+                    message += $" Did {finalResult} damage!";
                     break;
                 }
         }
@@ -34,10 +55,10 @@ public class DamageCalc : MonoBehaviour
         if(move.BuffTypes.Length > 0)
         {
             //the attacker applies the buff on whatever ally- be it themselves or someone else
-            theTarget.ApplyBuff(move.BuffTypes, move.BuffAmount);
+            theTarget.ApplyandDebuff(move.BuffTypes, move.BuffAmount);
 
             //adding the buffs to the message
-            message += $"{attacker.characterStats.CharacterName} uses {move.AttackName} on {theTarget.characterStats.CharacterName}! {theTarget.characterStats.CharacterName}'s";
+            message += $" {theTarget.characterStats.CharacterName}'s";
             //naming all the buffs that were in that attack
             for (int i = 0; i < move.BuffTypes.Length; i++)
             {
@@ -53,9 +74,9 @@ public class DamageCalc : MonoBehaviour
         if(move.DebuffTypes.Length > 0)
         {
             //applying any debuff on the target
-            theTarget.ApplyBuff(move.DebuffTypes, move.DebuffAmount);
+            theTarget.ApplyandDebuff(move.DebuffTypes, move.DebuffAmount);
 
-            message += $"{attacker.characterStats.CharacterName} uses {move.AttackName} on {theTarget.characterStats.CharacterName}! {theTarget.characterStats.CharacterName}'s";
+            message += $" {theTarget.characterStats.CharacterName}'s";
 
             for (int i = 0; i < move.DebuffTypes.Length; i++)
             {
@@ -68,40 +89,39 @@ public class DamageCalc : MonoBehaviour
             message += $" lowered!";
         }
 
-        if (finalResult <= 0)
+        if (theTarget.isDefeated)
         {
-            if (move.MoveType != MoveType.SUPPLEMENTARY)
-            {
-                finalResult += 1;
-            }
+            message += $" {theTarget.characterStats.CharacterName} was defeated!";
         }
-        return finalResult;
-
     }
 
     public void CalcTool(Unit attacker, ItemObject item, Unit theTarget)
     {
         int finalResult = 0;
+
+        message += $"{attacker.characterStats.CharacterName} used {item.ItemName} on {theTarget.characterStats.CharacterName}!";
+
         switch (item.Type)
         {
             case ItemType.Health: 
                 {
-                    float hpRestorationAmount = 0f;
-                    float mpRestorationAmount = 0f;
+                    int hpRestorationAmount = 0;
+                    int mpRestorationAmount = 0;
 
                     //making the item type more specifically a healing object
                     HealthObject healingItem = (HealthObject)item;
 
-                    message += $"{attacker.characterStats.CharacterName} used {item.ItemName} on {theTarget.characterStats.CharacterName}!";
-
                     if (healingItem.hpRestoreAmount > 0)
                     {
                         hpRestorationAmount = (int)Math.Ceiling(healingItem.hpRestoreAmount + (.15f * attacker.characterStats.CurrentEfficiency));
+                        theTarget.ApplyHealing(healingItem, hpRestorationAmount);
                         message += $" Restored {hpRestorationAmount} health!";
                     }
+
                     if(healingItem.mpRestoreAmount > 0)
                     {
                         mpRestorationAmount = (int)Math.Ceiling(healingItem.mpRestoreAmount + (.15f * attacker.characterStats.CurrentEfficiency));
+                        theTarget.ApplyHealing(healingItem, mpRestorationAmount);
                         message += $" Restored {mpRestorationAmount} magic!";
                     }
 
@@ -122,10 +142,16 @@ public class DamageCalc : MonoBehaviour
                     }
 
                     finalResult = (int)Math.Ceiling(damageOutput);
-                    message += $"{attacker.characterStats.CharacterName} used {item.ItemName} on {theTarget.characterStats.CharacterName}! It did {finalResult} damage!";
+                    theTarget.TakeDamage(finalResult);
+                    message += $" It did {finalResult} damage!";
                     break; 
                 }
 
+        }
+
+        if (theTarget.isDefeated)
+        {
+            Debug.Log($"{theTarget.characterStats.CharacterName} was defeated!");
         }
     }
 }

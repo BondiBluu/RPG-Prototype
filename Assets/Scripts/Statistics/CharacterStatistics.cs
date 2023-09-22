@@ -59,6 +59,7 @@ public class CharacterStatistics: ScriptableObject
     [SerializeField] Sprite image;
     [SerializeField] StatGrowth statGrowth;
     [SerializeField] SpawnRate spawnRate;
+    [SerializeField] UnitType unitType;
 
     public List<MoveBaseClass> moveBaseClassList;
 
@@ -195,9 +196,13 @@ public class CharacterStatistics: ScriptableObject
         set { statGrowth = value; }
     }
 
+    public Sprite Image { get { return image; } set { image = value; } }
+
     public SpawnRate SpawnRate
     { 
         get { return spawnRate; } 
         set {  spawnRate = value; } 
     }
+
+    public UnitType UnitType { get { return unitType; } set { unitType = value; } }
 }
