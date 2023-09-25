@@ -87,7 +87,7 @@ public class BattleSystem : MonoBehaviour
             playerUnits[i].InitialiseStats();
         }
         playerHUD.SetPlayerHUD(playerUnits);
-        //battleStats.ShowStatsForBattle(playerUnits[currentStatsIndex].characterStats);
+        battleStats.ShowStatsForBattle(playerUnits[currentStatsIndex].characterStats);
 
         enemyUnits = new EnemyUnit[enemyPrefabs.Length];
         //same for enemies

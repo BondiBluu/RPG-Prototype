@@ -30,19 +30,19 @@ public class BattleStats : MonoBehaviour
         abilityText.text = characterStatistics.Ability;
         descAbilityText.text = characterStatistics.AbilityDesc;
         nameText.text = characterStatistics.CharacterName;
-        levelText.text = characterStatistics.Level.ToString();
-        hPText.text = $"{characterStatistics.CurrentHP}/{characterStatistics.MaxHP}";
-        mPText.text = $"{characterStatistics.CurrentMP}/{characterStatistics.MaxMP}";
-        SetStatTexts(atkText, characterStatistics.CurrentAttack, characterStatistics.BaseAttack);
-        SetStatTexts(defText, characterStatistics.CurrentDefense, characterStatistics.BaseDefense);
-        SetStatTexts(magText, characterStatistics.CurrentMagic, characterStatistics.BaseMagic);
-        SetStatTexts(resText, characterStatistics.CurrentResistance, characterStatistics.BaseResistance);
-        SetStatTexts(effText, characterStatistics.CurrentEfficiency, characterStatistics.BaseEfficiency);
-        SetStatTexts(skiText, characterStatistics.CurrentSkill, characterStatistics.BaseSkill);
-        SetStatTexts(speText, characterStatistics.CurrentSpeed, characterStatistics.BaseSpeed);
+        levelText.text = "Level: " + characterStatistics.Level.ToString();
+        hPText.text = $"Health: {characterStatistics.CurrentHP}/{characterStatistics.MaxHP}";
+        mPText.text = $"Mana: {characterStatistics.CurrentMP}/{characterStatistics.MaxMP}";
+        SetStatTexts(atkText, characterStatistics.CurrentAttack, characterStatistics.BaseAttack, "Attack");
+        SetStatTexts(defText, characterStatistics.CurrentDefense, characterStatistics.BaseDefense, "Defense");
+        SetStatTexts(magText, characterStatistics.CurrentMagic, characterStatistics.BaseMagic, "Magic");
+        SetStatTexts(resText, characterStatistics.CurrentResistance, characterStatistics.BaseResistance, "Resistance");
+        SetStatTexts(effText, characterStatistics.CurrentEfficiency, characterStatistics.BaseEfficiency, "Efficiency");
+        SetStatTexts(skiText, characterStatistics.CurrentSkill, characterStatistics.BaseSkill, "Skill");
+        SetStatTexts(speText, characterStatistics.CurrentSpeed, characterStatistics.BaseSpeed, "Speed");
     }
 
-    public void SetStatTexts(TMP_Text textElement, int currentValue, int baseValue)
+    public void SetStatTexts(TMP_Text textElement, int currentValue, int baseValue, string statText)
     {
         //finding what was lowered or raised in the base
         int statsDifference = currentValue - baseValue;
@@ -50,7 +50,7 @@ public class BattleStats : MonoBehaviour
         //blue + or red - plus the stats difference will appear based on if the stats difference is a positive or negative value
         string sign = (statsDifference >= 0 ) ? $"<color=#6EFFFF>+{statsDifference}</color>" : $"<color=#FF1100>{statsDifference}</color>";
 
-        textElement.text = $"{baseValue}({sign})";
+        textElement.text = $"{statText}: {baseValue}({sign})";
     }
 
 
