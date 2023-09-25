@@ -38,7 +38,7 @@ public class BattleSystem : MonoBehaviour
 
     [Header("Buttons")]
     public Button[] enemySelectButton;
-    public GameObject undoButtonHolder;
+    public Button undoButtonHolder;
 
     MoveGenerator moveGenerator;
     AttackandSupplementary attackandSupplementary;
@@ -59,7 +59,7 @@ public class BattleSystem : MonoBehaviour
         damageCalc = FindObjectOfType<DamageCalc>();
         battleStats = FindObjectOfType<BattleStats>();
 
-        undoButtonHolder.SetActive(false);
+        undoButtonHolder.gameObject.SetActive(false);
 
         //setting up the battle. Starting a Coroutine to manipulate time (waiting for seconds)
         StartCoroutine(SetUpBattle());
@@ -87,7 +87,7 @@ public class BattleSystem : MonoBehaviour
             playerUnits[i].InitialiseStats();
         }
         playerHUD.SetPlayerHUD(playerUnits);
-        battleStats.ShowStatsForBattle(playerUnits[currentStatsIndex].characterStats);
+        //battleStats.ShowStatsForBattle(playerUnits[currentStatsIndex].characterStats);
 
         enemyUnits = new EnemyUnit[enemyPrefabs.Length];
         //same for enemies
@@ -136,8 +136,8 @@ public class BattleSystem : MonoBehaviour
                 continue;
             }
 
-            if (i > 0){undoButtonHolder.SetActive(true);} 
-            else { undoButtonHolder.SetActive(false); }
+            if (i > 0){undoButtonHolder.gameObject.SetActive(true);} 
+            else { undoButtonHolder.gameObject.SetActive(false); }
             //showing the player's turn
             Debug.Log(playerUnits[i].characterStats.CharacterName + "'s turn.");
 
@@ -211,7 +211,7 @@ public class BattleSystem : MonoBehaviour
             currentCycleIndex++;
             //saying the next player hasn't chosen their move yet.
             moveGenerator.ClearAttackButtons();
-            undoButtonHolder.SetActive(false);
+            undoButtonHolder.gameObject.SetActive(false);
         }
         yield return new WaitForSeconds(1.5f);
         Debug.Log("Finished.");

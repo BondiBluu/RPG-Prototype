@@ -10,15 +10,12 @@ public class DialogueManager : MonoBehaviour
     public GameObject diaBox;
     public GameObject nameBox;
     public GameObject charaBox;
+    public Button questAcceptanceButton;
+    public Button questDenialButton;
     
     public Text diaText;
     public Text nameText;
-
-    [Header("For Quests")]
-    public Button questAcceptanceButton;
-    public Button questDenialButton;
-    public TMP_Text questAcceptanceText;
-    public TMP_Text questDenialText;
+    
 
     public bool dialogActive = false;
     public bool questAccepted = false;
