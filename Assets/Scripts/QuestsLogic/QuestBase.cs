@@ -20,13 +20,29 @@ public enum QuestReward
 [CreateAssetMenu(fileName = "Quest", menuName = "Quest/New Quest")]
 public class QuestBase : ScriptableObject
 {
-    [SerializeField] string questTitle;
-    [SerializeField] string questDescription;
-    [SerializeField] string questObjective;
-    [SerializeField] string[] questDialogue;
-    [SerializeField] bool questCompleted;
-    [SerializeField] bool questActive;
-    [SerializeField] QuestType questType;
-    [SerializeField] QuestReward[] questReward;
+    [Header("Quest General")]
+    public string questTitle;
+    public string questDescription;
+    public string questObjective;
+    public string[] nPCQuestName;
+    public string[] nPCQuestDialogue;
+
+    [Header("Quest Text")]
+    public string questButtonInquiryText;
+    public string questButtonDisinterestText;
+
+    [Header("Acceptance")]
+    public string[] questAcceptanceName;
+    public string[] questAcceptanceLines;
+
+    [Header("Denial")]
+    public string[] questRejectionName;
+    public string[] questRejectionLines;
+
+    [Header("Quest Completion")]
+    public bool questCompleted;
+    public bool questActive;
+    public QuestType questType;
+    public QuestReward[] questReward;
 
 }
