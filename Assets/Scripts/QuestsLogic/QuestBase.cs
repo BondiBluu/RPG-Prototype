@@ -31,17 +31,26 @@ public class QuestBase : ScriptableObject
     public string questButtonInquiryText;
     public string questButtonDisinterestText;
 
+    [Header ("Inquiry")]
+    public string[] questInquryeName;
+    public string[] questInquiryLines;
+    public Sprite[] questInquiryCharaImage;
+
     [Header("Acceptance")]
     public string[] questAcceptanceName;
     public string[] questAcceptanceLines;
+    public Sprite[] questAcceptanceCharaImage;
+
 
     [Header("Denial")]
     public string[] questRejectionName;
     public string[] questRejectionLines;
+    public Sprite[] questRejectionCharaImage;
+
 
     [Header("Quest Completion")]
     public bool questCompleted;
-    public bool questActive;
+    public bool questActive = false;
     public QuestType questType;
     public QuestReward[] questReward;
 
