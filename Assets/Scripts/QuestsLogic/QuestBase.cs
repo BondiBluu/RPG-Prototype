@@ -24,8 +24,7 @@ public class QuestBase : ScriptableObject
     public string questTitle;
     public string questDescription;
     public string questObjective;
-    public string[] nPCQuestName;
-    public string[] nPCQuestDialogue;
+
 
     [Header("Quest Text")]
     public string questButtonInquiryText;
