@@ -34,6 +34,11 @@ public class QuestBase : ScriptableObject
     public string[] questInquiryLines;
     public Sprite[] questInquiryCharaImage;
 
+    [Header ("Disinterst")]
+    public string[] questDisinterestName;
+    public string[] questDisinterestLines;
+    public Sprite[] questDisinterestCharaImage;
+
     [Header("Acceptance")]
     public string[] questAcceptanceName;
     public string[] questAcceptanceLines;
