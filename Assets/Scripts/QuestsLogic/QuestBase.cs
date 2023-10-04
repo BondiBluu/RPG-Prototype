@@ -25,13 +25,12 @@ public class QuestBase : ScriptableObject
     public string questDescription;
     public string questObjective;
 
-
     [Header("Quest Text")]
     public string questButtonInquiryText;
     public string questButtonDisinterestText;
 
     [Header ("Inquiry")]
-    public string[] questInquryeName;
+    public string[] questInquiryName;
     public string[] questInquiryLines;
     public Sprite[] questInquiryCharaImage;
 
