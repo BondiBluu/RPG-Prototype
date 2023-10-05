@@ -24,6 +24,8 @@ public class QuestBase : ScriptableObject
     public string questTitle;
     public string questDescription;
     public string questObjective;
+    public bool questAvailable;
+    public int whereQuestButtonIsShown;
 
     [Header("Quest Text")]
     public string questButtonInquiryText;
@@ -52,6 +54,7 @@ public class QuestBase : ScriptableObject
 
 
     [Header("Quest Completion")]
+    public int amountToGetOrDefeat;
     public bool questCompleted;
     public bool questActive = false;
     public QuestType questType;
