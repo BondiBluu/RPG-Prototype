@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
-
+using TMPro;
 
 public class InputDialogueNPC : MonoBehaviour
 {
@@ -14,10 +14,12 @@ public class InputDialogueNPC : MonoBehaviour
     [SerializeField] bool questCompleted;
     [SerializeField] bool questIsActive;
     [SerializeField] bool questAvailable;
+    [SerializeField] bool questInquiryAccepted;
     [SerializeField] bool dialogueStarted = false;
     bool isInTriggerZone;
 
     public int currentLine = 0;
+    public int currentQuest = 0;
     public int currentQuestLine = 0;
 
     DialogueManager diaMan;
@@ -28,6 +30,7 @@ public class InputDialogueNPC : MonoBehaviour
         //referencing the DialogueManager script
         diaMan = FindObjectOfType<DialogueManager>();
         questIsActive = false;
+        questInquiryAccepted = false;
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -60,7 +63,7 @@ public class InputDialogueNPC : MonoBehaviour
     {
         if (value.isPressed && isInTriggerZone)
         {
-            if (!diaMan.dialogActive)
+            if ( !diaMan.dialogActive)
             {
                 StartDialogue();
             }
@@ -89,6 +92,15 @@ public class InputDialogueNPC : MonoBehaviour
         {
             EndDialogue();
         }
+
+        if (currentLine == npcData.questLine[currentQuest].whereQuestButtonIsShown)
+        {
+            ShowQuestButtons();
+        }
+        else 
+        {  
+            StopShowingQuestButtons();       
+        }
     }
 
     void EndDialogue()
@@ -103,6 +115,12 @@ public class InputDialogueNPC : MonoBehaviour
         diaMan.nameText.text = npcData.nameLines[currentLine];
         diaMan.charaBox.GetComponent<Image>().sprite = npcData.charaImage[currentLine];
     }
+
+    void GivingQuestDialogue() { }
+
+    void QuestAcceptanceDialogue() { }
+
+    void QuestDenialDialogue() { }
     void PreviewDialog() 
     {         
         diaMan.dialogActive = true;   
@@ -113,13 +131,16 @@ public class InputDialogueNPC : MonoBehaviour
 
     void ShowQuestButtons() 
     {         
-        diaMan.questAcceptanceButton.gameObject.SetActive(true);   
-        diaMan.questDenialButton.gameObject.SetActive(true);   
+        diaMan.questInquiryButton.gameObject.SetActive(true);   
+        diaMan.questDisnterestButton.gameObject.SetActive(true);
+        //change the text of the buttons to w/e the current quest's text is
+        diaMan.questInquiryButton.GetComponentInChildren<TMP_Text>().text = npcData.questLine[currentQuest].questButtonInquiryText;
+        diaMan.questDisnterestButton.GetComponentInChildren<TMP_Text>().text = npcData.questLine[currentQuest].questButtonDisinterestText;
     }
     void StopShowingQuestButtons() 
     {         
-        diaMan.questAcceptanceButton.gameObject.SetActive(false);
-        diaMan.questDenialButton.gameObject.SetActive(false);
+        diaMan.questInquiryButton.gameObject.SetActive(false);
+        diaMan.questDisnterestButton.gameObject.SetActive(false);
     }
 
     public void QuestAcceptance()
