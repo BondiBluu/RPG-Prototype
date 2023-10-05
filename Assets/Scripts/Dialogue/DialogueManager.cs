@@ -10,8 +10,10 @@ public class DialogueManager : MonoBehaviour
     public GameObject diaBox;
     public GameObject nameBox;
     public GameObject charaBox;
-    public Button questAcceptanceButton;
-    public Button questDenialButton;
+    public Button questInquiryButton;
+    public Button questDisnterestButton;
+    public Button questAcceptanceButton; //accept
+    public Button questDenialButton; //deny
     
     public Text diaText;
     public Text nameText;
@@ -36,6 +38,8 @@ public class DialogueManager : MonoBehaviour
         diaBox.SetActive(false);
         nameBox.SetActive(false);
         charaBox.SetActive(false);
+        questInquiryButton.gameObject.SetActive(false);
+        questDisnterestButton.gameObject.SetActive(false);
     }
 
     public void ActiveOn()
