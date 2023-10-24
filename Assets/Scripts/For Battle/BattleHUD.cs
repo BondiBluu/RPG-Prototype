@@ -18,13 +18,11 @@ public class BattleHUD : MonoBehaviour
     [SerializeField] TMP_Text[] levelTextPlayers;
 
     [Header("Player HP")]
-    public TMP_Text[] currentHPPlayers;
-    public TMP_Text[] maxHPPlayers;
+    public TMP_Text[] HPPlayers;
     public Slider[] sliderHPPlayers;
 
     [Header("Player MP")]
-    public TMP_Text[] currentMPPlayers;
-    public TMP_Text[] maxMPPlayers;
+    public TMP_Text[] MPPlayers;
     public Slider[] sliderMPPlayers;
 
     [Header("Allies")]
@@ -45,11 +43,9 @@ public class BattleHUD : MonoBehaviour
         {
             //displaying name, lvl, max and current hp and mp of players
             nameTextPlayers[i].text = units[i].characterStats.CharacterName;
-            levelTextPlayers[i].text = units[i].characterStats.Level.ToString();
-            maxHPPlayers[i].text = units[i].characterStats.MaxHP.ToString();
-            currentHPPlayers[i].text = units[i].characterStats.CurrentHP.ToString();
-            maxMPPlayers[i].text = units[i].characterStats.MaxMP.ToString();
-            currentMPPlayers[i].text = units[i].characterStats.CurrentMP.ToString();
+            levelTextPlayers[i].text = "Lvl: " + units[i].characterStats.Level.ToString();
+            HPPlayers[i].text = units[i].characterStats.CurrentHP.ToString() + " / " + units[i].characterStats.MaxHP.ToString();
+            MPPlayers[i].text = units[i].characterStats.CurrentMP.ToString() + " / " + units[i].characterStats.MaxMP.ToString();
 
             //displaying things for allies
             nameTextAllies[i].text = units[i].characterStats.CharacterName;
@@ -78,20 +74,20 @@ public class BattleHUD : MonoBehaviour
     }
 
     //updating player hp
-    public void UpdatePlayerHPAndMP(Unit unit, int hP, int mP)
+    public void UpdatePlayerHPAndMP(Unit unit, int currentHP, int maxHP, int currentMP, int maxMP)
     {
         int characterIndex = System.Array.IndexOf(battleSystem.playerUnits, unit);
 
         if (characterIndex != -1)
         {
             //updating the current hp and mp of all players, and numberical value of hp
-            sliderHPPlayers[characterIndex].value = hP;
-            sliderHPAllies[characterIndex].value = hP;
-            currentHPPlayers[characterIndex].text = hP.ToString();
+            sliderHPPlayers[characterIndex].value = currentHP;
+            sliderHPAllies[characterIndex].value = currentHP;
+            HPPlayers[characterIndex].text = currentHP.ToString() + " / " + maxHP.ToString();
 
-            sliderMPPlayers[characterIndex].value = mP;
-            sliderMPAllies[characterIndex].value = mP;
-            currentMPPlayers[characterIndex].text = mP.ToString();
+            sliderMPPlayers[characterIndex].value = currentMP;
+            sliderMPAllies[characterIndex].value = currentMP;
+            MPPlayers[characterIndex].text = currentMP.ToString() + " / " + maxMP.ToString();
         }
                     
     }

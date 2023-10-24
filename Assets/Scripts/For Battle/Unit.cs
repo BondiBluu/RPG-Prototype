@@ -19,12 +19,10 @@ public class Unit : MonoBehaviour
 
     //for testing purposes ONLY
 
-    int startingHP = 20;
-    int startingMP = 20;
     public void InitialiseStats()
     {
-        characterStats.CurrentHP = startingHP;
-        characterStats.CurrentMP = startingMP;
+        characterStats.CurrentHP = characterStats.MaxHP;
+        characterStats.CurrentMP = characterStats.MaxMP;
     }
 
     public void TakeDamage(int finalResult)
@@ -78,7 +76,7 @@ public class Unit : MonoBehaviour
     {
         if(characterStats.UnitType == UnitType.PLAYERCHARACTER)
         {
-            battleHUD.UpdatePlayerHPAndMP(this, characterStats.CurrentHP, characterStats.CurrentMP);
+            battleHUD.UpdatePlayerHPAndMP(this, characterStats.CurrentHP, characterStats.MaxHP, characterStats.CurrentMP, characterStats.MaxMP);
         } 
         else
         {

@@ -40,6 +40,10 @@ public class BattleSystem : MonoBehaviour
     public Button[] enemySelectButton;
     public Button undoButtonHolder;
 
+    [Header("Other")]
+    public TMP_Text actionText;
+    public int turnCount = 1;
+
     MoveGenerator moveGenerator;
     AttackandSupplementary attackandSupplementary;
     DamageCalc damageCalc;
@@ -83,7 +87,7 @@ public class BattleSystem : MonoBehaviour
             //using the reference to be able to get the stats information from each individual unit. storing the reference in a Unit and EnemyUnit var to use multiple times
             playerUnits[i] = playerGObject.GetComponent<Unit>();
 
-            //REMOVE AFTER TESTING
+            //REMOVE AFTER TESTING. Initializes all players to full health and magic
             playerUnits[i].InitialiseStats();
         }
         playerHUD.SetPlayerHUD(playerUnits);
@@ -102,9 +106,10 @@ public class BattleSystem : MonoBehaviour
         }
         enemyHUD.SetEnemyHUD(enemyUnits);
 
+        actionText.text = "Battle Start!";
 
         //waiting seconds after everything has instantiated to switch turns
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(3f);
 
 
         //switching turns
@@ -127,8 +132,17 @@ public class BattleSystem : MonoBehaviour
     //where player can choose an action
     IEnumerator PlayerTurn()
     {
+
+        //player's turn, so we're updating the stats for the player
+        foreach (Unit playerUnit in playerUnits)
+        {
+            battleStats.ShowStatsForBattle(playerUnits[currentStatsIndex].characterStats);
+        }
+
         for (int i = currentCycleIndex; i < playerUnits.Length; i++)
         {
+            
+
             //checking for character defeat
             if (playerUnits[i].characterStats.CurrentHP <= 0)
             {
@@ -139,7 +153,7 @@ public class BattleSystem : MonoBehaviour
             if (i > 0){undoButtonHolder.gameObject.SetActive(true);} 
             else { undoButtonHolder.gameObject.SetActive(false); }
             //showing the player's turn
-            Debug.Log(playerUnits[i].characterStats.CharacterName + "'s turn.");
+            actionText.text = playerUnits[i].characterStats.CharacterName + "'s turn.";
 
             //display the attack etc buttons for the current unit
             moveGenerator.GenerateATKButtons(playerUnits[i].characterStats);
@@ -233,6 +247,7 @@ public class BattleSystem : MonoBehaviour
             //decrementing to go back to the previous character
             currentCycleIndex--;
             Debug.Log($"Move undone. {playerUnits[currentCycleIndex].characterStats.CharacterName}'s turn.");
+            actionText.text = playerUnits[currentCycleIndex].characterStats.CharacterName + "'s turn.";
 
             StartCoroutine(PlayerTurn());
 
@@ -365,7 +380,7 @@ public class BattleSystem : MonoBehaviour
                         damageCalc.CalcDamage(playerAction.playerUnit, playerAction.move, playerAction.theTarget);
                         //playerHUD.UpdatePlayerHPAndMP(playerAction.theTarget, playerAction.theTarget.characterStats.CurrentHP, playerAction.theTarget.characterStats.CurrentMP);
                         string message = damageCalc.message;
-                        Debug.Log(message);
+                        actionText.text = message;
                         damageCalc.message = "";
                     }
                     else if (playerAction.item != null)
@@ -373,7 +388,7 @@ public class BattleSystem : MonoBehaviour
                         damageCalc.CalcTool(playerAction.playerUnit, playerAction.item, playerAction.theTarget);
                         //playerHUD.UpdatePlayerHPAndMP(playerAction.theTarget, playerAction.theTarget.characterStats.CurrentHP, playerAction.theTarget.characterStats.CurrentMP);
                         string message = damageCalc.message;
-                        Debug.Log(message);
+                        actionText.text = message;
                         damageCalc.message = "";
                     }
                 }
@@ -385,7 +400,7 @@ public class BattleSystem : MonoBehaviour
                     damageCalc.CalcDamage(enemyAction.enemyUnit, enemyAction.move, enemyAction.theTarget);
                     //playerHUD.UpdateEnemyHPAndMP(enemyAction.theTarget, enemyAction.theTarget.characterStats.CurrentHP);
                     string message = damageCalc.message;
-                    Debug.Log(message);
+                    actionText.text = message;
                     damageCalc.message = "";
                 }
             }
@@ -457,10 +472,10 @@ public class BattleSystem : MonoBehaviour
 
             if (state == BattleState.WIN)
         {
-            Debug.Log("Won!");
+            actionText.text = "Won!";
         } else if (state == BattleState.LOSS)
         {
-            Debug.Log("Lost. Rerouting.");
+            actionText.text = "Lost. Rerouting.";
         }
         yield return new WaitForSeconds(2f);
     }
