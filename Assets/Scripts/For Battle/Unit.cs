@@ -18,7 +18,6 @@ public class Unit : MonoBehaviour
     }
 
     //for testing purposes ONLY
-
     public void InitialiseStats()
     {
         characterStats.CurrentHP = characterStats.MaxHP;
@@ -40,6 +39,7 @@ public class Unit : MonoBehaviour
         }
         UpdateHealthAndMagic();
     }
+    
     public void TakeMP(int mpConsumption)
     {
         characterStats.CurrentMP -= mpConsumption;

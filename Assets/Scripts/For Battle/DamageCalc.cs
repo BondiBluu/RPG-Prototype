@@ -7,10 +7,12 @@ using UnityEngine.UIElements;
 public class DamageCalc : MonoBehaviour
 {
     public string message = "";
+    public string damageResult = "";
+    public int finalResult = 0;
+    
     public void CalcDamage(Unit attacker, MoveBaseClass move, Unit theTarget)
     {
         float damageOutput = 0f;
-        int finalResult = 0;
 
         message += $"{attacker.characterStats.CharacterName} used {move.AttackName} on {theTarget.characterStats.CharacterName}!";
         attacker.TakeMP(move.MPConsumption);
@@ -31,7 +33,7 @@ public class DamageCalc : MonoBehaviour
                         }
                     }
                     theTarget.TakeDamage(finalResult);
-                    message += $" Did {finalResult} damage!";
+                    damageResult += $" {theTarget.characterStats.CharacterName} took {finalResult} damage!";
                     break;
                 }
             case AttackType.MAGICAL:
@@ -47,7 +49,7 @@ public class DamageCalc : MonoBehaviour
                         }
                     }
                     theTarget.TakeDamage(finalResult);
-                    message += $" Did {finalResult} damage!";
+                    damageResult += $" {theTarget.characterStats.CharacterName} took {finalResult} damage!";
                     break;
                 }
         }
@@ -91,14 +93,12 @@ public class DamageCalc : MonoBehaviour
 
         if (theTarget.isDefeated)
         {
-            message += $" {theTarget.characterStats.CharacterName} was defeated!";
+            damageResult += $" {theTarget.characterStats.CharacterName} was defeated!";
         }
     }
 
     public void CalcTool(Unit attacker, ItemObject item, Unit theTarget)
     {
-        int finalResult = 0;
-
         message += $"{attacker.characterStats.CharacterName} used {item.ItemName} on {theTarget.characterStats.CharacterName}!";
 
         switch (item.Type)
@@ -115,14 +115,14 @@ public class DamageCalc : MonoBehaviour
                     {
                         hpRestorationAmount = (int)Math.Ceiling(healingItem.hpRestoreAmount + (.15f * attacker.characterStats.CurrentEfficiency));
                         theTarget.ApplyHealing(healingItem, hpRestorationAmount);
-                        message += $" Restored {hpRestorationAmount} health!";
+                        damageResult += $" Restored {hpRestorationAmount} health!";
                     }
 
                     if(healingItem.mpRestoreAmount > 0)
                     {
                         mpRestorationAmount = (int)Math.Ceiling(healingItem.mpRestoreAmount + (.15f * attacker.characterStats.CurrentEfficiency));
                         theTarget.ApplyHealing(healingItem, mpRestorationAmount);
-                        message += $" Restored {mpRestorationAmount} magic!";
+                        damageResult += $" Restored {mpRestorationAmount} magic!";
                     }
 
                     break;
@@ -143,7 +143,7 @@ public class DamageCalc : MonoBehaviour
 
                     finalResult = (int)Math.Ceiling(damageOutput);
                     theTarget.TakeDamage(finalResult);
-                    message += $" It did {finalResult} damage!";
+                    damageResult += $" {theTarget.characterStats.CharacterName} took {finalResult} damage!";
                     break; 
                 }
 

@@ -266,6 +266,7 @@ public class BattleSystem : MonoBehaviour
     {
         selectedEnemy = enemyUnits[enemyIndex];
     }
+    
     void EnemyTurn()
     {
         //grabbing nondefeated players
@@ -378,18 +379,30 @@ public class BattleSystem : MonoBehaviour
                     if (playerAction.move != null)
                     {
                         damageCalc.CalcDamage(playerAction.playerUnit, playerAction.move, playerAction.theTarget);
-                        //playerHUD.UpdatePlayerHPAndMP(playerAction.theTarget, playerAction.theTarget.characterStats.CurrentHP, playerAction.theTarget.characterStats.CurrentMP);
                         string message = damageCalc.message;
                         actionText.text = message;
                         damageCalc.message = "";
+                        if (damageCalc.damageResult != "")
+                        {
+                            yield return new WaitForSeconds(2f);
+                            message = damageCalc.damageResult;
+                            actionText.text = message;
+                            damageCalc.damageResult = "";
+                        }                      
                     }
                     else if (playerAction.item != null)
                     {
                         damageCalc.CalcTool(playerAction.playerUnit, playerAction.item, playerAction.theTarget);
-                        //playerHUD.UpdatePlayerHPAndMP(playerAction.theTarget, playerAction.theTarget.characterStats.CurrentHP, playerAction.theTarget.characterStats.CurrentMP);
                         string message = damageCalc.message;
                         actionText.text = message;
                         damageCalc.message = "";
+                        if (damageCalc.damageResult != "")
+                        {
+                            yield return new WaitForSeconds(2f);
+                            message = damageCalc.damageResult;
+                            actionText.text = message;
+                            damageCalc.damageResult = "";
+                        }
                     }
                 }
             }
@@ -398,10 +411,16 @@ public class BattleSystem : MonoBehaviour
                 if (!enemyAction.enemyUnit.isDefeated)
                 {
                     damageCalc.CalcDamage(enemyAction.enemyUnit, enemyAction.move, enemyAction.theTarget);
-                    //playerHUD.UpdateEnemyHPAndMP(enemyAction.theTarget, enemyAction.theTarget.characterStats.CurrentHP);
                     string message = damageCalc.message;
                     actionText.text = message;
                     damageCalc.message = "";
+                    if (damageCalc.damageResult != "")
+                    {
+                        yield return new WaitForSeconds(2f);
+                        message = damageCalc.damageResult;
+                        actionText.text = message;
+                        damageCalc.damageResult = "";
+                    }
                 }
             }
             yield return new WaitForSeconds(2f);

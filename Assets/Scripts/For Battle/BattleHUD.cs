@@ -104,6 +104,25 @@ public class BattleHUD : MonoBehaviour
                     
     }
     
+    public IEnumerator UpdateHealthBar(Unit unit, float damageAmount)
+    {
+        float duration = 1f;
+        
+        //calcing how much damage should decrease by the second
+        float decreasePerSecond = damageAmount / duration;
+        float originalHealth = unit.characterStats.CurrentHP;
+
+        //while the current hp is more than the hp - the damage amount
+        while(unit.characterStats.CurrentHP > originalHealth - damageAmount)
+        {
+            unit.characterStats.CurrentHP -= (int)(decreasePerSecond * Time.deltaTime);
+            UpdateEnemyHPAndMP(unit, (int)unit.characterStats.CurrentHP);
+            yield return null;
+        }
+
+        //making sure the current hp is now the original hp - the damage amount
+        unit.characterStats.CurrentHP = (int)originalHealth - (int)damageAmount;
+    }
 }
 
 
