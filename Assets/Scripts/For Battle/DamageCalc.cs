@@ -33,7 +33,7 @@ public class DamageCalc : MonoBehaviour
                         }
                     }
                     //theTarget.TakeDamage(finalResult);
-                    StartCoroutine(theTarget.PlayerDamage(finalResult));
+                    StartCoroutine(theTarget.TakeDamage(finalResult));
                     damageResult += $" {theTarget.characterStats.CharacterName} took {finalResult} damage!";
                     break;
                 }
@@ -50,7 +50,7 @@ public class DamageCalc : MonoBehaviour
                         }
                     }
                     //theTarget.TakeDamage(finalResult);
-                    StartCoroutine(theTarget.PlayerDamage(finalResult));
+                    StartCoroutine(theTarget.TakeDamage(finalResult));
                     damageResult += $" {theTarget.characterStats.CharacterName} took {finalResult} damage!";
                     break;
                 }
@@ -99,6 +99,7 @@ public class DamageCalc : MonoBehaviour
         }
     }
 
+
     public void CalcTool(Unit attacker, ItemObject item, Unit theTarget)
     {
         message += $"{attacker.characterStats.CharacterName} used {item.ItemName} on {theTarget.characterStats.CharacterName}!";
@@ -107,8 +108,8 @@ public class DamageCalc : MonoBehaviour
         {
             case ItemType.Health: 
                 {
-                    int hpRestorationAmount = 0;
-                    int mpRestorationAmount = 0;
+                    int hpRestorationAmount;
+                    int mpRestorationAmount;
 
                     //making the item type more specifically a healing object
                     HealthObject healingItem = (HealthObject)item;
@@ -116,14 +117,14 @@ public class DamageCalc : MonoBehaviour
                     if (healingItem.hpRestoreAmount > 0)
                     {
                         hpRestorationAmount = (int)Math.Ceiling(healingItem.hpRestoreAmount + (.15f * attacker.characterStats.CurrentEfficiency));
-                        theTarget.ApplyHealing(healingItem, hpRestorationAmount);
+                        StartCoroutine(theTarget.ApplyHealing(healingItem, hpRestorationAmount));
                         damageResult += $" Restored {hpRestorationAmount} health!";
                     }
 
                     if(healingItem.mpRestoreAmount > 0)
                     {
                         mpRestorationAmount = (int)Math.Ceiling(healingItem.mpRestoreAmount + (.15f * attacker.characterStats.CurrentEfficiency));
-                        theTarget.ApplyHealing(healingItem, mpRestorationAmount);
+                        StartCoroutine(theTarget.ApplyHealing(healingItem, mpRestorationAmount));
                         damageResult += $" Restored {mpRestorationAmount} magic!";
                     }
 
@@ -145,7 +146,7 @@ public class DamageCalc : MonoBehaviour
 
                     finalResult = (int)Math.Ceiling(damageOutput);
                     //theTarget.TakeDamage(finalResult);
-                    StartCoroutine(theTarget.PlayerDamage(finalResult));
+                    StartCoroutine(theTarget.TakeDamage(finalResult));
                     damageResult += $" {theTarget.characterStats.CharacterName} took {finalResult} damage!";
                     break; 
                 }

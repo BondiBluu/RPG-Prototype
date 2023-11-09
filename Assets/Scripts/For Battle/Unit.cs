@@ -24,7 +24,7 @@ public class Unit : MonoBehaviour
         characterStats.CurrentMP = characterStats.MaxMP;
     }
 
-    public IEnumerator PlayerDamage(int finalResult)
+    public IEnumerator TakeDamage(int finalResult)
     {
         float originalHP = characterStats.CurrentHP;
 
@@ -58,26 +58,43 @@ public class Unit : MonoBehaviour
     }
 
 
-    public void ApplyHealing(HealthObject item, int finalResult)
+    public IEnumerator ApplyHealing(HealthObject item, int finalResult)
     {
+        float originalHP = characterStats.CurrentHP;
+        float originalMP = characterStats.CurrentMP;
+
         if(item.hpRestoreAmount > 0)
         {
-            characterStats.CurrentHP += finalResult;
-            UpdateHealthAndMagic();
 
-            if (characterStats.CurrentHP >= characterStats.MaxHP)
+            while (characterStats.CurrentHP < originalHP + finalResult)
             {
-                characterStats.CurrentHP = characterStats.MaxHP;
+                characterStats.CurrentHP += 1;
+                UpdateHealthAndMagic();
+                yield return new WaitForSeconds(0.05f);
+
+                if (characterStats.CurrentHP >= characterStats.MaxHP)
+                {
+                    characterStats.CurrentHP = characterStats.MaxHP;
+
+                    break;
+                }
             }
         } 
         else if (item.mpRestoreAmount > 0)
         {
-            characterStats.CurrentMP += finalResult;
-            UpdateHealthAndMagic();
 
-            if (characterStats.CurrentMP >= characterStats.MaxMP)
+            while (characterStats.CurrentMP < originalMP + finalResult)
             {
-                characterStats.CurrentMP = characterStats.MaxMP;
+                characterStats.CurrentMP += 1;
+                UpdateHealthAndMagic();
+                yield return new WaitForSeconds(0.05f);
+
+                if (characterStats.CurrentMP >= characterStats.MaxMP)
+                {
+                    characterStats.CurrentMP = characterStats.MaxMP;
+
+                    break;
+                }
             }
         }
         
