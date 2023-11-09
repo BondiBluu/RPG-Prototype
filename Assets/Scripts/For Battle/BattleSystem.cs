@@ -133,6 +133,8 @@ public class BattleSystem : MonoBehaviour
     IEnumerator PlayerTurn()
     {
 
+        currentCycleIndex = 0;
+
         //player's turn, so we're updating the stats for the player
         foreach (Unit playerUnit in playerUnits)
         {
@@ -388,7 +390,7 @@ public class BattleSystem : MonoBehaviour
                             message = damageCalc.damageResult;
                             actionText.text = message;
                             damageCalc.damageResult = "";
-                        }                      
+                        }                    
                     }
                     else if (playerAction.item != null)
                     {
@@ -412,15 +414,15 @@ public class BattleSystem : MonoBehaviour
                 {
                     damageCalc.CalcDamage(enemyAction.enemyUnit, enemyAction.move, enemyAction.theTarget);
                     string message = damageCalc.message;
-                    actionText.text = message;
-                    damageCalc.message = "";
-                    if (damageCalc.damageResult != "")
-                    {
-                        yield return new WaitForSeconds(2f);
-                        message = damageCalc.damageResult;
-                        actionText.text = message;
-                        damageCalc.damageResult = "";
-                    }
+                     actionText.text = message;
+                     damageCalc.message = "";
+                     if (damageCalc.damageResult != "")
+                     {
+                         yield return new WaitForSeconds(2f);
+                         message = damageCalc.damageResult;
+                         actionText.text = message;
+                         damageCalc.damageResult = "";
+                     }
                 }
             }
             yield return new WaitForSeconds(2f);
@@ -475,6 +477,21 @@ public class BattleSystem : MonoBehaviour
             state = BattleState.PLAYERTURN;
             StartCoroutine(PlayerTurn());
         }    
+    }
+    
+    //needs reworking. Not working as intended    
+    IEnumerator DisplayText()
+    {
+        string message = damageCalc.message;
+        actionText.text = message;
+        damageCalc.message = "";
+        if (damageCalc.damageResult != "")
+        {
+            yield return new WaitForSeconds(2f);
+            message = damageCalc.damageResult;
+            actionText.text = message;
+            damageCalc.damageResult = "";
+        }
     }
 
     IEnumerator EndBattle()

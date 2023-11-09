@@ -24,26 +24,37 @@ public class Unit : MonoBehaviour
         characterStats.CurrentMP = characterStats.MaxMP;
     }
 
-    public void TakeDamage(int finalResult)
+    public IEnumerator PlayerDamage(int finalResult)
     {
-        characterStats.CurrentHP -= finalResult;
+        float originalHP = characterStats.CurrentHP;
 
-        if (characterStats.CurrentHP <= 0)
-        {
-            characterStats.CurrentHP = 0;
-            isDefeated = true;
+        while(characterStats.CurrentHP > originalHP - finalResult){
+            characterStats.CurrentHP -= 1;
+            UpdateHealthAndMagic();
+            yield return new WaitForSeconds(0.05f);
+
+            if (characterStats.CurrentHP <= 0)
+            {
+                characterStats.CurrentHP = 0;
+                isDefeated = true;
+            }
+            else
+            {
+                isDefeated = false;
+            }
         }
-        else
-        {
-            isDefeated = false;
-        }
-        UpdateHealthAndMagic();
     }
     
-    public void TakeMP(int mpConsumption)
+    public IEnumerator TakeMP(int mpConsumption)
     {
-        characterStats.CurrentMP -= mpConsumption;
-        UpdateHealthAndMagic();
+        float originalMP = characterStats.CurrentMP;
+
+        while (characterStats.CurrentMP > originalMP - mpConsumption)
+        {
+            characterStats.CurrentMP -= 1;
+            UpdateHealthAndMagic();
+            yield return new WaitForSeconds(0.05f);
+        }
     }
 
 

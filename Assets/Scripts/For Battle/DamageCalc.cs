@@ -15,7 +15,7 @@ public class DamageCalc : MonoBehaviour
         float damageOutput = 0f;
 
         message += $"{attacker.characterStats.CharacterName} used {move.AttackName} on {theTarget.characterStats.CharacterName}!";
-        attacker.TakeMP(move.MPConsumption);
+        StartCoroutine(attacker.TakeMP(move.MPConsumption));
 
         switch (move.AttackType)
         {
@@ -32,7 +32,8 @@ public class DamageCalc : MonoBehaviour
                             finalResult += 1;
                         }
                     }
-                    theTarget.TakeDamage(finalResult);
+                    //theTarget.TakeDamage(finalResult);
+                    StartCoroutine(theTarget.PlayerDamage(finalResult));
                     damageResult += $" {theTarget.characterStats.CharacterName} took {finalResult} damage!";
                     break;
                 }
@@ -48,7 +49,8 @@ public class DamageCalc : MonoBehaviour
                             finalResult += 1;
                         }
                     }
-                    theTarget.TakeDamage(finalResult);
+                    //theTarget.TakeDamage(finalResult);
+                    StartCoroutine(theTarget.PlayerDamage(finalResult));
                     damageResult += $" {theTarget.characterStats.CharacterName} took {finalResult} damage!";
                     break;
                 }
@@ -142,7 +144,8 @@ public class DamageCalc : MonoBehaviour
                     }
 
                     finalResult = (int)Math.Ceiling(damageOutput);
-                    theTarget.TakeDamage(finalResult);
+                    //theTarget.TakeDamage(finalResult);
+                    StartCoroutine(theTarget.PlayerDamage(finalResult));
                     damageResult += $" {theTarget.characterStats.CharacterName} took {finalResult} damage!";
                     break; 
                 }
