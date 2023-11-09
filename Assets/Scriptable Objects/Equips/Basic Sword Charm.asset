@@ -15,6 +15,8 @@ MonoBehaviour:
   prefab: {fileID: 0}
   type: 1
   itemName: a basic sword charm
+  namePlural: basic sword charms
+  invenItemName: Basic Sword Charm
   desc: An old sword. Better used in the hands of certain people.
   trueDesc: 
   price: 0

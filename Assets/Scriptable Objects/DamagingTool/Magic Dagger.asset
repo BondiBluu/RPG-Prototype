@@ -15,6 +15,8 @@ MonoBehaviour:
   prefab: {fileID: 0}
   type: 2
   itemName: magic dagger
+  namePlural: magic daggers
+  invenItemName: Magic Dagger
   desc: Dagger that inclicts negligable magic damage ony when thrown.
   trueDesc: 
   price: 0

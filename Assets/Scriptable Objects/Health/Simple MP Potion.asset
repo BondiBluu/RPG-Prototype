@@ -15,6 +15,8 @@ MonoBehaviour:
   prefab: {fileID: 0}
   type: 0
   itemName: a simple magic potion
+  namePlural: simple magic potions
+  invenItemName: Simple Magic Potion
   desc: A simple potion. Slightly restores magic reserves. Simple, but not very easy
     to come by.
   trueDesc: 

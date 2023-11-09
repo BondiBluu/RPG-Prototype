@@ -9,18 +9,37 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b5658b0a25007d44a038a7cf9f7343d, type: 3}
+  m_Script: {fileID: 11500000, guid: b53339b2bbc8399418d586222fffd8a9, type: 3}
   m_Name: NightGopherStats
   m_EditorClassIdentifier: 
-  enemyName: Night Gopher
+  characterName: Night Gopher
   level: 1
-  currentHP: 20
+  currentHP: 0
   maxHP: 20
-  attack: 10
-  defense: 2
-  magic: 2
-  resistance: 9
-  efficiency: 8
-  skill: 3
-  speed: 20
+  currentMP: 20
+  maxMP: 0
+  attackCurrent: 20
+  attackBase: 20
+  defenseCurrent: 5
+  defenseBase: 5
+  magicCurrent: 2
+  magicBase: 2
+  resistanceCurrent: 3
+  resistanceBase: 3
+  efficiencyCurrent: 9
+  efficiencyBase: 9
+  skillCurrent: 1
+  skillBase: 1
+  speedCurrent: 15
+  speedBase: 15
   ability: 
+  abilityDescription: 
+  image: {fileID: 0}
+  statGrowth: 6
+  spawnRate: 1
+  unitType: 2
+  moveBaseClassList:
+  - {fileID: 11400000, guid: c2121cc65732a734296bd9367104a9af, type: 2}
+  - {fileID: 11400000, guid: fbd92d47a6e84ce49a2bac02fdb64266, type: 2}
+  - {fileID: 11400000, guid: 0c949653849ba844bb56ba22cde0a105, type: 2}
+  - {fileID: 11400000, guid: 9af4c86addfba3d47ba5eb0ee0ff1be9, type: 2}

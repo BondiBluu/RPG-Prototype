@@ -15,6 +15,8 @@ MonoBehaviour:
   prefab: {fileID: 0}
   type: 1
   itemName: a basic staff
+  namePlural: basic staffs
+  invenItemName: Basic Staff
   desc: Magic staff thats magic is running low. Better used in the hands of certain
     people.
   trueDesc: 

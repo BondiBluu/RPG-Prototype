@@ -15,6 +15,8 @@ MonoBehaviour:
   prefab: {fileID: 0}
   type: 2
   itemName: dagger
+  namePlural: daggers
+  invenItemName: Dagger
   desc: Old throwing dagger.  You could get some mileage out of it throwing it at
     your enemies.
   trueDesc: 

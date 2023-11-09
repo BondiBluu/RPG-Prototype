@@ -20,6 +20,7 @@ public class DialogueManager : MonoBehaviour
     
 
     public bool dialogActive = false;
+    public bool questInquired = false;
     public bool questAccepted = false;
     public bool questDenied = false;
 
@@ -54,6 +55,13 @@ public class DialogueManager : MonoBehaviour
         dialogActive = false;
         diaBox.SetActive(true);
         nameBox.SetActive(true);
+    }
+
+    public void QuestInquiry() 
+    {
+        //inputDialogueNPC.StartQuestInquiry();
+        questInquired = true;
+        //inputDialogueNPC.StopShowingQuestButtons();
     }
 
     public void OnQuestAcceptance()

@@ -116,7 +116,18 @@ public class InputDialogueNPC : MonoBehaviour
         diaMan.charaBox.GetComponent<Image>().sprite = npcData.charaImage[currentLine];
     }
 
-    void GivingQuestDialogue() { }
+    public void StartQuestInquiry()
+    {
+        currentLine = 0;
+        GiveQuestDialogue();
+    }
+
+    void GiveQuestDialogue() 
+    {
+        diaMan.diaText.text = npcData.questLine[currentQuest].questInquiryLines[currentLine];
+        diaMan.nameText.text = npcData.questLine[currentQuest].questInquiryName[currentLine];
+        diaMan.charaBox.GetComponent<Image>().sprite = npcData.questLine[currentQuest].questInquiryCharaImage[currentLine];
+    }
 
     void QuestAcceptanceDialogue() { }
 
@@ -137,7 +148,7 @@ public class InputDialogueNPC : MonoBehaviour
         diaMan.questInquiryButton.GetComponentInChildren<TMP_Text>().text = npcData.questLine[currentQuest].questButtonInquiryText;
         diaMan.questDisnterestButton.GetComponentInChildren<TMP_Text>().text = npcData.questLine[currentQuest].questButtonDisinterestText;
     }
-    void StopShowingQuestButtons() 
+    public void StopShowingQuestButtons() 
     {         
         diaMan.questInquiryButton.gameObject.SetActive(false);
         diaMan.questDisnterestButton.gameObject.SetActive(false);
@@ -165,34 +176,3 @@ public class InputDialogueNPC : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
     }
 }
-/*if(beginningDialogue == false)
-            {
-                diaMan.dialogActive = true;
-                diaMan.ActiveOn();
-                beginningDialogue = true;
-            }
-            else
-            {
-                //if the current line is the line where the quest button should be shown
-                if(currentLine == npcData.whereQuestButtonIsShown - 1)
-                {
-                    ShowQuestButtons();
-                }
-                else 
-                { 
-                    StopShowingQuestButtons();
-                }
-                currentLine++;
-
-                if (currentLine >= npcData.diaLines.Length)
-                {
-                    beginningDialogue = false;
-                    diaMan.DialogOff();
-                    currentLine = 0;
-                }
-            }
-            
-        }
-        diaMan.diaText.text = npcData.diaLines[currentLine];
-        diaMan.nameText.text = npcData.nameLines[currentLine];
-        diaMan.charaBox.GetComponent<Image>().sprite = npcData.charaImage[currentLine];*/

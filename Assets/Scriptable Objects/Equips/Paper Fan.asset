@@ -15,6 +15,8 @@ MonoBehaviour:
   prefab: {fileID: 0}
   type: 1
   itemName: a paper fan
+  namePlural: paper fans
+  invenItemName: Paper Fan
   desc: A folded fan made of paper? Probably would sting a little getting hit by
     this.
   trueDesc: The weapon of myth and legend. Said to be held by a warrior capable of

@@ -14,20 +14,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Kachina
   level: 2
-  currentHP: 15
+  currentHP: 20
   maxHP: 30
-  currentMP: 19
+  currentMP: 20
   maxMP: 30
-  attack: 18
-  defense: 17
-  magic: 18
-  resistance: 3
-  efficiency: 7
-  skill: 17
-  speed: 9
+  attackCurrent: 13
+  attackBase: 12
+  defenseCurrent: 9
+  defenseBase: 9
+  magicCurrent: 12
+  magicBase: 12
+  resistanceCurrent: 8
+  resistanceBase: 8
+  efficiencyCurrent: 7
+  efficiencyBase: 7
+  skillCurrent: 10
+  skillBase: 10
+  speedCurrent: 11
+  speedBase: 11
   ability: 
   abilityDescription: 
   image: {fileID: 0}
   statGrowth: 0
+  spawnRate: 0
+  unitType: 1
   moveBaseClassList:
   - {fileID: 11400000, guid: 1ce1feeaff54da74ea72213809c39776, type: 2}

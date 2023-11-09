@@ -14,21 +14,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Rosa
   level: 15
-  currentHP: 37
+  currentHP: 7
   maxHP: 50
-  currentMP: 35
+  currentMP: 10
   maxMP: 55
-  attack: 18
-  defense: 8
-  magic: 50
-  resistance: 51
-  efficiency: 45
-  skill: 30
-  speed: 25
+  attackCurrent: 11
+  attackBase: 10
+  defenseCurrent: 9
+  defenseBase: 9
+  magicCurrent: 30
+  magicBase: 30
+  resistanceCurrent: 29
+  resistanceBase: 29
+  efficiencyCurrent: 22
+  efficiencyBase: 22
+  skillCurrent: 18
+  skillBase: 18
+  speedCurrent: 26
+  speedBase: 26
   ability: 
   abilityDescription: 
   image: {fileID: 0}
   statGrowth: 0
+  spawnRate: 0
+  unitType: 1
   moveBaseClassList:
   - {fileID: 11400000, guid: c9d4c0967f944304c8b6400330c053ed, type: 2}
   - {fileID: 11400000, guid: ee9fa80558443e34781d289b62071308, type: 2}

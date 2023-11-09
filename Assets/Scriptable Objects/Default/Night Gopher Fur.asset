@@ -15,6 +15,8 @@ MonoBehaviour:
   prefab: {fileID: 0}
   type: 3
   itemName: night gopher fur
+  namePlural: tufts of night gopher fur
+  invenItemName: Night Gopher Fur
   desc: Fur from a Night Gopher acquired at night. Darker and glistens in the moonlight.
   trueDesc: 
   price: 0

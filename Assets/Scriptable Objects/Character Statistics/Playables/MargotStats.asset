@@ -14,20 +14,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Margot
   level: 1
-  currentHP: 3
+  currentHP: 33
   maxHP: 33
-  currentMP: 2
+  currentMP: 20
   maxMP: 22
-  attack: 2
-  defense: 4
-  magic: 5
-  resistance: 6
-  efficiency: 8
-  skill: 6
-  speed: 9
+  attackCurrent: 7
+  attackBase: 7
+  defenseCurrent: 10
+  defenseBase: 10
+  magicCurrent: 12
+  magicBase: 12
+  resistanceCurrent: 10
+  resistanceBase: 10
+  efficiencyCurrent: 11
+  efficiencyBase: 11
+  skillCurrent: 18
+  skillBase: 18
+  speedCurrent: 9
+  speedBase: 9
   ability: Songbird
   abilityDescription: 
   image: {fileID: 0}
   statGrowth: 0
+  spawnRate: 0
+  unitType: 1
   moveBaseClassList:
   - {fileID: 11400000, guid: dc3307980d15c8945909b23e628b06a1, type: 2}

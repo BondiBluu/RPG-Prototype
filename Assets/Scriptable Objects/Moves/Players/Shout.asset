@@ -13,11 +13,14 @@ MonoBehaviour:
   m_Name: Shout
   m_EditorClassIdentifier: 
   attackName: Shout
-  attackDesc: Yells, owering the target's defense.
+  attackDesc: Yells, lowering the target's defense.
   attackPower: 0
   mPConsumption: 2
-  boostAmount: 1
   levelAqcuired: 4
   healAmount: 0
   moveType: 1
   attackType: 0
+  buffTypes: 
+  buffAmount: 0
+  debuffTypes: 02000000
+  debuffAmount: -0.1

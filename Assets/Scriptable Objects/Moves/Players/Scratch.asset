@@ -14,10 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackName: Scratch
   attackDesc: A clawing attack using nails
-  attackPower: 1
+  attackPower: 5
   mPConsumption: 0
-  boostAmount: 0
   levelAqcuired: 1
   healAmount: 0
   moveType: 0
   attackType: 1
+  buffTypes: 
+  buffAmount: 0
+  debuffTypes: 
+  debuffAmount: 0

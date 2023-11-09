@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 313f52f393aa9494cb4fbb0ef27c46ac, type: 3}
+  m_Name: SylvainQuest1
+  m_EditorClassIdentifier: 
+  questTitle: Cherry Apple of My Eye
+  questDescription: An apple a day...might bring her over?
+  questObjective: Collect 3 cherry apples and bring them to Sylvain.
+  questAvailable: 0
+  whereQuestButtonIsShown: 2
+  questButtonInquiryText: You seem...down. What's up?
+  questButtonDisinterestText: Yea yea, keep it movin'
+  questInquiryName:
+  - Sylvain
+  - Sylvain
+  - Sylvain
+  questInquiryLines:
+  - Hah...you got me. Could you listen for a sec?
+  - I've got a bit of a problem, could you help me?
+  - It'll take a sec...or two....or three.  Whadyou say?
+  questInquiryCharaImage:
+  - {fileID: 21300000, guid: fc8bd14a8fd2d4e48ae70625796398e1, type: 3}
+  - {fileID: 21300000, guid: fc8bd14a8fd2d4e48ae70625796398e1, type: 3}
+  - {fileID: 21300000, guid: fc8bd14a8fd2d4e48ae70625796398e1, type: 3}
+  questDisinterestName:
+  - Sylvain
+  questDisinterestLines:
+  - 'Heh, I get it!  '
+  questDisinterestCharaImage:
+  - {fileID: 21300000, guid: fc8bd14a8fd2d4e48ae70625796398e1, type: 3}
+  questAcceptanceName:
+  - Sylvain
+  - Sylvain
+  questAcceptanceLines:
+  - 'Hey, thanks! '
+  - I'll see you when I get back, okay?
+  questAcceptanceCharaImage:
+  - {fileID: 21300000, guid: fc8bd14a8fd2d4e48ae70625796398e1, type: 3}
+  - {fileID: 21300000, guid: fc8bd14a8fd2d4e48ae70625796398e1, type: 3}
+  questRejectionName:
+  - Sylvain
+  - Sylvain
+  questRejectionLines:
+  - I get it- gotta look out for number one.
+  - Don't sweat it. I'll get someone else.
+  questRejectionCharaImage:
+  - {fileID: 21300000, guid: fc8bd14a8fd2d4e48ae70625796398e1, type: 3}
+  - {fileID: 21300000, guid: fc8bd14a8fd2d4e48ae70625796398e1, type: 3}
+  amountToGetOrDefeat: 3
+  questCompleted: 0
+  questActive: 0
+  questType: 0
+  questReward: 0100000002000000

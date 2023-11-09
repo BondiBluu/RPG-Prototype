@@ -14,21 +14,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Lola
   level: 2
-  currentHP: 15
+  currentHP: 20
   maxHP: 17
-  currentMP: 12
+  currentMP: 20
   maxMP: 12
-  attack: 22
-  defense: 20
-  magic: 3
-  resistance: 10
-  efficiency: 18
-  skill: 29
-  speed: 8
+  attackCurrent: 15
+  attackBase: 15
+  defenseCurrent: 11
+  defenseBase: 12
+  magicCurrent: 4
+  magicBase: 4
+  resistanceCurrent: 3
+  resistanceBase: 3
+  efficiencyCurrent: 10
+  efficiencyBase: 10
+  skillCurrent: 16
+  skillBase: 16
+  speedCurrent: 6
+  speedBase: 6
   ability: One with Weapons
   abilityDescription: 
   image: {fileID: 0}
   statGrowth: 0
+  spawnRate: 0
+  unitType: 1
   moveBaseClassList:
   - {fileID: 11400000, guid: 382037e4fe9d54a4389c09509e6d150c, type: 2}
   - {fileID: 11400000, guid: 812f3aa38b0262946aea71300353af4e, type: 2}

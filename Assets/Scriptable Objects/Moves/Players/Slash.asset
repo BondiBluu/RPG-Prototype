@@ -12,12 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e950f1ad7661d64fa1fb0c3c77bc3ef, type: 3}
   m_Name: Slash
   m_EditorClassIdentifier: 
-  attackName: Scratch
+  attackName: Slash
   attackDesc: A basic knife attack.
   attackPower: 2
   mPConsumption: 0
-  boostAmount: 0
   levelAqcuired: 1
   healAmount: 0
   moveType: 0
   attackType: 1
+  buffTypes: 
+  buffAmount: 0
+  debuffTypes: 
+  debuffAmount: 0

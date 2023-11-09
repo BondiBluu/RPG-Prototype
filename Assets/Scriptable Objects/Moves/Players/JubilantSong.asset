@@ -16,8 +16,11 @@ MonoBehaviour:
   attackDesc: Caster sings a song of their home. Raises attack.
   attackPower: 0
   mPConsumption: 0
-  boostAmount: 0
   levelAqcuired: 1
   healAmount: 0
   moveType: 1
   attackType: 0
+  buffTypes: 01000000
+  buffAmount: 0.1
+  debuffTypes: 
+  debuffAmount: 0
