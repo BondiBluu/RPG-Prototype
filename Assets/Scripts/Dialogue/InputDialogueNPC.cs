@@ -22,7 +22,6 @@ public class InputDialogueNPC : MonoBehaviour
 
     int currentLine = 0;
     int currentQuest = 0;
-    int currentQuestLine = 0;
     string optionChosen;
 
     DialogueManager diaMan;
@@ -70,11 +69,11 @@ public class InputDialogueNPC : MonoBehaviour
             }
             else if ((diaMan.dialogActive && questInquiryAccepted) || (!diaMan.dialogActive && questInquiryAccepted))
             {
-                ContinueQuestDialogue(optionChosen);
+                ContinueQuestDialogue();
             }
             else if ((diaMan.dialogActive && questInquiryDenied) || (!diaMan.dialogActive && questInquiryDenied))
             {
-                ContinueQuestDialogue(optionChosen);
+                ContinueQuestDialogue();
             }
             else if (diaMan.dialogActive)
             {
@@ -149,7 +148,7 @@ public class InputDialogueNPC : MonoBehaviour
     void ShowQuestDialogue(string optionValue) 
     {
         currentLine = 0;
-        //used for the ContinueDialogue() method. Global variable
+        //used to determine which dialogue to show. Global variable
         optionChosen = optionValue;
         
         StopShowingQuestButtons();
@@ -157,39 +156,24 @@ public class InputDialogueNPC : MonoBehaviour
         //0 is disinterest, 1 is inquiry
         if (optionValue == "Deny")
         {
-            //GiveQuestDialogue();
             Debug.Log("Quest Denied");
             questInquiryDenied = true;
-            StartQuestDialogue();
+            QuestDisinterestDialogue();
         }
         else if(optionValue == "Inquire")
         {
-            //DenyQuestDialogue();
             Debug.Log("Quest Accepted");
             questInquiryAccepted = true;
-            StartQuestDialogue();
-        }
-    }
-
-    void StartQuestDialogue()
-    {
-        currentLine = 0;
-        if (optionChosen == "Deny")
-        {
-            QuestDisinterestDialogue();
-        }
-        else if (optionChosen == "Inquire")
-        {
             QuestInquiryDialogue();
         }
     }
-
-    void ContinueQuestDialogue(string optionValue)
+    
+    void ContinueQuestDialogue()
     {
         currentLine++;
 
         //disinterest in the quest
-        if(optionValue == "Deny")
+        if(optionChosen == "Deny")
         {
             if (currentLine < npcData.questLine[currentQuest].questDisinterestLines.Length)
             {
@@ -202,7 +186,7 @@ public class InputDialogueNPC : MonoBehaviour
             }
 
         } //interest in the quest
-        else if(optionValue == "Inquire")
+        else if(optionChosen == "Inquire")
         {
             if (currentLine < npcData.questLine[currentQuest].questInquiryLines.Length)
             {
