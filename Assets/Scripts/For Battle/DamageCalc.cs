@@ -32,7 +32,6 @@ public class DamageCalc : MonoBehaviour
                             finalResult += 1;
                         }
                     }
-                    //theTarget.TakeDamage(finalResult);
                     StartCoroutine(theTarget.TakeDamage(finalResult));
                     damageResult += $" {theTarget.characterStats.CharacterName} took {finalResult} damage!";
                     break;
@@ -49,7 +48,6 @@ public class DamageCalc : MonoBehaviour
                             finalResult += 1;
                         }
                     }
-                    //theTarget.TakeDamage(finalResult);
                     StartCoroutine(theTarget.TakeDamage(finalResult));
                     damageResult += $" {theTarget.characterStats.CharacterName} took {finalResult} damage!";
                     break;
@@ -145,7 +143,6 @@ public class DamageCalc : MonoBehaviour
                     }
 
                     finalResult = (int)Math.Ceiling(damageOutput);
-                    //theTarget.TakeDamage(finalResult);
                     StartCoroutine(theTarget.TakeDamage(finalResult));
                     damageResult += $" {theTarget.characterStats.CharacterName} took {finalResult} damage!";
                     break; 

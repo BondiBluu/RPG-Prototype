@@ -51,7 +51,7 @@ public class MoveGenerator : MonoBehaviour
                 //if the move's level is more than or equal to out chara's level
                 if (characterStatistics.Level >= move.LevelAqcuired && !movesAlreadyAdded.Contains(move) && move.MoveType == MoveType.SUPPLEMENTARY)
                     {
-                    //making a new move button- instantiating the prefab and having it be a child of atkButtonContainer
+                    //making a new move button- instantiating the prefab and having it be a child of suppButtonContainer
                     GameObject buttonGO = Instantiate(moveButtonPrefab, suppButtonContainer);
                     //setting the anchored pos of the button's rectTransform using a vector 2 
                     buttonGO.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -currentPosY);

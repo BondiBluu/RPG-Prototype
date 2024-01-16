@@ -43,7 +43,6 @@ public class BattleSystem : MonoBehaviour
     [Header("Other")]
     public TMP_Text actionText;
     public int turnCount = 1;
-
     MoveGenerator moveGenerator;
     AttackandSupplementary attackandSupplementary;
     DamageCalc damageCalc;
@@ -132,9 +131,6 @@ public class BattleSystem : MonoBehaviour
     //where player can choose an action
     IEnumerator PlayerTurn()
     {
-
-        currentCycleIndex = 0;
-
         //player's turn, so we're updating the stats for the player
         foreach (Unit playerUnit in playerUnits)
         {
@@ -473,6 +469,8 @@ public class BattleSystem : MonoBehaviour
             sortedEnemyActions.Clear();
             playerandEnemyStorage.playerActionContainer.Clear();
             playerandEnemyStorage.enemyActionContainer.Clear();
+            currentCycleIndex = 0;  
+            Debug.Log($"Current index: {currentCycleIndex}.");
 
             state = BattleState.PLAYERTURN;
             StartCoroutine(PlayerTurn());
