@@ -10,6 +10,8 @@ public class DialogueManager : MonoBehaviour
     public GameObject diaBox;
     public GameObject nameBox;
     public GameObject charaBox;
+    public GameObject itemBox;
+    public TMP_Text itemText;
     public Button questInquiryButton;
     public Button questDisnterestButton;
     public Button questAcceptanceButton; //accept
@@ -30,7 +32,18 @@ public class DialogueManager : MonoBehaviour
     void Start()
     {
         DialogOff();
+        ItemShowOff();
         inputDialogueNPC = FindObjectOfType<InputDialogueNPC>();
+    }
+
+    public void ItemShowOff()
+    {
+        itemBox.SetActive(false);
+    }
+
+    public void ItemShowOn()
+    {
+        itemBox.SetActive(true);
     }
 
     public void DialogOff(){
