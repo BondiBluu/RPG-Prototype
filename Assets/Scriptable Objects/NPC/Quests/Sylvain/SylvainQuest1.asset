@@ -32,7 +32,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: fc8bd14a8fd2d4e48ae70625796398e1, type: 3}
   - {fileID: 21300000, guid: fc8bd14a8fd2d4e48ae70625796398e1, type: 3}
   questDisinterestName:
-  - Sylvain
+  - '"Regular" Sylvain'
   questDisinterestLines:
   - 'Heh, I get it!  '
   questDisinterestCharaImage:

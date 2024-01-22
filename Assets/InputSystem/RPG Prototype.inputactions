@@ -40,6 +40,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Collect",
+                    "type": "Button",
+                    "id": "383c3ba2-683e-4b2d-8b1f-07a0fbfc8d87",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -273,6 +282,17 @@
                     "action": "Run",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c0a7e89a-0408-4f9b-8530-09f54cd3b41b",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Collect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -428,15 +448,6 @@
                     "name": "OpenSave",
                     "type": "Button",
                     "id": "69bc0ea4-170a-4b17-b7ef-6d70a9b1666c",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "PickItem",
-                    "type": "Button",
-                    "id": "bae75a07-30dc-4f1d-b320-79fcea807b65",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -936,17 +947,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "OpenCharacters",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "54262296-4801-4a28-9a71-68a6b17915f1",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "PickItem",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
