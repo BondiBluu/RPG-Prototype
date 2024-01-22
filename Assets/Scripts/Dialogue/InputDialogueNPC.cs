@@ -15,7 +15,6 @@ public class InputDialogueNPC : MonoBehaviour
     //[SerializeField] bool questIsActive;
     //[SerializeField] bool questAvailable;
     //[SerializeField] bool questInquiryAccepted;
-    //[SerializeField] bool dialogueStarted = false;
     bool questInquiryDenied = false;
     bool questInquiryAccepted = false;
     bool isInTriggerZone;
@@ -167,7 +166,7 @@ public class InputDialogueNPC : MonoBehaviour
             QuestInquiryDialogue();
         }
     }
-    
+
     void ContinueQuestDialogue()
     {
         currentLine++;
