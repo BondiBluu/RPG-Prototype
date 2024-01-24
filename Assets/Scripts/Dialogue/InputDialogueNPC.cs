@@ -209,7 +209,7 @@ public class InputDialogueNPC : MonoBehaviour
         if(currentLine == npcData.questLine[currentQuest].questInquiryLines.Length - 1)
         {
             questMan.QuestBoxOn();
-            ShowQuestWindow();
+            StartCoroutine(ShowQuestWindow());
         }
     }
 
@@ -226,11 +226,13 @@ public class InputDialogueNPC : MonoBehaviour
         diaMan.questDisnterestButton.gameObject.SetActive(false);
     }
 
-    void ShowQuestWindow()
+    public IEnumerator ShowQuestWindow()
     {
         questMan.questTitle.text = npcData.questLine[currentQuest].questTitle;
         questMan.questDescription.text = npcData.questLine[currentQuest].questDescription;
         questMan.questAssignment.text = npcData.questLine[currentQuest].questObjective;
+
+        yield return new WaitForSeconds(0.5f); //wait until one of the buttons is pressed (player has accepted or denied)
     }
 
     
