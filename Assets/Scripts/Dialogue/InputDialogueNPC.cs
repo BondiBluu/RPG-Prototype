@@ -24,12 +24,14 @@ public class InputDialogueNPC : MonoBehaviour
     string optionChosen;
 
     DialogueManager diaMan;
+    QuestManager questMan;
 
 
     void Start()
     {
         //referencing the DialogueManager script
         diaMan = FindObjectOfType<DialogueManager>();
+        questMan = FindObjectOfType<QuestManager>();
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -204,6 +206,11 @@ public class InputDialogueNPC : MonoBehaviour
         diaMan.diaText.text = npcData.questLine[currentQuest].questInquiryLines[currentLine];
         diaMan.nameText.text = npcData.questLine[currentQuest].questInquiryName[currentLine];
         diaMan.charaBox.GetComponent<Image>().sprite = npcData.questLine[currentQuest].questInquiryCharaImage[currentLine];
+        if(currentLine == npcData.questLine[currentQuest].questInquiryLines.Length - 1)
+        {
+            questMan.QuestBoxOn();
+            ShowQuestWindow();
+        }
     }
 
     void QuestDisinterestDialogue()
@@ -217,6 +224,13 @@ public class InputDialogueNPC : MonoBehaviour
     {         
         diaMan.questInquiryButton.gameObject.SetActive(false);
         diaMan.questDisnterestButton.gameObject.SetActive(false);
+    }
+
+    void ShowQuestWindow()
+    {
+        questMan.questTitle.text = npcData.questLine[currentQuest].questTitle;
+        questMan.questDescription.text = npcData.questLine[currentQuest].questDescription;
+        questMan.questAssignment.text = npcData.questLine[currentQuest].questObjective;
     }
 
     
@@ -233,13 +247,6 @@ public class InputDialogueNPC : MonoBehaviour
 // {
 //     currentLine = 0;
 //     GiveQuestDialogue();
-// }
-
-// void GiveQuestDialogue() 
-// {
-//     diaMan.diaText.text = npcData.questLine[currentQuest].questInquiryLines[currentLine];
-//     diaMan.nameText.text = npcData.questLine[currentQuest].questInquiryName[currentLine];
-//     diaMan.charaBox.GetComponent<Image>().sprite = npcData.questLine[currentQuest].questInquiryCharaImage[currentLine];
 // }
 
 // void QuestAcceptanceDialogue() { }
